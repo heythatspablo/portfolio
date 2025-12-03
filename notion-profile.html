@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pablo Vizcaino - Design Project Manager</title>
+    <!-- Mermaid JS for Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        /* --- VARIABLES & THEME CONFIG --- */
+        :root {
+            /* Light Mode Default */
+            --bg-color: #FFFFFF;
+            --fg-color: #37352F;
+            --fg-light: #9B9A97; /* Metadata */
+            --border-color: #E9E9E7; /* Light gray dividers */
+            --hover-bg: rgba(55, 53, 47, 0.08);
+            --selection: rgba(35, 131, 226, 0.28);
+            
+            /* Block Backgrounds */
+            --callout-bg: #F1F1EF;
+            --code-bg: #F7F6F3;
+            --card-bg: #FFFFFF; 
+            --card-shadow: rgba(15, 15, 15, 0.1);
+            --board-col-bg: #F7F6F3;
+            
+            /* Typography */
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            
+            /* Specifics */
+            --quote-border: #37352F;
+            --link-color: inherit;
+        }
+
+        /* Dark Mode Overrides */
+        body.dark-mode {
+            --bg-color: #191919;
+            --fg-color: rgba(255, 255, 255, 0.9);
+            --fg-light: rgba(255, 255, 255, 0.443);
+            --border-color: rgba(255, 255, 255, 0.094);
+            --hover-bg: rgba(255, 255, 255, 0.055);
+            --selection: rgba(35, 131, 226, 0.4);
+            
+            --callout-bg: #2F2F2F; 
+            --code-bg: #262626;
+            --card-bg: #252525;
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --board-col-bg: #202020; 
+
+            --quote-border: rgba(255, 255, 255, 0.9);
+        }
+
+        /* --- GLOBAL RESET --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--fg-color);
+            font-family: var(--font-main);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+            font-size: 16px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        ::selection { background: var(--selection); }
+
+        /* --- NAVIGATION --- */
+        header {
+            height: 45px;
+            width: 100%;
+            position: fixed;
+            top: 0; left: 0;
+            background: var(--bg-color); /* Fallback */
+            background-color: transparent; /* For backdrop filter */
+            backdrop-filter: blur(8px); /* Frosted glass */
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 14px;
+        }
+        body.dark-mode header { background-color: rgba(25, 25, 25, 0.8); }
+        body:not(.dark-mode) header { background-color: rgba(255, 255, 255, 0.9); }
+
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            color: var(--fg-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .crumb {
+            display: flex;
+            align-items: center;
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        .crumb:hover { background: var(--hover-bg); }
+        .crumb-icon { margin-right: 6px; }
+        .divider { color: var(--fg-light); margin: 0 2px; }
+
+        .header-controls {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            color: var(--fg-color);
+            font-size: 14px;
+            align-items: center;
+            position: relative; /* Context for overflow menu */
+        }
+        
+        .header-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.1s;
+        }
+        .header-btn:hover { background: var(--hover-bg); }
+
+        /* --- OVERFLOW MENU DROPDOWN --- */
+        .overflow-menu {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            width: 260px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            display: none;
+            z-index: 200;
+            padding: 6px 0;
+            font-size: 14px;
+            color: var(--fg-color);
+        }
+        .overflow-menu.active { display: block; }
+
+        .menu-section-title {
+            padding: 8px 12px 4px 12px;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--fg-light);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        .menu-item {
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--fg-color);
+            transition: background 0.1s;
+        }
+        .menu-item:hover { background: var(--hover-bg); }
+        .menu-icon { margin-right: 10px; width: 16px; text-align: center; color: var(--fg-light); }
+        .menu-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* --- LAYOUT --- */
+        .cover-image {
+            height: 30vh;
+            min-height: 180px;
+            width: 100%;
+            object-fit: cover;
+            object-position: center 50%;
+            display: block;
+            margin-top: 45px; /* header offset */
+            transition: opacity 0.3s ease;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 96px 100px 96px;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .main-container { padding: 0 24px 60px 24px; }
+        }
+
+        /* --- PAGE HEADER --- */
+        .page-icon {
+            font-size: 78px;
+            margin-top: -42px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1.page-title {
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            color: var(--fg-color);
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h2 {
+            font-size: 1.875em;
+            font-weight: 600;
+            margin-top: 1.4em;
+            margin-bottom: 0.3em;
+            letter-spacing: -0.01em;
+        }
+        h3 {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-top: 1em;
+            margin-bottom: 0.2em;
+        }
+        h4 {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: 1em;
+            margin-bottom: 0.1em;
+        }
+        p { margin-bottom: 0.5em; min-height: 1.5em; }
+        ul { margin-bottom: 1em; padding-left: 1.5em; }
+        li { margin-bottom: 0.2em; }
+        a.text-link {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: var(--fg-light);
+            text-underline-offset: 2px;
+        }
+        a.text-link:hover { color: #2383E2; text-decoration-color: #2383E2; }
+        hr { border: none; border-bottom: 1px solid var(--border-color); margin: 24px 0; }
+
+        /* --- COMPONENTS --- */
+
+        /* 1. Callout */
+        .callout {
+            padding: 16px 16px 16px 12px;
+            display: flex;
+            background: var(--callout-bg);
+            border-radius: 3px;
+            margin: 4px 0;
+            color: var(--fg-color);
+        }
+        .callout-icon { margin-right: 12px; font-size: 24px; line-height: 1.1; user-select: none; }
+        .callout-content { flex: 1; line-height: 1.5; }
+
+        /* 2. Column Layouts (Simulating Notion Columns) */
+        .notion-row {
+            display: flex;
+            gap: 32px; /* Notion uses fairly wide gaps */
+            margin: 8px 0;
+        }
+        .notion-col {
+            flex: 1;
+            min-width: 0; /* Fix flexbox overflow issues */
+        }
+        @media (max-width: 600px) {
+            .notion-row { flex-direction: column; gap: 16px; }
+        }
+
+        /* 3. Featured Case Study (Custom Split Card) */
+        .featured-case {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        .featured-case:hover { background: var(--hover-bg); }
+        .featured-content {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .featured-visual {
+            flex: 1;
+            background: var(--board-col-bg);
+            min-height: 250px;
+            position: relative;
+            overflow: hidden;
+        }
+        .featured-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .metric-overlay {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* 4. Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+        .gallery-card {
+            background: var(--card-bg);
+            border-radius: 3px;
+            box-shadow: 0 1px 2px var(--card-shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background 0.1s;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+        }
+        .gallery-card:hover { background: var(--hover-bg); }
+        .gallery-cover {
+            height: 140px;
+            width: 100%;
+            background-color: var(--board-col-bg);
+            object-fit: cover;
+        }
+        .gallery-content { padding: 10px 12px; }
+        .gallery-title { font-weight: 500; font-size: 14px; margin-bottom: 4px; }
+
+        /* 5. Code Block (Used for Spec) */
+        .code-block {
+            background: var(--code-bg);
+            padding: 32px;
+            border-radius: 3px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: #EB5757;
+            margin: 4px 0;
+            overflow-x: auto;
+            white-space: pre;
+            tab-size: 2;
+            line-height: 1.4;
+        }
+        body.dark-mode .code-block { color: #ff8f8f; }
+
+        /* 6. Toggle List */
+        details.notion-toggle { margin: 2px 0; }
+        details.notion-toggle summary {
+            cursor: pointer;
+            list-style: none; 
+            padding: 6px 4px;
+            display: flex;
+            align-items: flex-start;
+            outline: none;
+            font-weight: 600;
+            border-radius: 3px;
+        }
+        details.notion-toggle summary:hover { background: var(--hover-bg); }
+        details.notion-toggle summary::-webkit-details-marker { display: none; }
+        .toggle-triangle {
+            margin-right: 6px;
+            width: 20px; 
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            font-size: 12px;
+            color: var(--fg-light);
+        }
+        details[open] summary .toggle-triangle { transform: rotate(90deg); }
+        .toggle-content { margin-left: 26px; margin-bottom: 12px; color: var(--fg-color); }
+        
+        .role-meta {
+            font-weight: 400;
+            color: var(--fg-light);
+            margin-left: 8px;
+            font-size: 0.9em;
+        }
+
+        /* 7. Mermaid Chart Container */
+        .mermaid {
+            background: var(--bg-color);
+            padding: 10px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* 8. Utility Classes for SPA View Switching */
+        .view-section { display: none; animation: fadeIn 0.3s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .tag-pill {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 6px;
+            background: rgba(235, 87, 87, 0.1);
+            color: #EB5757;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION -->
+    <header>
+        <div class="breadcrumbs">
+            <div class="crumb" onclick="navigateTo('home')">
+                <span class="crumb-icon">🧔🏻‍♂️</span> Pablo Vizcaino
+            </div>
+            <span class="divider">/</span>
+            <div id="breadcrumb-current" class="crumb" style="cursor: default;">
+                Portfolio
+            </div>
+        </div>
+        <div class="header-controls">
+            <!-- Theme Toggle -->
+            <div class="header-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                <span id="theme-icon">🌙</span>
+            </div>
+            
+            <!-- Overflow Menu Trigger -->
+            <div class="header-btn" onclick="toggleOverflow(event)" title="More options">⋯</div>
+
+            <!-- DROP DOWN MENU -->
+            <div id="overflow-menu" class="overflow-menu">
+                <div class="menu-section-title">Contact</div>
+                <a href="mailto:heythatspablo@gmail.com" class="menu-item">
+                    <span class="menu-icon">✉️</span>
+                    <span class="menu-label">heythatspablo@gmail.com</span>
+                </a>
+                
+                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                
+                <div class="menu-section-title">Socials</div>
+                <a href="https://linkedin.com" target="_blank" class="menu-item">
+                    <span class="menu-icon">🔗</span>
+                    <span class="menu-label">LinkedIn</span>
+                </a>
+                <a href="https://github.com" target="_blank" class="menu-item">
+                    <span class="menu-icon">💻</span>
+                    <span class="menu-label">GitHub</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- COVER IMAGE -->
+    <!-- Default Cover Image, will be swapped via JS -->
+    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" class="cover-image" id="main-cover-image" alt="Cover Image">
+
+    <main class="main-container">
+        
+        <!-- ================= HOME VIEW ================= -->
+        <div id="home-view" class="view-section active">
+            <!-- ICON & HERO -->
+            <div class="page-icon">🧔🏻‍♂️</div>
+            <h1 class="page-title">Pablo Vizcaino: Design Project Manager</h1>
+
+            <!-- Sub-headline Callout -->
+            <div class="callout" style="background: transparent; padding-left: 0; border: none; margin-bottom: 24px;">
+                <div class="callout-content" style="font-size: 1.2em; color: var(--fg-light);">
+                    Bridging the gap between Product, Design, and Engineering to deliver scalable identity solutions in regulated markets.
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- FEATURED CASE STUDY -->
+            <h3>Featured Case Study</h3>
+            <div class="featured-case" onclick="navigateTo('casestudy')">
+                <div class="featured-content">
+                    <div style="font-size: 12px; color: #EB5757; font-weight: 600; margin-bottom: 8px;">CROWN JEWEL</div>
+                    <h2 style="margin-top: 0; font-size: 24px;">Unfamiliar.id: Unblocking the Biometric Bottleneck</h2>
+                    <p style="font-size: 14px; color: var(--fg-light); margin-bottom: 16px;">
+                        B2B Identity • AI Integration • Dual-Track Agile
+                    </p>
+                    <div style="margin-top: auto;">
+                        <span style="border-bottom: 1px solid var(--fg-light);">Read Case Study →</span>
+                    </div>
+                </div>
+                <div class="featured-visual">
+                    <!-- Placeholder visual for Split Screen Linear vs UI -->
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop" alt="Split Screen Visual">
+                    <div class="metric-overlay">Reduced verification time by 76% (75s → 18s)</div>
+                </div>
+            </div>
+
+            <!-- HOW I WORK (3 Columns) -->
+            <h3>How I Work</h3>
+            <div class="notion-row">
+                <div class="notion-col">
+                    <div style="font-size: 24px; margin-bottom: 8px;">🏗️</div>
+                    <strong>Operational Rigor</strong>
+                    <p style="font-size: 14px; color: var(--fg-light);">I turn chaotic requirements into clean Linear/Jira workflows.</p>
+                </div>
+                <div class="notion-col">
+                    <div style="font-size: 24px; margin-bottom: 8px;">🤝</div>
+                    <strong>Design Diplomacy</strong>
+                    <p style="font-size: 14px; color: var(--fg-light);">I speak both 'Figma' and 'React,' preventing handoff friction.</p>
+                </div>
+                <div class="notion-col">
+                    <div style="font-size: 24px; margin-bottom: 8px;">📊</div>
+                    <strong>Data-Driven Delivery</strong>
+                    <p style="font-size: 14px; color: var(--fg-light);">I measure success in conversion rates and cycle times, not just aesthetics.</p>
+                </div>
+            </div>
+
+            <!-- WORK HISTORY -->
+            <h3>Work History</h3>
+            <div class="gallery-grid">
+                <!-- Card 1: Outliant -->
+                <div class="gallery-card" onclick="navigateTo('outliant')">
+                    <div class="gallery-cover" style="background: #2E86AB;"></div>
+                    <div class="gallery-content">
+                        <div class="gallery-title">Outliant</div>
+                        <div style="font-size: 12px; color: var(--fg-light);">Project Manager</div>
+                    </div>
+                </div>
+                <!-- Card 2: Goliath -->
+                <div class="gallery-card" onclick="navigateTo('goliath')">
+                    <div class="gallery-cover" style="background: #A23B72;"></div>
+                    <div class="gallery-content">
+                        <div class="gallery-title">Goliath</div>
+                        <div style="font-size: 12px; color: var(--fg-light);">Lead Product Designer</div>
+                    </div>
+                </div>
+                <!-- Card 3: Bloomreach -->
+                <div class="gallery-card" onclick="navigateTo('bloomreach')">
+                    <div class="gallery-cover" style="background: #0D3B66;"></div>
+                    <div class="gallery-content">
+                        <div class="gallery-title">Bloomreach</div>
+                        <div style="font-size: 12px; color: var(--fg-light);">Customer Success Manager</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+            
+            <!-- NAV LINKS -->
+            <div class="notion-row">
+                <div class="notion-col">
+                    <a class="text-link" href="#" onclick="navigateTo('about')">→ About Me</a>
+                </div>
+                <div class="notion-col">
+                    <a class="text-link" href="#" onclick="navigateTo('contact')">→ Contact</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= CASE STUDY: UNFAMILIAR.ID ================= -->
+        <div id="casestudy-view" class="view-section">
+            <div class="page-icon">🆔</div>
+            <h1 class="page-title">Unblocking the Biometric Bottleneck: How we reduced verification time by 76% while navigating shifting compliance landscapes.</h1>
+            
+            <!-- AT A GLANCE -->
+            <div class="callout">
+                <div class="callout-icon">📋</div>
+                <div class="callout-content">
+                    <strong>At a Glance</strong><br>
+                    <span style="font-size: 14px; color: var(--fg-light);">
+                    <strong>Role:</strong> Senior Design Project Manager<br>
+                    <strong>Team:</strong> 9 (3 Product Designers, 4 Frontend Engineers, 1 Backend Liaison, 1 Product Analyst)<br>
+                    <strong>Timeline:</strong> Jan 2022 – Mar 2025<br>
+                    <strong>Core Tools:</strong> Linear, Figma, Storybook, Amplitude
+                    </span>
+                </div>
+            </div>
+
+            <h2>The Challenge</h2>
+            <p><strong>High Friction, High Stakes.</strong> Unfamiliar.id’s core product is identity verification. The "Selfie Capture" flow—where users prove they are human—was failing.</p>
+            <ul>
+                <li><strong>The Metric:</strong> User verification took ~75 seconds, with a dropout rate of 18%.</li>
+                <li><strong>The Constraint:</strong> UK biometric compliance laws were changing monthly, causing constant scope creep.</li>
+                <li><strong>The Conflict:</strong> Designers wanted high-fidelity animations; Engineers were struggling with model latency on low-end devices.</li>
+            </ul>
+
+            <hr>
+
+            <h2>The Operational Strategy</h2>
+            <p>As the DPM, my job wasn't just to "manage tickets"—it was to unblock the flow of value.</p>
+
+            <h3>1. Dual-Track Delivery (The "Legal" Fix)</h3>
+            <p><strong>Problem:</strong> Every time Legal changed a requirement, the entire sprint would freeze.<br>
+            <strong>Solution:</strong> I restructured our Jira/Linear workflow into two distinct tracks:</p>
+            <div class="notion-row">
+                <div class="notion-col" style="background: var(--callout-bg); padding: 16px; border-radius: 4px;">
+                    <strong>Track A (Compliance/Backend)</strong><br>
+                    Locked for 6-week cycles. No changes allowed.
+                </div>
+                <div class="notion-col" style="background: var(--callout-bg); padding: 16px; border-radius: 4px;">
+                    <strong>Track B (UX/Frontend)</strong><br>
+                    2-week agile sprints for UI polish and experimentation.
+                </div>
+            </div>
+            <p><strong>Result:</strong> Engineering could build the compliance infrastructure without waiting for the UI pixel-tweaks.</p>
+
+            <h3>Artifact 1: Dual-Track Delivery Timeline</h3>
+            <div class="mermaid">
+gantt
+    title Project Delta: Dual-Track Delivery Cycle (Q1 2024)
+    dateFormat  YYYY-MM-DD
+    axisFormat  %W
+
+    section Track A: Compliance (Locked)
+    Reqs Frozen (Legal)       :active, crit, 2024-01-01, 2024-01-14
+    Backend Infrastructure    :2024-01-15, 30d
+    Security Audit            :2024-02-14, 7d
+
+    section Track B: UX (Agile)
+    Sprint 1 (Low Light UI)   :2024-01-01, 14d
+    Sprint 2 (Animations)     :2024-01-15, 14d
+    Sprint 3 (Design QA)      :2024-01-29, 14d
+    
+    section Milestone
+    Combined Release v2.0     :milestone, 2024-02-21, 0d
+            </div>
+
+            <hr>
+
+            <h3>2. The "Lighting Resilience" Sprint (The "Tech" Fix)</h3>
+            <p><strong>Problem:</strong> The AI model failed in low light, causing users to fail verification.<br>
+            <strong>Solution:</strong> I coordinated a cross-functional "Swarm" sprint. We paused feature work for 2 weeks.</p>
+            <ul>
+                <li>Designers built "low-light" UI feedback loops (e.g., "Move to a brighter area").</li>
+                <li>ML Engineers retrained the model on darker datasets.</li>
+            </ul>
+            <p><strong>Result:</strong> Pass rates jumped from 82% to 94%.</p>
+
+            <h3>Artifact 2: The "Spec" (Sanitized Linear Ticket)</h3>
+            <div class="code-block">
+LIN-2491  [Project Delta] Lighting Resilience & Error Recovery
+Status: In Progress  |  Priority: High  |  Owner: Pablo V.
+
+DESCRIPTION
+-------------------------------------------------------------------------
+The current model fails when lux < 50. We need a UI intervention before
+the API call creates a failure state.
+
+REQUIREMENTS (Agreed by @ML-Team & @Design)
+1. [Frontend] If camera feed detects average brightness < 20%:
+   - Trigger "Flash Mode" overlay (Component: <FlashOverlay />).
+   - Pause frame capture until brightness > 40%.
+   
+2. [ML] Retrain model on "Dataset-Dark-v4" (See link).
+   - Acceptance Criteria: Inference time must remain < 200ms.
+
+3. [Design] Remove "Particle Animation" during capture.
+   - It consumes 15% GPU; causes lag on Android < 10.
+            </div>
+
+            <hr>
+
+            <h3>3. Instituting Design QA (The "Process" Fix)</h3>
+            <p><strong>Problem:</strong> 40% of engineering tickets were "rework" caused by misinterpreting Figma files.<br>
+            <strong>Solution:</strong> I introduced a mandatory "Design QA" column in our Kanban board. No ticket could merge to Master without a designer's sign-off in the staging environment (Vercel).</p>
+
+            <hr>
+
+            <h2>The Outcomes</h2>
+            <p>By shifting focus from "features" to "flow," we achieved:</p>
+            <div class="callout">
+                <div class="callout-icon">🏆</div>
+                <div class="callout-content">
+                    <strong>Speed:</strong> End-to-end verification time dropped from 75s → 18s.<br>
+                    <strong>Efficiency:</strong> Reduced Design-to-Dev rework by 40%.<br>
+                    <strong>Revenue:</strong> Increased successful verification pass rate to 94%.
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <a href="#" onclick="navigateTo('home')" class="text-link">← Back to Portfolio</a>
+            </div>
+        </div>
+
+        <!-- ================= CASE STUDY: OUTLIANT ================= -->
+        <div id="outliant-view" class="view-section">
+            <div class="page-icon">💼</div>
+            <h1 class="page-title">Outliant</h1>
+            <div class="callout">
+                <div class="callout-icon">📌</div>
+                <div class="callout-content">
+                    <strong>Role:</strong> Remote Project Manager<br>
+                    <span style="font-size: 14px; color: var(--fg-light);">2022 – 2023</span>
+                </div>
+            </div>
+            <h2>Key Achievements</h2>
+            <ul>
+                <li>Reduced average project delivery timeline by 25% by streamlining design workflows and enforcing stricter acceptance criteria across design and engineering teams.</li>
+                <li>Elevated Client NPS by 5 points for enterprise accounts (including SelectQuote and OrangeTheory) by establishing transparent roadmap reporting and weekly delivery demos.</li>
+                <li>Managed resource allocation for multiple simultaneous creative projects, ensuring 100% on-time delivery for Q3 and Q4 deliverables.</li>
+            </ul>
+            <div style="margin-top: 40px;">
+                <a href="#" onclick="navigateTo('home')" class="text-link">← Back to Portfolio</a>
+            </div>
+        </div>
+
+        <!-- ================= CASE STUDY: GOLIATH ================= -->
+        <div id="goliath-view" class="view-section">
+            <div class="page-icon">🏢</div>
+            <h1 class="page-title">Goliath</h1>
+            <div class="callout">
+                <div class="callout-icon">📌</div>
+                <div class="callout-content">
+                    <strong>Role:</strong> Lead Product Designer (San Jose, CA)<br>
+                    <span style="font-size: 14px; color: var(--fg-light);">2019 – 2022</span>
+                </div>
+            </div>
+            <h2>Key Achievements</h2>
+            <ul>
+                <li>Built and maintained a scalable design system that supported 4 major web applications, directly contributing to a 40% lift in digital revenue.</li>
+                <li>Bridged the gap between creative and technical teams, translating complex business requirements into high-fidelity prototypes that secured stakeholder buy-in early in the development cycle.</li>
+                <li>Drove 15% customer growth by iteratively testing and optimizing core user flows based on live analytics data.</li>
+            </ul>
+            <div style="margin-top: 40px;">
+                <a href="#" onclick="navigateTo('home')" class="text-link">← Back to Portfolio</a>
+            </div>
+        </div>
+
+        <!-- ================= CASE STUDY: BLOOMREACH ================= -->
+        <div id="bloomreach-view" class="view-section">
+            <div class="page-icon">📈</div>
+            <h1 class="page-title">Bloomreach</h1>
+            <div class="callout">
+                <div class="callout-icon">📌</div>
+                <div class="callout-content">
+                    <strong>Role:</strong> Customer Success Manager (Mountain View, CA)<br>
+                    <span style="font-size: 14px; color: var(--fg-light);">2019</span>
+                </div>
+            </div>
+            <h2>Key Achievements</h2>
+            <ul>
+                <li>Managed a $3.2M ARR portfolio, growing revenue by 15% in 6 months through strategic account planning and product adoption initiatives.</li>
+                <li>Reduced churn by 30% for key accounts (Levi’s, Puma) by implementing a proactive customer feedback loop that directly informed the product roadmap.</li>
+            </ul>
+            <div style="margin-top: 40px;">
+                <a href="#" onclick="navigateTo('home')" class="text-link">← Back to Portfolio</a>
+            </div>
+        </div>
+
+
+        <!-- ================= ABOUT VIEW ================= -->
+        <div id="about-view" class="view-section">
+            <div class="page-icon">👋</div>
+            <h1 class="page-title">From Pixel-Perfect to Process-Perfect</h1>
+
+            <div class="callout">
+                <div class="callout-icon">💡</div>
+                <div class="callout-content">
+                    I started as a designer, so I know how hard it is to build great things. But I realized the biggest blocker wasn't the design—it was the delivery. Now, I use my background to protect design intent while ensuring engineering velocity.
+                </div>
+            </div>
+
+            <h3>Experience</h3>
+
+            <!-- Unfamiliar.id -->
+            <details class="notion-toggle" open>
+                <summary>
+                    <div class="toggle-triangle">▶</div>
+                    UNFAMILIAR.ID <span class="role-meta">| Senior DPM (Aug 2023 – Oct 2025)</span>
+                </summary>
+                <div class="toggle-content">
+                    <ul>
+                        <li>Led a 9-person cross-functional team (Design, FE Dev, BE Liaison, Product Analytics) delivering core identity-verification experiences used by enterprise clients.</li>
+                        <li>Owned roadmap execution across SDKs, dashboards, and onboarding flows; shipped features with 90%+ on-time delivery.</li>
+                        <li>Directed the end-to-end build of the AI Biometric Selfie Capture + Anti-Spoofing flow — reduced verification time from 75s → 18s and increased pass rate from 82% → 94%.</li>
+                        <li>Rebuilt delivery processes: introduced dual-track development, compliance-locked sprint windows, and design QA gates, resulting in a 40% reduction in rework.</li>
+                        <li>Cleared 230+ Jira tickets in one quarter; cut average cycle time by 33% with streamlined workflows.</li>
+                        <li>Ran 6+ monthly growth experiments, improving onboarding completion by 20% and reducing selfie flow drop-off by 42%.</li>
+                        <li>Standardized alignment across Legal, Growth, and Engineering through unified requirements and risk frameworks.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <!-- Outliant -->
+            <details class="notion-toggle">
+                <summary>
+                    <div class="toggle-triangle">▶</div>
+                    OUTLIANT <span class="role-meta">| Project Manager (2022 – 2023)</span>
+                </summary>
+                <div class="toggle-content">
+                    <ul>
+                        <li>Reduced average project delivery timeline by 25% by streamlining design workflows and enforcing stricter acceptance criteria across design and engineering teams.</li>
+                        <li>Elevated Client NPS by 5 points for enterprise accounts (including SelectQuote and OrangeTheory) by establishing transparent roadmap reporting and weekly delivery demos.</li>
+                        <li>Managed resource allocation for multiple simultaneous creative projects, ensuring 100% on-time delivery for Q3 and Q4 deliverables.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <!-- Goliath -->
+            <details class="notion-toggle">
+                <summary>
+                    <div class="toggle-triangle">▶</div>
+                    GOLIATH <span class="role-meta">| Lead Product Designer (2019 – 2022)</span>
+                </summary>
+                <div class="toggle-content">
+                    <ul>
+                        <li>Built and maintained a scalable design system that supported 4 major web applications, directly contributing to a 40% lift in digital revenue.</li>
+                        <li>Bridged the gap between creative and technical teams, translating complex business requirements into high-fidelity prototypes that secured stakeholder buy-in early in the development cycle.</li>
+                        <li>Drove 15% customer growth by iteratively testing and optimizing core user flows based on live analytics data.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <!-- Bloomreach -->
+            <details class="notion-toggle">
+                <summary>
+                    <div class="toggle-triangle">▶</div>
+                    BLOOMREACH <span class="role-meta">| Customer Success Manager (2019)</span>
+                </summary>
+                <div class="toggle-content">
+                    <ul>
+                        <li>Managed a $3.2M ARR portfolio, growing revenue by 15% in 6 months through strategic account planning and product adoption initiatives.</li>
+                        <li>Reduced churn by 30% for key accounts (Levi’s, Puma) by implementing a proactive customer feedback loop that directly informed the product roadmap.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <hr>
+
+            <h3>The Tech Stack</h3>
+            <div class="notion-row">
+                <div class="notion-col">
+                    <strong>Management</strong>
+                    <ul>
+                        <li>Linear</li>
+                        <li>Jira</li>
+                        <li>Notion</li>
+                    </ul>
+                </div>
+                <div class="notion-col">
+                    <strong>Creative</strong>
+                    <ul>
+                        <li>Figma</li>
+                        <li>Storybook</li>
+                    </ul>
+                </div>
+                <div class="notion-col">
+                    <strong>Data</strong>
+                    <ul>
+                        <li>Amplitude</li>
+                        <li>Mixpanel</li>
+                        <li>SQL (Basic)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <a href="#" onclick="navigateTo('home')" class="text-link">← Back to Portfolio</a>
+            </div>
+        </div>
+
+        <!-- ================= CONTACT VIEW ================= -->
+        <div id="contact-view" class="view-section">
+            <div class="page-icon">📬</div>
+            <h1 class="page-title">Ready to ship?</h1>
+            <p style="font-size: 1.2em; color: var(--fg-light);">Currently available for Senior DPM roles in the UK/Remote.</p>
+
+            <div class="callout">
+                <div class="callout-icon">✉️</div>
+                <div class="callout-content">
+                    <strong>Email:</strong> <a href="mailto:heythatspablo@gmail.com" class="text-link">heythatspablo@gmail.com</a>
+                </div>
+            </div>
+
+            <h3>Social Proof</h3>
+            <ul style="list-style: none; padding-left: 0;">
+                <li><a href="#" class="text-link">↗ LinkedIn</a></li>
+                <li><a href="#" class="text-link">↗ Read.cv</a></li>
+            </ul>
+
+            <div style="margin-top: 40px;">
+                <a href="#" onclick="navigateTo('home')" class="text-link">← Back to Portfolio</a>
+            </div>
+        </div>
+
+        <div style="height: 100px;"></div> <!-- Bottom spacer -->
+    </main>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+
+        // --- THEME TOGGLE ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            body.classList.toggle('dark-mode');
+            
+            // Toggle Mermaid Theme (Requires re-render, simple reload for demo)
+            // Ideally we re-initialize mermaid here, but for simplicity we rely on neutral theme.
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.textContent = '☀️';
+            } else {
+                icon.textContent = '🌙';
+            }
+        }
+        
+        // --- OVERFLOW MENU LOGIC ---
+        function toggleOverflow(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('overflow-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('overflow-menu');
+            const trigger = document.querySelector('.header-btn[title="More options"]');
+            
+            if (menu.classList.contains('active') && !menu.contains(e.target) && e.target !== trigger) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // --- SIMPLE ROUTING ---
+        function navigateTo(viewId) {
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            
+            // Show target view
+            document.getElementById(viewId + '-view').classList.add('active');
+            
+            // Update Breadcrumb
+            const breadcrumb = document.getElementById('breadcrumb-current');
+            if (viewId === 'home') breadcrumb.textContent = 'Portfolio';
+            if (viewId === 'about') breadcrumb.textContent = 'About';
+            if (viewId === 'contact') breadcrumb.textContent = 'Contact';
+            if (viewId === 'casestudy') breadcrumb.textContent = 'Case Study: Unfamiliar.id';
+            if (viewId === 'outliant') breadcrumb.textContent = 'Experience: Outliant';
+            if (viewId === 'goliath') breadcrumb.textContent = 'Experience: Goliath';
+            if (viewId === 'bloomreach') breadcrumb.textContent = 'Experience: Bloomreach';
+
+            // --- COVER IMAGE LOGIC ---
+            const coverImage = document.getElementById('main-cover-image');
+            const defaultCover = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop";
+            const caseStudyCover = "https://images.unsplash.com/photo-1624969862293-b749659ccc4e?q=80&w=2670&auto=format&fit=crop";
+
+            if (viewId === 'casestudy') {
+                coverImage.src = caseStudyCover;
+            } else {
+                coverImage.src = defaultCover;
+            }
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+
+            // Re-render mermaid if in case study view (fix for rendering in hidden divs)
+            if (viewId === 'casestudy') {
+                mermaid.contentLoaded();
+            }
+        }
+
+    </script>
+</body>
+</html>
