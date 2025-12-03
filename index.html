@@ -105,6 +105,7 @@
         }
         .crumb:hover { background: var(--hover-bg); }
         .crumb-icon { margin-right: 6px; }
+        .crumb-icon img { width: 20px; vertical-align: middle; }
         .divider { color: var(--fg-light); margin: 0 2px; }
 
         .header-controls {
@@ -195,6 +196,9 @@
             margin-bottom: 4px;
             position: relative;
             z-index: 10;
+        }
+        .page-icon img {
+            width: 78px;
         }
 
         h1.page-title {
@@ -419,7 +423,7 @@
     <header>
         <div class="breadcrumbs">
             <div class="crumb" onclick="navigateTo('home')">
-                <img src="pablo-avatar-notion.png" alt="Pablo" style="width: 20px; height: 20px; border-radius: 4px; vertical-align: middle; margin-right: 2px;"> Pablo Vizcaino
+                <span class="crumb-icon"><img src="pablo-avatar-notion-removebg.png" alt="Pablo"></span> Pablo Vizcaino
             </div>
             <span class="divider">/</span>
             <div id="breadcrumb-current" class="crumb" style="cursor: default;">
@@ -467,7 +471,7 @@
         <!-- ================= HOME VIEW ================= -->
         <div id="home-view" class="view-section active">
             <!-- ICON & HERO -->
-            <div class="page-icon"><img src="pablo-avatar-notion.png" alt="Pablo" style="width: 78px; height: 78px; border-radius: 8px;"></div>
+            <div class="page-icon"><img src="pablo-avatar-notion-removebg.png" alt="Pablo"></div>
             <h1 class="page-title">Pablo Vizcaino: Design Project Manager</h1>
 
             <!-- Sub-headline Callout -->
