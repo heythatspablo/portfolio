@@ -403,9 +403,15 @@
                     </div>
                 </div>
 
+                <!-- Cover Image Upload -->
                 <div class="form-group">
-                    <label>Cover Image URL</label>
-                    <input type="text" id="post-cover" placeholder="https://...">
+                    <label>Cover Image</label>
+                    <div class="image-upload-area" id="cover-upload-area" onclick="document.getElementById('cover-file-input').click()">
+                        📷 Click or drag cover image here
+                    </div>
+                    <input type="file" id="cover-file-input" accept="image/*" style="display: none;" onchange="handleCoverUpload(event)">
+                    <input type="hidden" id="post-cover">
+                    <div id="cover-preview" style="margin-top: 12px;"></div>
                 </div>
 
                 <div class="form-group">
@@ -413,11 +419,11 @@
                     <input type="text" id="post-excerpt" placeholder="A brief summary of the post...">
                 </div>
 
-                <!-- Image Upload -->
+                <!-- Content Images Upload -->
                 <div class="form-group">
-                    <label>Upload Images</label>
+                    <label>Content Images (click to copy markdown)</label>
                     <div class="image-upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
-                        📁 Click or drag images here to upload
+                        📁 Click or drag images for post content
                     </div>
                     <input type="file" id="file-input" accept="image/*" multiple style="display: none;" onchange="handleFileSelect(event)">
                     <div id="uploaded-images" class="uploaded-images"></div>
@@ -553,6 +559,8 @@
         function showEditor(post = null) {
             document.getElementById('list-view').style.display = 'none';
             document.getElementById('editor-view').style.display = 'block';
+            document.getElementById('uploaded-images').innerHTML = '';
+            document.getElementById('cover-preview').innerHTML = '';
 
             if (post) {
                 document.getElementById('editor-title').textContent = 'Edit Post';
@@ -565,6 +573,14 @@
                 document.getElementById('post-content').value = post.content || '';
                 document.getElementById('post-published').value = post.published ? 'true' : 'false';
                 document.getElementById('delete-btn').style.display = 'block';
+                
+                // Show existing cover image
+                if (post.cover_image) {
+                    document.getElementById('cover-preview').innerHTML = `
+                        <img src="${post.cover_image}" style="max-width: 100%; max-height: 200px; border-radius: 4px;">
+                        <button type="button" class="btn btn-secondary" style="margin-top: 8px;" onclick="removeCoverImage()">Remove</button>
+                    `;
+                }
             } else {
                 document.getElementById('editor-title').textContent = 'New Post';
                 document.getElementById('post-form').reset();
@@ -652,6 +668,77 @@
         }
 
         // --- IMAGE UPLOAD ---
+        async function uploadImage(file) {
+            const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+            
+            const { data, error } = await supabase.storage
+                .from(STORAGE_BUCKET)
+                .upload(fileName, file, { cacheControl: '3600', upsert: false });
+
+            if (error) {
+                throw new Error(error.message);
+            }
+
+            const { data: urlData } = supabase.storage
+                .from(STORAGE_BUCKET)
+                .getPublicUrl(fileName);
+
+            return urlData.publicUrl;
+        }
+
+        // --- COVER IMAGE UPLOAD ---
+        const coverUploadArea = document.getElementById('cover-upload-area');
+
+        coverUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            coverUploadArea.classList.add('dragover');
+        });
+
+        coverUploadArea.addEventListener('dragleave', () => {
+            coverUploadArea.classList.remove('dragover');
+        });
+
+        coverUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            coverUploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                handleCoverFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        function handleCoverUpload(e) {
+            if (e.target.files.length > 0) {
+                handleCoverFile(e.target.files[0]);
+            }
+        }
+
+        async function handleCoverFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showToast('Please select an image file', true);
+                return;
+            }
+
+            showToast('Uploading cover image...');
+
+            try {
+                const url = await uploadImage(file);
+                document.getElementById('post-cover').value = url;
+                document.getElementById('cover-preview').innerHTML = `
+                    <img src="${url}" style="max-width: 100%; max-height: 200px; border-radius: 4px;">
+                    <button type="button" class="btn btn-secondary" style="margin-top: 8px;" onclick="removeCoverImage()">Remove</button>
+                `;
+                showToast('Cover image uploaded!');
+            } catch (err) {
+                showToast('Upload failed: ' + err.message, true);
+            }
+        }
+
+        function removeCoverImage() {
+            document.getElementById('post-cover').value = '';
+            document.getElementById('cover-preview').innerHTML = '';
+        }
+
+        // --- CONTENT IMAGES UPLOAD ---
         const uploadArea = document.getElementById('upload-area');
 
         uploadArea.addEventListener('dragover', (e) => {
@@ -677,25 +764,15 @@
             for (const file of files) {
                 if (!file.type.startsWith('image/')) continue;
 
-                const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-                
                 showToast('Uploading ' + file.name + '...');
 
-                const { data, error } = await supabase.storage
-                    .from(STORAGE_BUCKET)
-                    .upload(fileName, file, { cacheControl: '3600', upsert: false });
-
-                if (error) {
-                    showToast('Upload failed: ' + error.message, true);
-                    continue;
+                try {
+                    const url = await uploadImage(file);
+                    addUploadedImage(url, file.name);
+                    showToast('Uploaded: ' + file.name);
+                } catch (err) {
+                    showToast('Upload failed: ' + err.message, true);
                 }
-
-                const { data: urlData } = supabase.storage
-                    .from(STORAGE_BUCKET)
-                    .getPublicUrl(fileName);
-
-                addUploadedImage(urlData.publicUrl, fileName);
-                showToast('Uploaded: ' + file.name);
             }
         }
 
@@ -703,12 +780,18 @@
             const container = document.getElementById('uploaded-images');
             const div = document.createElement('div');
             div.className = 'uploaded-image';
+            const markdown = `![${fileName}](${url})`;
             div.innerHTML = `
                 <img src="${url}" alt="">
                 <button type="button" onclick="this.parentElement.remove()">×</button>
-                <span class="copy-url" onclick="copyToClipboard('${url}')" title="${url}">📋 Copy URL</span>
+                <span class="copy-url" onclick="copyMarkdown('${markdown}')" title="Click to copy markdown">📋 Copy Markdown</span>
             `;
             container.appendChild(div);
+        }
+
+        function copyMarkdown(text) {
+            navigator.clipboard.writeText(text);
+            showToast('Markdown copied! Paste into content.');
         }
 
         function copyToClipboard(text) {
