@@ -344,6 +344,34 @@
         .gallery-content { padding: 10px 12px; }
         .gallery-title { font-weight: 500; font-size: 14px; margin-bottom: 4px; }
 
+        /* Featured Blog Grid */
+        .featured-blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 768px) {
+            .featured-blog-grid { grid-template-columns: 1fr; }
+        }
+        .blog-card {
+            background: var(--card-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+            border: 1px solid var(--border-color);
+        }
+        .blog-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .blog-card-cover {
+            height: 120px;
+            width: 100%;
+            object-fit: cover;
+        }
+        .blog-card-content { padding: 12px; }
+        .blog-card-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+        .blog-card-meta { font-size: 12px; color: var(--fg-light); margin-bottom: 6px; }
+        .blog-card-excerpt { font-size: 12px; color: var(--fg-light); line-height: 1.4; }
+
         /* 5. Code Block (Used for Spec) */
         .code-block {
             background: var(--code-bg);
@@ -504,24 +532,17 @@
 
             <hr>
 
-            <!-- FEATURED CASE STUDY -->
-            <h3>Featured Case Study</h3>
-            <div class="featured-case" onclick="navigateTo('casestudy')">
-                <div class="featured-content">
-                    <div style="font-size: 12px; color: #EB5757; font-weight: 600; margin-bottom: 8px;">CROWN JEWEL</div>
-                    <h2 style="margin-top: 0; font-size: 24px;">Unfamiliar.id: Unblocking the Biometric Bottleneck</h2>
-                    <p style="font-size: 14px; color: var(--fg-light); margin-bottom: 16px;">
-                        B2B Identity • AI Integration • Dual-Track Agile
-                    </p>
-                    <div style="margin-top: auto;">
-                        <span style="border-bottom: 1px solid var(--fg-light);">Read Case Study →</span>
-                    </div>
+            <!-- RECENT BLOG POSTS -->
+            <h3>Recent Blog Posts</h3>
+            <div id="home-blog-posts" class="featured-blog-grid">
+                <!-- Loaded dynamically -->
+                <div class="callout" style="grid-column: 1 / -1;">
+                    <div class="callout-icon">⏳</div>
+                    <div class="callout-content">Loading posts...</div>
                 </div>
-                <div class="featured-visual">
-                    <!-- Placeholder visual for Split Screen Linear vs UI -->
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop" alt="Split Screen Visual">
-                    <div class="metric-overlay">Reduced verification time by 76% (75s → 18s)</div>
-                </div>
+            </div>
+            <div style="margin-top: 16px;">
+                <a href="#" onclick="navigateTo('blog')" class="text-link">View all posts →</a>
             </div>
 
             <!-- HOW I WORK (3 Columns) -->
@@ -587,6 +608,25 @@
                         <li><strong>Risk Management:</strong> I anticipate bottlenecks (API latency, 3rd party downtimes) and build "fallback UIs" into the specs before they become emergencies.</li>
                         <li><strong>Stakeholder Translation:</strong> I translate complex technical blockers into business language for executives, and business goals into technical tasks for engineers.</li>
                     </ul>
+                </div>
+            </div>
+
+            <!-- FEATURED CASE STUDY -->
+            <h3>Featured Case Study</h3>
+            <div class="featured-case" onclick="navigateTo('casestudy')">
+                <div class="featured-content">
+                    <div style="font-size: 12px; color: #EB5757; font-weight: 600; margin-bottom: 8px;">CROWN JEWEL</div>
+                    <h2 style="margin-top: 0; font-size: 24px;">Unfamiliar.id: Unblocking the Biometric Bottleneck</h2>
+                    <p style="font-size: 14px; color: var(--fg-light); margin-bottom: 16px;">
+                        B2B Identity • AI Integration • Dual-Track Agile
+                    </p>
+                    <div style="margin-top: auto;">
+                        <span style="border-bottom: 1px solid var(--fg-light);">Read Case Study →</span>
+                    </div>
+                </div>
+                <div class="featured-visual">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop" alt="Split Screen Visual">
+                    <div class="metric-overlay">Reduced verification time by 76% (75s → 18s)</div>
                 </div>
             </div>
 
@@ -1042,6 +1082,38 @@ REQUIREMENTS (Agreed by @ML-Team & @Design)
             `).join('');
         }
 
+        async function loadRecentBlogPosts() {
+            const grid = document.getElementById('home-blog-posts');
+            if (!grid) return;
+            
+            const { data: posts, error } = await supabase
+                .from('posts')
+                .select('slug, title, excerpt, cover_image, icon, created_at')
+                .eq('published', true)
+                .order('created_at', { ascending: false })
+                .limit(3);
+
+            if (error || !posts || posts.length === 0) {
+                grid.innerHTML = `
+                    <div class="callout" style="grid-column: 1 / -1;">
+                        <div class="callout-icon">📭</div>
+                        <div class="callout-content">No posts yet. Check back soon!</div>
+                    </div>`;
+                return;
+            }
+
+            grid.innerHTML = posts.map(post => `
+                <div class="blog-card" onclick="navigateToBlogPost('${post.slug}')">
+                    <img class="blog-card-cover" src="${post.cover_image || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800'}" alt="${post.title}">
+                    <div class="blog-card-content">
+                        <div class="blog-card-title">${post.icon || '📝'} ${post.title}</div>
+                        <div class="blog-card-meta">${formatDate(post.created_at)}</div>
+                        <div class="blog-card-excerpt">${post.excerpt || ''}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         async function loadBlogPost(slug) {
             const { data: post, error } = await supabase
                 .from('posts')
@@ -1227,6 +1299,9 @@ REQUIREMENTS (Agreed by @ML-Team & @Design)
                 loadBlogPosts();
             }
         }
+
+        // Load recent posts on homepage on page load
+        document.addEventListener('DOMContentLoaded', loadRecentBlogPosts);
 
     </script>
 </body>
