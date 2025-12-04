@@ -1057,7 +1057,8 @@ REQUIREMENTS (Agreed by @ML-Team & @Design)
             
             // Render markdown content
             const rawContent = post.content || '';
-            document.getElementById('blogpost-content').innerHTML = marked.parse(rawContent);
+            const renderedContent = marked.parse(rawContent);
+            document.getElementById('blogpost-content').innerHTML = renderedContent;
             
             // Update cover image
             const coverImage = document.getElementById('main-cover-image');
@@ -1067,6 +1068,53 @@ REQUIREMENTS (Agreed by @ML-Team & @Design)
 
             // Update breadcrumb with post title
             document.getElementById('breadcrumb-current').textContent = post.title;
+
+            // Inject JSON-LD structured data for SEO
+            injectBlogPostSchema(post, rawContent);
+        }
+
+        function injectBlogPostSchema(post, rawContent) {
+            // Remove existing blog schema if present
+            const existingSchema = document.getElementById('blogpost-schema');
+            if (existingSchema) existingSchema.remove();
+
+            // Calculate word count from raw content
+            const wordCount = rawContent.trim().split(/\s+/).filter(w => w.length > 0).length;
+
+            // Build the base URL
+            const baseUrl = window.location.origin;
+            const postUrl = `${baseUrl}/blog/${post.slug}`;
+
+            const schema = {
+                "@context": "https://schema.org",
+                "@type": "BlogPosting",
+                "@id": postUrl,
+                "mainEntityOfPage": postUrl,
+                "headline": post.title,
+                "description": post.excerpt || '',
+                "articleBody": rawContent,
+                "datePublished": post.created_at,
+                "dateModified": post.updated_at || post.created_at,
+                "author": {
+                    "@type": "Person",
+                    "name": "Pablo Vizcaino",
+                    "url": baseUrl
+                },
+                "publisher": {
+                    "@type": "Person",
+                    "name": "Pablo Vizcaino",
+                    "url": baseUrl
+                },
+                "image": post.cover_image ? [post.cover_image] : [],
+                "inLanguage": "en",
+                "wordCount": wordCount
+            };
+
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.id = 'blogpost-schema';
+            script.textContent = JSON.stringify(schema, null, 2);
+            document.head.appendChild(script);
         }
 
         function navigateToBlogPost(slug) {
