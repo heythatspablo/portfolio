@@ -6,6 +6,10 @@
     <title>Pablo Vizcaino - Design Project Manager</title>
     <!-- Mermaid JS for Charts -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         /* --- VARIABLES & THEME CONFIG --- */
         :root {
@@ -425,7 +429,11 @@
             <div class="crumb" onclick="navigateTo('home')">
                 <span class="crumb-icon"><img src="pablo-avatar-notion-removebg.png" alt="Pablo"></span> Pablo Vizcaino
             </div>
-            <span class="divider">/</span>
+<span class="divider">/</span>
+            <div id="breadcrumb-middle" class="crumb" style="cursor: pointer; display: none;" onclick="navigateTo('blog')">
+                Blog
+            </div>
+            <span id="divider-middle" class="divider" style="display: none;">/</span>
             <div id="breadcrumb-current" class="crumb" style="cursor: default;">
                 Portfolio
             </div>
@@ -604,6 +612,9 @@
             <div class="notion-row">
                 <div class="notion-col">
                     <a class="text-link" href="#" onclick="navigateTo('about')">→ About Me</a>
+                </div>
+                <div class="notion-col">
+                    <a class="text-link" href="#" onclick="navigateTo('blog')">→ Blog</a>
                 </div>
                 <div class="notion-col">
                     <a class="text-link" href="#" onclick="navigateTo('contact')">→ Contact</a>
@@ -938,12 +949,132 @@ REQUIREMENTS (Agreed by @ML-Team & @Design)
             </div>
         </div>
 
+        <!-- ================= BLOG LISTING VIEW ================= -->
+        <div id="blog-view" class="view-section">
+            <div class="page-icon">📝</div>
+            <h1 class="page-title">Blog</h1>
+            <p style="font-size: 1.2em; color: var(--fg-light); margin-bottom: 24px;">Thoughts on design, project management, and building products.</p>
+            
+            <div id="blog-posts-grid" class="gallery-grid">
+                <!-- Posts loaded dynamically -->
+                <div class="callout" style="grid-column: 1 / -1;">
+                    <div class="callout-icon">⏳</div>
+                    <div class="callout-content">Loading posts...</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <a href="#" onclick="navigateTo('home')" class="text-link">← Back to Portfolio</a>
+            </div>
+        </div>
+
+        <!-- ================= DYNAMIC BLOG POST VIEW ================= -->
+        <div id="blogpost-view" class="view-section">
+            <div class="page-icon" id="blogpost-icon">📝</div>
+            <h1 class="page-title" id="blogpost-title">Loading...</h1>
+            
+            <div id="blogpost-content">
+                <!-- Content loaded dynamically -->
+            </div>
+
+            <div style="margin-top: 40px;">
+                <a href="#" onclick="navigateTo('blog')" class="text-link">← Back to Blog</a>
+            </div>
+        </div>
+
         <div style="height: 100px;"></div> <!-- Bottom spacer -->
     </main>
 
     <script>
         // Initialize Mermaid
         mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+
+        // --- SUPABASE CLIENT ---
+        const SUPABASE_URL = 'https://cvaujkhxgzrqwqjofgls.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2YXVqa2h4Z3pycXdxam9mZ2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3OTM3NDYsImV4cCI6MjA4MDM2OTc0Nn0.qbmIu3luDquk734FXko7I2m1qaY6MPA0r6quFJlEmSw';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // --- BLOG FUNCTIONS ---
+        async function loadBlogPosts() {
+            const grid = document.getElementById('blog-posts-grid');
+            
+            const { data: posts, error } = await supabase
+                .from('posts')
+                .select('slug, title, excerpt, cover_image, icon, created_at')
+                .eq('published', true)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                grid.innerHTML = `
+                    <div class="callout" style="grid-column: 1 / -1; background: rgba(235, 87, 87, 0.1);">
+                        <div class="callout-icon">❌</div>
+                        <div class="callout-content">Error loading posts: ${error.message}</div>
+                    </div>`;
+                return;
+            }
+
+            if (!posts || posts.length === 0) {
+                grid.innerHTML = `
+                    <div class="callout" style="grid-column: 1 / -1;">
+                        <div class="callout-icon">📭</div>
+                        <div class="callout-content">No posts yet. Check back soon!</div>
+                    </div>`;
+                return;
+            }
+
+            grid.innerHTML = posts.map(post => `
+                <div class="gallery-card" onclick="navigateToBlogPost('${post.slug}')">
+                    <img class="gallery-cover" src="${post.cover_image || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800'}" alt="${post.title}">
+                    <div class="gallery-content">
+                        <div class="gallery-title">${post.icon || '📝'} ${post.title}</div>
+                        <div style="font-size: 12px; color: var(--fg-light);">${post.excerpt || ''}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadBlogPost(slug) {
+            const { data: post, error } = await supabase
+                .from('posts')
+                .select('*')
+                .eq('slug', slug)
+                .eq('published', true)
+                .single();
+
+            if (error || !post) {
+                document.getElementById('blogpost-title').textContent = 'Post Not Found';
+                document.getElementById('blogpost-icon').textContent = '❌';
+                document.getElementById('blogpost-content').innerHTML = `
+                    <div class="callout" style="background: rgba(235, 87, 87, 0.1);">
+                        <div class="callout-icon">🔍</div>
+                        <div class="callout-content">This post doesn't exist or has been removed.</div>
+                    </div>`;
+                return;
+            }
+
+            document.getElementById('blogpost-icon').textContent = post.icon || '📝';
+            document.getElementById('blogpost-title').textContent = post.title;
+            
+            // Render markdown content
+            const rawContent = post.content || '';
+            document.getElementById('blogpost-content').innerHTML = marked.parse(rawContent);
+            
+            // Update cover image
+            const coverImage = document.getElementById('main-cover-image');
+            if (post.cover_image) {
+                coverImage.src = post.cover_image;
+            }
+
+            // Update breadcrumb with post title
+            document.getElementById('breadcrumb-current').textContent = post.title;
+        }
+
+        function navigateToBlogPost(slug) {
+            // Store current slug for routing
+            window.currentBlogSlug = slug;
+            navigateTo('blogpost');
+            loadBlogPost(slug);
+        }
 
         // --- THEME TOGGLE ---
         function toggleTheme() {
@@ -988,6 +1119,13 @@ REQUIREMENTS (Agreed by @ML-Team & @Design)
             
             // Update Breadcrumb
             const breadcrumb = document.getElementById('breadcrumb-current');
+            const breadcrumbMiddle = document.getElementById('breadcrumb-middle');
+            const dividerMiddle = document.getElementById('divider-middle');
+            
+            // Hide middle breadcrumb by default
+            breadcrumbMiddle.style.display = 'none';
+            dividerMiddle.style.display = 'none';
+            
             if (viewId === 'home') breadcrumb.textContent = 'Portfolio';
             if (viewId === 'about') breadcrumb.textContent = 'About';
             if (viewId === 'contact') breadcrumb.textContent = 'Contact';
@@ -995,15 +1133,26 @@ REQUIREMENTS (Agreed by @ML-Team & @Design)
             if (viewId === 'outliant') breadcrumb.textContent = 'Experience: Outliant';
             if (viewId === 'goliath') breadcrumb.textContent = 'Experience: Goliath';
             if (viewId === 'bloomreach') breadcrumb.textContent = 'Experience: Bloomreach';
+            if (viewId === 'blog') breadcrumb.textContent = 'Blog';
+            if (viewId === 'blogpost') {
+                // Show middle breadcrumb for blog posts: Pablo / Blog / {title}
+                breadcrumbMiddle.style.display = 'flex';
+                dividerMiddle.style.display = 'inline';
+                breadcrumb.textContent = 'Loading...'; // Will be updated by loadBlogPost
+            }
 
             // --- COVER IMAGE LOGIC ---
             const coverImage = document.getElementById('main-cover-image');
             const defaultCover = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop";
             const caseStudyCover = "https://images.unsplash.com/photo-1624969862293-b749659ccc4e?q=80&w=2670&auto=format&fit=crop";
+            const blogCover = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=2670&auto=format&fit=crop";
 
             if (viewId === 'casestudy') {
                 coverImage.src = caseStudyCover;
-            } else {
+            } else if (viewId === 'blog') {
+                coverImage.src = blogCover;
+            } else if (viewId !== 'blogpost') {
+                // blogpost sets its own cover via loadBlogPost()
                 coverImage.src = defaultCover;
             }
 
@@ -1013,6 +1162,11 @@ REQUIREMENTS (Agreed by @ML-Team & @Design)
             // Re-render mermaid if in case study view (fix for rendering in hidden divs)
             if (viewId === 'casestudy') {
                 mermaid.contentLoaded();
+            }
+
+            // Load blog posts when navigating to blog view
+            if (viewId === 'blog') {
+                loadBlogPosts();
             }
         }
 
