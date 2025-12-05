@@ -504,6 +504,8 @@
             }
 
             allPosts = data || [];
+            console.log('Loaded posts:', allPosts);
+            console.log('Drafts:', allPosts.filter(p => !p.published));
             renderPosts();
         }
 
