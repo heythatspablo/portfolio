@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding - Pablo Vizcaino</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Support tickets are a lagging indicator of friction. Here is how I used embedded Typeforms to capture real-time CSAT data during the Unfamiliar.id onboarding flow, identifying a UX blind spot that was stalling enterprise clients.">
+    <meta name="author" content="Pablo F. Vizcaino">
+    <link rel="canonical" href="https://99pablos.com/blog/the-silent-churn-killer-using-micro-surveys-to-unblock-enterprise-onboarding.html">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding">
+    <meta property="og:description" content="Support tickets are a lagging indicator of friction. Here is how I used embedded Typeforms to capture real-time CSAT data during the Unfamiliar.id onboarding flow, identifying a UX blind spot that was stalling enterprise clients.">
+    <meta property="og:image" content="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764893471499-Gemini_Generated_Image_dvxb9jdvxb9jdvxb.png">
+    <meta property="og:url" content="https://99pablos.com/blog/the-silent-churn-killer-using-micro-surveys-to-unblock-enterprise-onboarding.html">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2025-12-05T00:11:19.855559+00:00">
+    <meta property="article:author" content="Pablo F. Vizcaino">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding">
+    <meta name="twitter:description" content="Support tickets are a lagging indicator of friction. Here is how I used embedded Typeforms to capture real-time CSAT data during the Unfamiliar.id onboarding flow, identifying a UX blind spot that was stalling enterprise clients.">
+    <meta name="twitter:image" content="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764893471499-Gemini_Generated_Image_dvxb9jdvxb9jdvxb.png">
+    
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": "https://99pablos.com/blog/the-silent-churn-killer-using-micro-surveys-to-unblock-enterprise-onboarding.html",
+    "mainEntityOfPage": "https://99pablos.com/blog/the-silent-churn-killer-using-micro-surveys-to-unblock-enterprise-onboarding.html",
+    "headline": "The \"Silent Churn\" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding",
+    "description": "Support tickets are a lagging indicator of friction. Here is how I used embedded Typeforms to capture real-time CSAT data during the Unfamiliar.id onboarding flow, identifying a UX blind spot that was stalling enterprise clients.",
+    "articleBody": "In B2B SaaS, the most dangerous customer isn't the one filing a support ticket. It's the one who gets stuck, says nothing, and quietly decides your product is \"too complicated.\"\n\nWe call this **Silent Churn**.\n\nAt **Unfamiliar.id**, we were seeing a worrying trend during our Enterprise Onboarding phase. We had a powerful product, but our \"Time to First Value\" (TTFV)—the time it takes for a new developer to integrate our SDK—was lagging.\n\nWorse, our support team was getting hit with a specific spike in tickets related to \"API Configuration\" about 48 hours after sign-up.\n\nBy the time the ticket arrived, the customer was already frustrated. The engineering team was fully booked building core features, so we couldn't just \"build a feedback system\" from scratch to diagnose the problem.\n\nWe needed a listening device, and we needed it immediately.\n\n### The Low-Code Solution: Typeform as a Sensor\n\nInstead of waiting for a sprint cycle to build a native feedback component, I turned to **Typeform**.\n\nMy hypothesis was simple: We didn't have a bug; we had a clarity issue. But we needed data to prove it.\n\nI spun up a lightweight, 2-question Typeform and used a simple Javascript embed to trigger it inside the dashboard at the exact moment a user completed (or abandoned) the API setup step.\n\n**The Survey Design:**\n1.  **The CSAT Score:** \"On a scale of 1-5, how easy was it to generate your first API key?\"\n2.  **The Blocker (Conditional):** If they scored 3 or lower, we asked: \"What was the one thing that stopped you from finishing?\"\n\n### The Deployment\n\nWe deployed this \"Micro-Survey\" via Google Tag Manager (GTM). This meant we could go live without a deployment to the core codebase.\n\nWithin 24 hours, the data started flowing.\n\n### The Discovery\n\nThe qualitative data was shocking. We assumed users were struggling with complex technical documentation.\n\nThe reality? They couldn't find the \"Environment Switcher.\"\n\nOur Enterprise clients often needed to switch between \"Sandbox\" and \"Production\" modes to test their keys. In our UI, the switcher was a small toggle in the top right corner—standard for us, but invisible to them.\n\nUsers were generating Sandbox keys, trying to use them in Production environments, failing, and then churning or filing a ticket.\n\n**The Feedback Loop:**\n* **User A:** \"I generated a key but it says invalid.\"\n* **User B:** \"Where do I find the prod keys?\"\n* **User C:** \"Stuck on sandbox mode.\"\n\nWe didn't need a code rewrite. We needed a UI tweak.\n\n### The Fix and The Outcome\n\nArmed with this data, I brought the findings to the Design team. Because the evidence was irrefutable (and tied directly to support volume), we prioritized a hotfix.\n\nWe moved the Environment Switcher to the center of the API Dashboard and added a clear banner indicating which mode was active.\n\n**The Results:**\n* **Support Ticket Volume:** The specific \"Invalid Key\" ticket category dropped by **60%** within a week.\n* **CSAT Score:** The specific rating for that onboarding step jumped from **3.2 to 4.5**.\n* **Engineering Time Saved:** By diagnosing the problem with Typeform, we avoided weeks of engineers hunting for non-existent backend bugs.\n\n### The Takeaway\n\nAs Product Managers, we often fall into the trap of thinking every solution needs to be \"built.\"\n\nSometimes, the most high-leverage thing you can do is stop guessing and start asking. Tools like Typeform allow you to inject \"listening devices\" into your product experience instantly.\n\nIf your customers are getting stuck, don't wait for them to email support. Ask them right there, right then. The answer is usually simpler than you think.",
+    "datePublished": "2025-12-05T00:11:19.855559+00:00",
+    "dateModified": "2025-12-05T00:11:16.496+00:00",
+    "author": {
+        "@type": "Person",
+        "name": "Pablo F. Vizcaino",
+        "url": "https://99pablos.com"
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "Pablo F. Vizcaino",
+        "url": "https://99pablos.com"
+    },
+    "image": [
+        "https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764893471499-Gemini_Generated_Image_dvxb9jdvxb9jdvxb.png"
+    ],
+    "inLanguage": "en",
+    "wordCount": 598
+}
+    </script>
+    
+    <style>
+        :root {
+            --bg-color: #FFFFFF;
+            --fg-color: #37352F;
+            --fg-light: #9B9A97;
+            --border-color: #E9E9E7;
+            --callout-bg: #F1F1EF;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #191919;
+                --fg-color: rgba(255, 255, 255, 0.9);
+                --fg-light: rgba(255, 255, 255, 0.443);
+                --border-color: rgba(255, 255, 255, 0.094);
+                --callout-bg: #2F2F2F;
+            }
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-color);
+            color: var(--fg-color);
+            line-height: 1.6;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .cover-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 24px;
+        }
+        
+        .meta {
+            font-size: 14px;
+            color: var(--fg-light);
+            margin-bottom: 8px;
+        }
+        
+        .icon {
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        
+        .excerpt {
+            font-size: 1.1em;
+            color: var(--fg-light);
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .content h2 {
+            font-size: 1.5em;
+            margin: 32px 0 16px;
+        }
+        
+        .content h3 {
+            font-size: 1.25em;
+            margin: 24px 0 12px;
+        }
+        
+        .content p {
+            margin-bottom: 16px;
+        }
+        
+        .content ul, .content ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+        
+        .content li {
+            margin-bottom: 8px;
+        }
+        
+        .content blockquote {
+            border-left: 3px solid var(--fg-color);
+            padding-left: 16px;
+            margin: 16px 0;
+            color: var(--fg-light);
+        }
+        
+        .content code {
+            font-family: var(--font-mono);
+            background: var(--callout-bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        .content pre {
+            background: var(--callout-bg);
+            padding: 16px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        
+        .content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .content a {
+            color: var(--fg-color);
+            text-decoration: underline;
+        }
+        
+        .content hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 32px 0;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--fg-light);
+            text-decoration: none;
+            border-bottom: 1px solid var(--fg-light);
+        }
+        
+        .back-link:hover {
+            color: var(--fg-color);
+        }
+    </style>
+</head>
+<body>
+    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764893471499-Gemini_Generated_Image_dvxb9jdvxb9jdvxb.png" alt="The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding" class="cover-image">
+    
+    <div class="icon">📝</div>
+    <p class="meta">04 December, 2025</p>
+    <h1>The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding</h1>
+    <p class="excerpt">Support tickets are a lagging indicator of friction. Here is how I used embedded Typeforms to capture real-time CSAT data during the Unfamiliar.id onboarding flow, identifying a UX blind spot that was stalling enterprise clients.</p>
+    
+    <article class="content">
+<p>In B2B SaaS, the most dangerous customer isn't the one filing a support ticket. It's the one who gets stuck, says nothing, and quietly decides your product is "too complicated."</p><p>We call this <strong>Silent Churn</strong>.</p><p>At <strong>Unfamiliar.id</strong>, we were seeing a worrying trend during our Enterprise Onboarding phase. We had a powerful product, but our "Time to First Value" (TTFV)—the time it takes for a new developer to integrate our SDK—was lagging.</p><p>Worse, our support team was getting hit with a specific spike in tickets related to "API Configuration" about 48 hours after sign-up.</p><p>By the time the ticket arrived, the customer was already frustrated. The engineering team was fully booked building core features, so we couldn't just "build a feedback system" from scratch to diagnose the problem.</p><p>We needed a listening device, and we needed it immediately.</p><h3>The Low-Code Solution: Typeform as a Sensor</h3><p>Instead of waiting for a sprint cycle to build a native feedback component, I turned to <strong>Typeform</strong>.</p><p>My hypothesis was simple: We didn't have a bug; we had a clarity issue. But we needed data to prove it.</p><p>I spun up a lightweight, 2-question Typeform and used a simple Javascript embed to trigger it inside the dashboard at the exact moment a user completed (or abandoned) the API setup step.</p><p><strong>The Survey Design:</strong><br><ul><li><strong>The CSAT Score:</strong> "On a scale of 1-5, how easy was it to generate your first API key?"</li></ul><br><ul><li><strong>The Blocker (Conditional):</strong> If they scored 3 or lower, we asked: "What was the one thing that stopped you from finishing?"</li></ul></p><h3>The Deployment</h3><p>We deployed this "Micro-Survey" via Google Tag Manager (GTM). This meant we could go live without a deployment to the core codebase.</p><p>Within 24 hours, the data started flowing.</p><h3>The Discovery</h3><p>The qualitative data was shocking. We assumed users were struggling with complex technical documentation.</p><p>The reality? They couldn't find the "Environment Switcher."</p><p>Our Enterprise clients often needed to switch between "Sandbox" and "Production" modes to test their keys. In our UI, the switcher was a small toggle in the top right corner—standard for us, but invisible to them.</p><p>Users were generating Sandbox keys, trying to use them in Production environments, failing, and then churning or filing a ticket.</p><p><strong>The Feedback Loop:</strong><br><ul><li><strong>User A:</strong> "I generated a key but it says invalid."</li></ul><br><ul><li><strong>User B:</strong> "Where do I find the prod keys?"</li></ul><br><ul><li><strong>User C:</strong> "Stuck on sandbox mode."</li></ul></p><p>We didn't need a code rewrite. We needed a UI tweak.</p><h3>The Fix and The Outcome</h3><p>Armed with this data, I brought the findings to the Design team. Because the evidence was irrefutable (and tied directly to support volume), we prioritized a hotfix.</p><p>We moved the Environment Switcher to the center of the API Dashboard and added a clear banner indicating which mode was active.</p><p><strong>The Results:</strong><br><ul><li><strong>Support Ticket Volume:</strong> The specific "Invalid Key" ticket category dropped by <strong>60%</strong> within a week.</li></ul><br><ul><li><strong>CSAT Score:</strong> The specific rating for that onboarding step jumped from <strong>3.2 to 4.5</strong>.</li></ul><br><ul><li><strong>Engineering Time Saved:</strong> By diagnosing the problem with Typeform, we avoided weeks of engineers hunting for non-existent backend bugs.</li></ul></p><h3>The Takeaway</h3><p>As Product Managers, we often fall into the trap of thinking every solution needs to be "built."</p><p>Sometimes, the most high-leverage thing you can do is stop guessing and start asking. Tools like Typeform allow you to inject "listening devices" into your product experience instantly.</p><p>If your customers are getting stuck, don't wait for them to email support. Ask them right there, right then. The answer is usually simpler than you think.</p>
+    </article>
+    
+    <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+</body>
+</html>

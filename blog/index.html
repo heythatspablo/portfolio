@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Pablo Vizcaino</title>
+    <meta name="description" content="Blog posts by Pablo F. Vizcaino on product management, design systems, and operational excellence.">
+    <link rel="canonical" href="https://99pablos.com/blog/">
+    
+    <style>
+        :root {
+            --bg-color: #FFFFFF;
+            --fg-color: #37352F;
+            --fg-light: #9B9A97;
+            --border-color: #E9E9E7;
+            --hover-bg: rgba(55, 53, 47, 0.08);
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #191919;
+                --fg-color: rgba(255, 255, 255, 0.9);
+                --fg-light: rgba(255, 255, 255, 0.443);
+                --border-color: rgba(255, 255, 255, 0.094);
+                --hover-bg: rgba(255, 255, 255, 0.055);
+            }
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-color);
+            color: var(--fg-color);
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 32px;
+        }
+        
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        
+        .post-card {
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        
+        .post-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .post-cover {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+        
+        .post-info {
+            padding: 16px;
+        }
+        
+        .post-icon {
+            font-size: 24px;
+        }
+        
+        .post-info h2 {
+            font-size: 1.1em;
+            margin: 8px 0;
+        }
+        
+        .post-date {
+            font-size: 12px;
+            color: var(--fg-light);
+        }
+        
+        .post-excerpt {
+            font-size: 13px;
+            color: var(--fg-light);
+            margin-top: 8px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: var(--fg-light);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="https://99pablos.com" class="back-link">← Back to Portfolio</a>
+    <h1>📝 Blog</h1>
+    
+    <div class="posts-grid">
+
+        <a href="/blog/the-master-prompt-how-i-generate-personas-tone-and-copy-in-one-session.html" class="post-card">
+            <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764964502546-Gemini_Generated_Image_4uio674uio674uio_formphotoeditor.com.jpg" alt="The "Master Prompt": How I Generate Personas, Tone, and Copy in One Session" class="post-cover">
+            <div class="post-info">
+                <span class="post-icon">📝</span>
+                <h2>The "Master Prompt": How I Generate Personas, Tone, and Copy in One Session</h2>
+                <p class="post-date">05 December, 2025</p>
+                <p class="post-excerpt">Most people use AI for one-off tasks. I built a "Master Prompt" workflow that chains context together—generating deep user personas, enforcing a strict brand voice, and outputting weeks of ad copy in a single, coherent stream.</p>
+            </div>
+        </a>
+    
+
+        <a href="/blog/the-death-of-the-5-year-plan-why-i-replaced-static-strategy-with-bayesian-updating.html" class="post-card">
+            <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1765230903345-banner-blog.png" alt="The Death of the 5-Year Plan: Why I Replaced Static Strategy with Bayesian Updating" class="post-cover">
+            <div class="post-info">
+                <span class="post-icon">📈</span>
+                <h2>The Death of the 5-Year Plan: Why I Replaced Static Strategy with Bayesian Updating</h2>
+                <p class="post-date">08 December, 2025</p>
+                <p class="post-excerpt">I argue for Bayesian Updating—a mental model where you continuously refine the probability of a hypothesis as new data becomes available. Instead of asking "Is this strategy right?", I ask "How has the probability of success changed based on Q3 data?"</p>
+            </div>
+        </a>
+    
+
+        <a href="/blog/killing-the-design-handoff-dual-track-agile.html" class="post-card">
+            <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog_images/2025/Office%20Meeting%20Room%20Pop%20Art%20Clean.png" alt="Why I Killed the "Design Handoff" (And Architected a Bridge Instead)" class="post-cover">
+            <div class="post-info">
+                <span class="post-icon">📝</span>
+                <h2>Why I Killed the "Design Handoff" (And Architected a Bridge Instead)</h2>
+                <p class="post-date">04 December, 2025</p>
+                <p class="post-excerpt">In high-stakes product development, the traditional "handoff" is a bottleneck that breeds resentment and rework. Here is how I implemented dual-track agile and a Figma-to-Storybook bridge at Unfamiliar.id to cut cycle times by 33% and stop the war between Design and Engineering.</p>
+            </div>
+        </a>
+    
+
+        <a href="/blog/stop-the-spreadsheet-hell-how-i-used-airtable-to-speed-up-legacy-migration-to-gcp.html" class="post-card">
+            <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764891719123-Gemini_Generated_Image_kseorakseorakseo.png" alt="Stop the Spreadsheet Hell: How I Used Airtable to Speed Up Legacy Migration to GCP" class="post-cover">
+            <div class="post-info">
+                <span class="post-icon">📝</span>
+                <h2>Stop the Spreadsheet Hell: How I Used Airtable to Speed Up Legacy Migration to GCP</h2>
+                <p class="post-date">04 December, 2025</p>
+                <p class="post-excerpt">Data migrations usually fail because they are treated as "black boxes." Here is how I used Airtable as a visual staging environment to bridge the gap between legacy spreadsheets and modern GCP storage—accelerating validation by 300%.</p>
+            </div>
+        </a>
+    
+
+        <a href="/blog/identity-verification-bottleneck-case-study.html" class="post-card">
+            <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764892293258-gemeni-correction.png" alt="75 Seconds to 18: How We Solved the Identity Verification Bottleneck" class="post-cover">
+            <div class="post-info">
+                <span class="post-icon">📝</span>
+                <h2>75 Seconds to 18: How We Solved the Identity Verification Bottleneck</h2>
+                <p class="post-date">04 December, 2025</p>
+                <p class="post-excerpt">Friction is usually the enemy of conversion, but in identity verification, it's a legal requirement. Here is how we used data-driven strategy to reduce verification time by 76% and boost pass rates to 94% without compromising security.</p>
+            </div>
+        </a>
+    
+
+        <a href="/blog/the-silent-churn-killer-using-micro-surveys-to-unblock-enterprise-onboarding.html" class="post-card">
+            <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764893471499-Gemini_Generated_Image_dvxb9jdvxb9jdvxb.png" alt="The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding" class="post-cover">
+            <div class="post-info">
+                <span class="post-icon">📝</span>
+                <h2>The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding</h2>
+                <p class="post-date">04 December, 2025</p>
+                <p class="post-excerpt">Support tickets are a lagging indicator of friction. Here is how I used embedded Typeforms to capture real-time CSAT data during the Unfamiliar.id onboarding flow, identifying a UX blind spot that was stalling enterprise clients.</p>
+            </div>
+        </a>
+    
+    </div>
+</body>
+</html>
