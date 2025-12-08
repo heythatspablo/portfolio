@@ -15,7 +15,14 @@
 const fs = require('fs');
 const path = require('path');
 
-const BASE_URL = 'https://99pablos.com';
+// Import NavCover component
+const { 
+    BASE_URL,
+    DEFAULT_COVER,
+    getNavCoverStyles, 
+    getNavCoverHTML, 
+    getNavCoverScript 
+} = require('./lib/navcover');
 
 // ============================================================================
 // NOTION BLOCK RENDERERS
@@ -253,13 +260,49 @@ function renderBlock(block) {
 function generatePage(config) {
     const blocks = config.blocks.map(renderBlock).join('\n\n');
     
-    const coverHtml = config.cover 
-        ? BlockRenderers.cover(config.cover)
-        : '';
+    // Determine cover image/gradient
+    let coverImage = DEFAULT_COVER;
+    let coverGradient = null;
+    if (config.cover) {
+        if (config.cover.gradient) {
+            coverGradient = config.cover.gradient;
+        } else if (config.cover.src) {
+            coverImage = config.cover.src;
+        }
+    }
     
-    const iconHtml = config.icon 
-        ? BlockRenderers.icon(config.icon)
-        : '';
+    // Determine page icon
+    let pageIcon = 'image'; // default to profile image
+    let pageIconImage = null;
+    if (config.icon) {
+        if (config.icon.type === 'none') {
+            pageIcon = null;
+        } else if (config.icon.emoji) {
+            pageIcon = config.icon.emoji;
+        } else if (config.icon.type === 'image' && config.icon.src) {
+            pageIcon = 'image';
+            pageIconImage = config.icon.src;
+        }
+    }
+    
+    // Generate NavCover HTML
+    const navCoverHtml = getNavCoverHTML({
+        currentPage: config.breadcrumb || config.title,
+        parentPage: config.parentPage || null,
+        parentHref: config.parentHref || null,
+        coverImage: coverImage,
+        coverGradient: coverGradient,
+        pageIcon: pageIcon,
+        pageIconImage: pageIconImage
+    });
+    
+    // Generate page icon for content area (if not using profile image)
+    let iconHtml = '';
+    if (config.icon && config.icon.type !== 'none') {
+        if (config.icon.emoji) {
+            iconHtml = `<div class="page-icon">${config.icon.emoji}</div>`;
+        }
+    }
 
     const tocScript = config.toc ? `
         // Generate TOC
@@ -689,41 +732,12 @@ function generatePage(config) {
             color: var(--fg-color);
         }
         
-        /* ============================================
-           HEADER
-           ============================================ */
-        .page-header {
-            position: sticky;
-            top: 0;
-            background: var(--bg-color);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 24px;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header-nav a {
-            color: var(--fg-light);
-            text-decoration: none;
-            margin-left: 24px;
-        }
-        .header-nav a:hover {
-            color: var(--fg-color);
-        }
+        /* NavCover Component Styles */
+        ${getNavCoverStyles()}
     </style>
 </head>
 <body class="dark-mode">
-    ${config.header !== false ? `
-    <header class="page-header">
-        <a href="${BASE_URL}" class="text-link">← Back to Portfolio</a>
-        <nav class="header-nav">
-            <a href="${BASE_URL}/#blog">Blog</a>
-            <a href="${BASE_URL}/#about">About</a>
-        </nav>
-    </header>` : ''}
-    
-    ${coverHtml}
+    ${navCoverHtml}
     
     <main class="main-container">
         ${iconHtml}
@@ -734,8 +748,7 @@ ${blocks}
     </main>
     
     <script>
-        // Dark mode default
-        document.body.classList.add('dark-mode');
+        ${getNavCoverScript()}
         ${tocScript}
     </script>
 </body>

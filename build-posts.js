@@ -10,12 +10,19 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
+// Import NavCover component
+const { 
+    BASE_URL, 
+    getNavCoverStyles, 
+    getNavCoverHTML, 
+    getNavCoverScript 
+} = require('./lib/navcover');
+
 // Supabase config
 const SUPABASE_URL = 'https://cvaujkhxgzrqwqjofgls.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2YXVqa2h4Z3pycXdxam9mZ2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3OTM3NDYsImV4cCI6MjA4MDM2OTc0Nn0.qbmIu3luDquk734FXko7I2m1qaY6MPA0r6quFJlEmSw';
 
 const BLOG_DIR = path.join(__dirname, 'blog');
-const BASE_URL = 'https://99pablos.com';
 
 // Simple markdown to HTML converter (basic implementation)
 function markdownToHtml(markdown) {
@@ -110,6 +117,15 @@ function generatePostHtml(post) {
         "wordCount": wordCount
     };
 
+    // Generate NavCover HTML
+    const navCoverHtml = getNavCoverHTML({
+        currentPage: post.title,
+        parentPage: 'Blog',
+        parentHref: `${BASE_URL}/#blog`,
+        coverImage: post.cover_image || 'https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/site-images/Gemini_Generated_Image_lxos6elxos6elxos_formphotoeditor.com.jpg',
+        pageIcon: post.icon || '📝'
+    });
+
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -143,24 +159,28 @@ ${JSON.stringify(schema, null, 4)}
     </script>
     
     <style>
+        /* ============================================
+           NOTION DESIGN SYSTEM - CORE VARIABLES
+           ============================================ */
         :root {
             --bg-color: #FFFFFF;
             --fg-color: #37352F;
             --fg-light: #9B9A97;
             --border-color: #E9E9E7;
+            --hover-bg: rgba(55, 53, 47, 0.08);
             --callout-bg: #F1F1EF;
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
         }
         
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #191919;
-                --fg-color: rgba(255, 255, 255, 0.9);
-                --fg-light: rgba(255, 255, 255, 0.443);
-                --border-color: rgba(255, 255, 255, 0.094);
-                --callout-bg: #2F2F2F;
-            }
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-color: #191919;
+            --fg-color: rgba(255, 255, 255, 0.9);
+            --fg-light: rgba(255, 255, 255, 0.443);
+            --border-color: rgba(255, 255, 255, 0.094);
+            --hover-bg: rgba(255, 255, 255, 0.055);
+            --callout-bg: #2F2F2F;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -170,35 +190,34 @@ ${JSON.stringify(schema, null, 4)}
             background: var(--bg-color);
             color: var(--fg-color);
             line-height: 1.6;
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 40px 20px;
         }
         
-        .cover-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 24px;
+        /* NavCover Styles */
+        ${getNavCoverStyles()}
+        
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 96px 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container { padding: 0 24px 60px; }
+        }
+        
+        /* Page Title */
+        h1.page-title {
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 1.2;
+            margin-bottom: 16px;
         }
         
         .meta {
             font-size: 14px;
             color: var(--fg-light);
             margin-bottom: 8px;
-        }
-        
-        .icon {
-            font-size: 48px;
-            margin-bottom: 8px;
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.2;
         }
         
         .excerpt {
@@ -209,13 +228,16 @@ ${JSON.stringify(schema, null, 4)}
             border-bottom: 1px solid var(--border-color);
         }
         
+        /* Content Styles */
         .content h2 {
             font-size: 1.5em;
+            font-weight: 600;
             margin: 32px 0 16px;
         }
         
         .content h3 {
             font-size: 1.25em;
+            font-weight: 600;
             margin: 24px 0 12px;
         }
         
@@ -284,19 +306,25 @@ ${JSON.stringify(schema, null, 4)}
         }
     </style>
 </head>
-<body>
-    ${post.cover_image ? `<img src="${post.cover_image}" alt="${post.title}" class="cover-image">` : ''}
+<body class="dark-mode">
+    ${navCoverHtml}
     
-    <div class="icon">${post.icon || '📝'}</div>
-    <p class="meta">${formatDate(post.created_at)}</p>
-    <h1>${post.title}</h1>
-    ${post.excerpt ? `<p class="excerpt">${post.excerpt}</p>` : ''}
-    
-    <article class="content">
+    <main class="main-container">
+        <div class="page-icon">${post.icon || '📝'}</div>
+        <p class="meta">${formatDate(post.created_at)}</p>
+        <h1 class="page-title">${post.title}</h1>
+        ${post.excerpt ? `<p class="excerpt">${post.excerpt}</p>` : ''}
+        
+        <article class="content">
 ${renderedContent}
-    </article>
+        </article>
+        
+        <a href="${BASE_URL}/#blog" class="back-link">← Back to Blog</a>
+    </main>
     
-    <a href="${BASE_URL}/#blog" class="back-link">← Back to Blog</a>
+    <script>
+        ${getNavCoverScript()}
+    </script>
 </body>
 </html>`;
 }
@@ -378,6 +406,13 @@ function generateBlogIndex(posts) {
         </a>
     `).join('\n');
 
+    // Generate NavCover HTML for blog index
+    const navCoverHtml = getNavCoverHTML({
+        currentPage: 'Blog',
+        coverImage: 'https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/site-images/Gemini_Generated_Image_lxos6elxos6elxos_formphotoeditor.com.jpg',
+        pageIcon: '📝'
+    });
+
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -388,23 +423,28 @@ function generateBlogIndex(posts) {
     <link rel="canonical" href="${BASE_URL}/blog/">
     
     <style>
+        /* ============================================
+           NOTION DESIGN SYSTEM - CORE VARIABLES
+           ============================================ */
         :root {
             --bg-color: #FFFFFF;
             --fg-color: #37352F;
             --fg-light: #9B9A97;
             --border-color: #E9E9E7;
             --hover-bg: rgba(55, 53, 47, 0.08);
+            --callout-bg: #F1F1EF;
+            --card-shadow: rgba(15, 15, 15, 0.1);
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         }
         
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #191919;
-                --fg-color: rgba(255, 255, 255, 0.9);
-                --fg-light: rgba(255, 255, 255, 0.443);
-                --border-color: rgba(255, 255, 255, 0.094);
-                --hover-bg: rgba(255, 255, 255, 0.055);
-            }
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-color: #191919;
+            --fg-color: rgba(255, 255, 255, 0.9);
+            --fg-light: rgba(255, 255, 255, 0.443);
+            --border-color: rgba(255, 255, 255, 0.094);
+            --hover-bg: rgba(255, 255, 255, 0.055);
+            --callout-bg: #2F2F2F;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -414,13 +454,27 @@ function generateBlogIndex(posts) {
             background: var(--bg-color);
             color: var(--fg-color);
             line-height: 1.6;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
         }
         
-        h1 {
-            font-size: 2.5em;
+        /* NavCover Styles */
+        ${getNavCoverStyles()}
+        
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 96px 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container { padding: 0 24px 60px; }
+        }
+        
+        /* Page Title */
+        h1.page-title {
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 1.2;
             margin-bottom: 32px;
         }
         
@@ -433,6 +487,7 @@ function generateBlogIndex(posts) {
         .post-card {
             text-decoration: none;
             color: inherit;
+            background: var(--bg-color);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             overflow: hidden;
@@ -440,7 +495,7 @@ function generateBlogIndex(posts) {
         }
         
         .post-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px var(--card-shadow);
         }
         
         .post-cover {
@@ -475,19 +530,33 @@ function generateBlogIndex(posts) {
         
         .back-link {
             display: inline-block;
-            margin-bottom: 24px;
+            margin-top: 40px;
             color: var(--fg-light);
             text-decoration: none;
+            border-bottom: 1px solid var(--fg-light);
+        }
+        .back-link:hover {
+            color: var(--fg-color);
         }
     </style>
 </head>
-<body>
-    <a href="${BASE_URL}" class="back-link">← Back to Portfolio</a>
-    <h1>📝 Blog</h1>
+<body class="dark-mode">
+    ${navCoverHtml}
     
-    <div class="posts-grid">
+    <main class="main-container">
+        <div class="page-icon">📝</div>
+        <h1 class="page-title">Blog</h1>
+        
+        <div class="posts-grid">
 ${postCards}
-    </div>
+        </div>
+        
+        <a href="${BASE_URL}" class="back-link">← Back to Portfolio</a>
+    </main>
+    
+    <script>
+        ${getNavCoverScript()}
+    </script>
 </body>
 </html>`;
 }

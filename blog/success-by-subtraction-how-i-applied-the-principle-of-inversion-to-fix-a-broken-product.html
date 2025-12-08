@@ -56,24 +56,28 @@
     </script>
     
     <style>
+        /* ============================================
+           NOTION DESIGN SYSTEM - CORE VARIABLES
+           ============================================ */
         :root {
             --bg-color: #FFFFFF;
             --fg-color: #37352F;
             --fg-light: #9B9A97;
             --border-color: #E9E9E7;
+            --hover-bg: rgba(55, 53, 47, 0.08);
             --callout-bg: #F1F1EF;
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
         }
         
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #191919;
-                --fg-color: rgba(255, 255, 255, 0.9);
-                --fg-light: rgba(255, 255, 255, 0.443);
-                --border-color: rgba(255, 255, 255, 0.094);
-                --callout-bg: #2F2F2F;
-            }
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-color: #191919;
+            --fg-color: rgba(255, 255, 255, 0.9);
+            --fg-light: rgba(255, 255, 255, 0.443);
+            --border-color: rgba(255, 255, 255, 0.094);
+            --hover-bg: rgba(255, 255, 255, 0.055);
+            --callout-bg: #2F2F2F;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -83,35 +87,157 @@
             background: var(--bg-color);
             color: var(--fg-color);
             line-height: 1.6;
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 40px 20px;
         }
         
+        /* NavCover Styles */
+        
+        /* ============================================
+           NAVCOVER COMPONENT STYLES
+           ============================================ */
+        
+        /* Header / Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            font-size: 14px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        body.dark-mode header { background-color: rgba(25, 25, 25, 0.8); }
+        body:not(.dark-mode) header { background-color: rgba(255, 255, 255, 0.9); }
+        
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .crumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        .crumb:hover { background: var(--hover-bg); }
+        
+        .crumb-icon img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .divider {
+            color: var(--fg-light);
+            user-select: none;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+        }
+        
+        .header-btn {
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .header-btn:hover { background: var(--hover-bg); }
+        
+        /* Overflow Menu */
+        .overflow-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            min-width: 220px;
+            padding: 8px 0;
+            display: none;
+            z-index: 200;
+        }
+        .overflow-menu.active { display: block; }
+        
+        .menu-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--fg-light);
+            padding: 8px 12px 4px;
+            text-transform: uppercase;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            color: var(--fg-color);
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .menu-item:hover { background: var(--hover-bg); }
+        .menu-icon { font-size: 16px; }
+        
+        /* Cover Image */
         .cover-image {
             width: 100%;
-            height: 200px;
+            height: 30vh;
             object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 24px;
+        }
+        
+        /* Page Icon */
+        .page-icon {
+            font-size: 78px;
+            margin-top: -42px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 10;
+        }
+        .page-icon img {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    
+        
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 96px 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container { padding: 0 24px 60px; }
+        }
+        
+        /* Page Title */
+        h1.page-title {
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 1.2;
+            margin-bottom: 16px;
         }
         
         .meta {
             font-size: 14px;
             color: var(--fg-light);
             margin-bottom: 8px;
-        }
-        
-        .icon {
-            font-size: 48px;
-            margin-bottom: 8px;
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.2;
         }
         
         .excerpt {
@@ -122,13 +248,16 @@
             border-bottom: 1px solid var(--border-color);
         }
         
+        /* Content Styles */
         .content h2 {
             font-size: 1.5em;
+            font-weight: 600;
             margin: 32px 0 16px;
         }
         
         .content h3 {
             font-size: 1.25em;
+            font-weight: 600;
             margin: 24px 0 12px;
         }
         
@@ -197,18 +326,114 @@
         }
     </style>
 </head>
-<body>
-    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1765232838772-banner-blog__1_.png" alt="Success by Subtraction: How I Applied the Principle of Inversion to Fix a Broken Product" class="cover-image">
+<body class="dark-mode">
     
-    <div class="icon">🙃</div>
-    <p class="meta">08 December, 2025</p>
-    <h1>Success by Subtraction: How I Applied the Principle of Inversion to Fix a Broken Product</h1>
-    <p class="excerpt">When growth stalls, the instinct is always the same: add a feature, add a workflow, add a campaign. But for most products, the fastest growth lever isn’t additive at all — it’s Inversion.</p>
+    <!-- NAVCOVER COMPONENT -->
+    <header>
+        <div class="breadcrumbs">
+            <div class="crumb" onclick="window.location.href='https://99pablos.com'">
+                <span class="crumb-icon"><img src="https://99pablos.com/pabs_prof_circle@750.png" alt="Pablo"></span> Pablo Vizcaino
+            </div>
+            
+            <span class="divider">/</span>
+            <div class="crumb" onclick="window.location.href='https://99pablos.com/#blog'">
+                Blog
+            </div>
+            <span class="divider">/</span>
+            <div class="crumb" style="cursor: default;">
+                Success by Subtraction: How I Applied the Principle of Inversion to Fix a Broken Product
+            </div>
+        </div>
+        <div class="header-controls">
+            <!-- Theme Toggle -->
+            <div class="header-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                <span id="theme-icon">☀️</span>
+            </div>
+            
+            <!-- Overflow Menu Trigger -->
+            <div class="header-btn" onclick="toggleOverflow(event)" title="More options">⋯</div>
+
+            <!-- DROP DOWN MENU -->
+            <div id="overflow-menu" class="overflow-menu">
+                <div class="menu-section-title">Contact</div>
+                <a href="mailto:heythatspablo@gmail.com" class="menu-item">
+                    <span class="menu-icon">✉️</span>
+                    <span class="menu-label">heythatspablo@gmail.com</span>
+                </a>
+                
+                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                
+                <div class="menu-section-title">Socials</div>
+                <a href="https://www.linkedin.com/in/pablo-vizcaino-caballeros/" target="_blank" class="menu-item">
+                    <span class="menu-icon">🔗</span>
+                    <span class="menu-label">LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1765232838772-banner-blog__1_.png" class="cover-image" alt="Cover">
+    <!-- END NAVCOVER COMPONENT -->
     
-    <article class="content">
+    <main class="main-container">
+        <div class="page-icon">🙃</div>
+        <p class="meta">08 December, 2025</p>
+        <h1 class="page-title">Success by Subtraction: How I Applied the Principle of Inversion to Fix a Broken Product</h1>
+        <p class="excerpt">When growth stalls, the instinct is always the same: add a feature, add a workflow, add a campaign. But for most products, the fastest growth lever isn’t additive at all — it’s Inversion.</p>
+        
+        <article class="content">
 <p>Human beings are wired for addition.</p><p>When a product isn't growing, our instinct is to <em>add</em>. Add a new feature, add a referral program, add a pop-up. We equate "solving a problem" with "doing more things."</p><p>But in my experience, the most powerful growth lever is usually the opposite. It is <strong>Inversion</strong>.</p><p>Instead of asking, "How do I make this product successful?", I ask, "What is currently making it fail?"</p><p>This isn't just a clever turn of phrase. It is a fundamental mental model championed by the mathematician Carl Jacobi ("Invert, always invert") and popularized by Charlie Munger.</p><p>When I applied this to a stalling SaaS product, we didn't ship a single new feature for a quarter. Instead, we removed the barriers to value. The result wasn't just stability; it was a 12% lift in growth. Here is the logic—and the math—behind why this works.</p><p>#### The Mathematics of the "Leaky Bucket"</p><p>The economic argument for Inversion rests on the asymmetry between Acquisition and Retention.</p><p>According to research by <strong>Bain &amp; Company</strong> (and corroborated by Harvard Business Review), increasing customer retention rates by just <strong>5%</strong> increases profits by <strong>25% to 95%</strong>.</p><p>Why? Because the cost of acquiring a new customer (CAC) is expensive and front-loaded, while the cost of retaining a customer drops over time.</p><p>If you have a "leaky bucket" (high churn), pouring more water in (Growth Hacking/Acquisition) is a waste of capital. You are paying to acquire users who will inevitably leave because you haven't fixed the "Death Moments" in your product.</p><p>#### The Science of <em>Via Negativa</em></p><p>Nassim Taleb describes this concept as <strong>Via Negativa</strong>: improvement by subtraction.</p><p>In medicine, stopping a smoker from smoking adds more years to their life than giving them the best vitamins in the world. In product, removing a 3-second delay in your login screen adds more value than a new dashboard widget.</p><p><strong>Amazon</strong> proved this decades ago. Their internal data showed that every <strong>100ms of latency</strong> cost them <strong>1% in sales</strong>. They didn't grow by making the store "prettier"; they grew by removing the friction of time.</p><p>#### How I Implement Inversion Operationally</p><p>It is easy to say "remove friction." It is hard to do it when your roadmap is full of shiny new features. Here is the operational framework I use to force Inversion:</p><p><strong>1\. The "Reverse Brainstorm"</strong> In our quarterly planning, I hold a session with a simple prompt: <em>"It is 12 months from now, and our product has failed completely. We have zero users left. What did we do to cause this?"</em></p><p>The team’s answers are usually illuminating:<br><ul><li>"We annoyed them with too many emails."</li></ul><br><ul><li>"The mobile app login kept timing out."</li></ul><br><ul><li>"We made the export feature hard to find to lock them in."</li></ul><br>    </p><p>This list becomes our "Anti-Roadmap." Our immediate priority becomes preventing these scenarios.</p><p><strong>2\. The Friction Audit (The "Death Moments")</strong> I look at the funnel data to find the "Death Moments"—the specific screens where user behavior drops to zero.</p><p>In one case, we found a 40% drop-off at a "Invite Your Team" screen during onboarding.<br><ul><li><strong>Additive Thinking:</strong> "Let's add a video explaining why teams are great!"</li></ul><br><ul><li><strong>Inversion Thinking:</strong> "Why is this hard? Oh, they have to go look up email addresses."</li></ul><br><ul><li><strong>The Fix:</strong> We removed the step entirely and let them invite via a link later. Conversion skyrocketed.</li></ul><br>    </p><p><strong>3\. The "Kill List"</strong> Every quarter, we identify features that are "net negatives"—features that generate support tickets but low usage. We kill them. This reduces technical debt and cognitive load for the user. As Steve Jobs noted, "Innovation is saying no to 1,000 things."</p><p>#### The Psychological Edge</p><p>There is a final reason Inversion works: <strong>Loss Aversion</strong>.</p><p>Psychologically, users hate frustration (loss of time/patience) more than they love delight (gain of features). A user will tolerate a lack of "dark mode," but they will rage-quit over a broken password reset link.</p><p>By focusing on Inversion, you are solving for the user's strongest emotional triggers.</p><p>If your growth has plateaued, stop adding. Start subtracting. Find the anchors dragging you down and cut the rope.</p>
-    </article>
+        </article>
+        
+        <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    </main>
     
-    <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    <script>
+        
+        // --- THEME TOGGLE ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // --- OVERFLOW MENU LOGIC ---
+        function toggleOverflow(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('overflow-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('overflow-menu');
+            const trigger = document.querySelector('.header-btn[title="More options"]');
+            
+            if (menu && menu.classList.contains('active') && !menu.contains(e.target) && e.target !== trigger) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Initialize theme from localStorage or default to dark
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('theme-icon').textContent = '🌙';
+            } else {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-icon').textContent = '☀️';
+            }
+        })();
+    
+    </script>
 </body>
 </html>

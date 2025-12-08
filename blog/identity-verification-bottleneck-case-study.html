@@ -56,24 +56,28 @@
     </script>
     
     <style>
+        /* ============================================
+           NOTION DESIGN SYSTEM - CORE VARIABLES
+           ============================================ */
         :root {
             --bg-color: #FFFFFF;
             --fg-color: #37352F;
             --fg-light: #9B9A97;
             --border-color: #E9E9E7;
+            --hover-bg: rgba(55, 53, 47, 0.08);
             --callout-bg: #F1F1EF;
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
         }
         
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #191919;
-                --fg-color: rgba(255, 255, 255, 0.9);
-                --fg-light: rgba(255, 255, 255, 0.443);
-                --border-color: rgba(255, 255, 255, 0.094);
-                --callout-bg: #2F2F2F;
-            }
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-color: #191919;
+            --fg-color: rgba(255, 255, 255, 0.9);
+            --fg-light: rgba(255, 255, 255, 0.443);
+            --border-color: rgba(255, 255, 255, 0.094);
+            --hover-bg: rgba(255, 255, 255, 0.055);
+            --callout-bg: #2F2F2F;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -83,35 +87,157 @@
             background: var(--bg-color);
             color: var(--fg-color);
             line-height: 1.6;
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 40px 20px;
         }
         
+        /* NavCover Styles */
+        
+        /* ============================================
+           NAVCOVER COMPONENT STYLES
+           ============================================ */
+        
+        /* Header / Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            font-size: 14px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        body.dark-mode header { background-color: rgba(25, 25, 25, 0.8); }
+        body:not(.dark-mode) header { background-color: rgba(255, 255, 255, 0.9); }
+        
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .crumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        .crumb:hover { background: var(--hover-bg); }
+        
+        .crumb-icon img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .divider {
+            color: var(--fg-light);
+            user-select: none;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+        }
+        
+        .header-btn {
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .header-btn:hover { background: var(--hover-bg); }
+        
+        /* Overflow Menu */
+        .overflow-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            min-width: 220px;
+            padding: 8px 0;
+            display: none;
+            z-index: 200;
+        }
+        .overflow-menu.active { display: block; }
+        
+        .menu-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--fg-light);
+            padding: 8px 12px 4px;
+            text-transform: uppercase;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            color: var(--fg-color);
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .menu-item:hover { background: var(--hover-bg); }
+        .menu-icon { font-size: 16px; }
+        
+        /* Cover Image */
         .cover-image {
             width: 100%;
-            height: 200px;
+            height: 30vh;
             object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 24px;
+        }
+        
+        /* Page Icon */
+        .page-icon {
+            font-size: 78px;
+            margin-top: -42px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 10;
+        }
+        .page-icon img {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    
+        
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 96px 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container { padding: 0 24px 60px; }
+        }
+        
+        /* Page Title */
+        h1.page-title {
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 1.2;
+            margin-bottom: 16px;
         }
         
         .meta {
             font-size: 14px;
             color: var(--fg-light);
             margin-bottom: 8px;
-        }
-        
-        .icon {
-            font-size: 48px;
-            margin-bottom: 8px;
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.2;
         }
         
         .excerpt {
@@ -122,13 +248,16 @@
             border-bottom: 1px solid var(--border-color);
         }
         
+        /* Content Styles */
         .content h2 {
             font-size: 1.5em;
+            font-weight: 600;
             margin: 32px 0 16px;
         }
         
         .content h3 {
             font-size: 1.25em;
+            font-weight: 600;
             margin: 24px 0 12px;
         }
         
@@ -197,18 +326,114 @@
         }
     </style>
 </head>
-<body>
-    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764892293258-gemeni-correction.png" alt="75 Seconds to 18: How We Solved the Identity Verification Bottleneck" class="cover-image">
+<body class="dark-mode">
     
-    <div class="icon">📝</div>
-    <p class="meta">04 December, 2025</p>
-    <h1>75 Seconds to 18: How We Solved the Identity Verification Bottleneck</h1>
-    <p class="excerpt">Friction is usually the enemy of conversion, but in identity verification, it's a legal requirement. Here is how we used data-driven strategy to reduce verification time by 76% and boost pass rates to 94% without compromising security.</p>
+    <!-- NAVCOVER COMPONENT -->
+    <header>
+        <div class="breadcrumbs">
+            <div class="crumb" onclick="window.location.href='https://99pablos.com'">
+                <span class="crumb-icon"><img src="https://99pablos.com/pabs_prof_circle@750.png" alt="Pablo"></span> Pablo Vizcaino
+            </div>
+            
+            <span class="divider">/</span>
+            <div class="crumb" onclick="window.location.href='https://99pablos.com/#blog'">
+                Blog
+            </div>
+            <span class="divider">/</span>
+            <div class="crumb" style="cursor: default;">
+                75 Seconds to 18: How We Solved the Identity Verification Bottleneck
+            </div>
+        </div>
+        <div class="header-controls">
+            <!-- Theme Toggle -->
+            <div class="header-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                <span id="theme-icon">☀️</span>
+            </div>
+            
+            <!-- Overflow Menu Trigger -->
+            <div class="header-btn" onclick="toggleOverflow(event)" title="More options">⋯</div>
+
+            <!-- DROP DOWN MENU -->
+            <div id="overflow-menu" class="overflow-menu">
+                <div class="menu-section-title">Contact</div>
+                <a href="mailto:heythatspablo@gmail.com" class="menu-item">
+                    <span class="menu-icon">✉️</span>
+                    <span class="menu-label">heythatspablo@gmail.com</span>
+                </a>
+                
+                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                
+                <div class="menu-section-title">Socials</div>
+                <a href="https://www.linkedin.com/in/pablo-vizcaino-caballeros/" target="_blank" class="menu-item">
+                    <span class="menu-icon">🔗</span>
+                    <span class="menu-label">LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764892293258-gemeni-correction.png" class="cover-image" alt="Cover">
+    <!-- END NAVCOVER COMPONENT -->
     
-    <article class="content">
+    <main class="main-container">
+        <div class="page-icon">📝</div>
+        <p class="meta">04 December, 2025</p>
+        <h1 class="page-title">75 Seconds to 18: How We Solved the Identity Verification Bottleneck</h1>
+        <p class="excerpt">Friction is usually the enemy of conversion, but in identity verification, it's a legal requirement. Here is how we used data-driven strategy to reduce verification time by 76% and boost pass rates to 94% without compromising security.</p>
+        
+        <article class="content">
 <p>In consumer product design, "friction" is a dirty word. We are taught to remove every extra click, smooth out every animation, and get the user to the "Aha!" moment as fast as possible.</p><p>But when you are building Identity Verification (IDV) products, friction isn't just a nuisance. Sometimes, it is the law.</p><p>At <strong>Unfamiliar.id</strong>, we were facing a critical bottleneck. We were shipping core identity experiences for enterprise clients, and our flagship AI Biometric Selfie Capture flow was bleeding users.</p><p>The metrics were brutal:<br><ul><li><strong>Average Time to Verify:</strong> 75 seconds.</li></ul><br><ul><li><strong>Pass Rate:</strong> 82%.</li></ul></p><p>In the world of modern apps, asking a user to spend 75 seconds rotating their head in front of a camera is asking them to quit. We needed to fix the flow without breaking the strict compliance rules (GDPR, Anti-Spoofing) that governed our industry.</p><p>Here is the strategy we used to drop that time to 18 seconds and increase our pass rate to 94%.</p><h3>The Diagnosis: It Wasn't Just "Bad UI"</h3><p>When a flow is failing, the instinct is often to "make it prettier." Change the button color, increase the font size, smooth the animation.</p><p>But looking at our <strong>Amplitude</strong> data, the story was different. Users weren't struggling to find the buttons; they were struggling with <em>cognitive load</em>.</p><p>We were asking users to perform complex physical actions (look left, look right, blink) while simultaneously processing legal disclaimers and waiting for server-side API checks. The drop-off points weren't random. They clustered exactly where the user had to wait for the system to catch up with them.</p><p>The problem wasn't the interface. The problem was that we were exposing the complexity of our compliance engine to the user.</p><h3>The Strategy: Translating "Legal" into "Product"</h3><p>To solve this, I had to bridge the gap between our Legal/Compliance team and our Engineering squad. We needed a roadmap pivot that respected the risk framework but prioritized speed.</p><p>We executed this in three phases:</p><p>#### 1. Ruthless Scope Cutting<br>We audited every step of the 75-second journey. If a screen existed solely because "we might need this data later," it was cut.</p><p>We realized we were front-loading permissions (camera, location, storage) that weren't needed until later in the lifecycle. We moved these to a "just-in-time" model, asking for permission only when the user was already committed to the action.</p><p>#### 2. The "Fallback UI" Architecture<br>The biggest killer of conversion was API latency. If a third-party anti-spoofing check took 5 seconds, the user stared at a spinning loader.</p><p>We rebuilt the flow to handle latency gracefully.<br><ul><li><strong>Old Way:</strong> Spinner &gt; Wait &gt; Success/Fail.</li></ul><br><em> <strong>New Way:</strong> While the API crunched data in the background, we served the user an educational transition screen explaining </em>why* this security step protected them.</p><p>By filling the "wait time" with value rather than a spinner, perceived wait time dropped to near zero.</p><p>#### 3. AI-Driven Guidance<br>We introduced real-time feedback loops. Instead of failing a user <em>after</em> they uploaded a blurry selfie, we implemented client-side AI analysis.</p><p>If the lighting was too low or the face was off-center, the UI gave immediate, haptic feedback: <em>"Move to a brighter area"</em> or <em>"Hold still."</em> This prevented the "Fail → Retry" loop that caused 40% of our churn.</p><h3>The Execution: Testing the Hypothesis</h3><p>We didn't just ship the new flow and hope. We ran a series of A/B tests to validate the new architecture.<br><ul><li><strong>Variant A:</strong> The original, compliance-heavy flow.</li></ul><br><ul><li><strong>Variant B:</strong> The streamlined flow with "Just-in-Time" permissions.</li></ul><br><ul><li><strong>Variant C:</strong> The streamlined flow + Real-time AI guidance.</li></ul></p><p>Variant C didn't just win; it dominated.</p><h3>The Results</h3><p>By treating compliance constraints as design challenges rather than roadblocks, we achieved a massive shift in unit economics:<br><ul><li><strong>Time to Verify:</strong> Reduced from <strong>75s → 18s</strong>.</li></ul><br><ul><li><strong>Pass Rate:</strong> Increased from <strong>82% → 94%</strong>.</li></ul><br><ul><li><strong>Selfie Drop-off:</strong> Reduced by <strong>42%</strong>.</li></ul></p><h3>The Takeaway</h3><p>There is a false dichotomy in regulated industries that you have to choose between <strong>Security</strong> and <strong>User Experience</strong>.</p><p>The truth is, security <em>is</em> a user experience. If your verification flow is so difficult that real users drop off, you haven't built a secure system; you've built a wall.</p><p>The job of a Product Manager in this space isn't to fight the lawyers or the engineers. It is to translate the strict requirements of the former into the technical capabilities of the latter—so the user never feels the weight of either.</p>
-    </article>
+        </article>
+        
+        <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    </main>
     
-    <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    <script>
+        
+        // --- THEME TOGGLE ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // --- OVERFLOW MENU LOGIC ---
+        function toggleOverflow(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('overflow-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('overflow-menu');
+            const trigger = document.querySelector('.header-btn[title="More options"]');
+            
+            if (menu && menu.classList.contains('active') && !menu.contains(e.target) && e.target !== trigger) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Initialize theme from localStorage or default to dark
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('theme-icon').textContent = '🌙';
+            } else {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-icon').textContent = '☀️';
+            }
+        })();
+    
+    </script>
 </body>
 </html>

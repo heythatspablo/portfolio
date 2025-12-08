@@ -56,24 +56,28 @@
     </script>
     
     <style>
+        /* ============================================
+           NOTION DESIGN SYSTEM - CORE VARIABLES
+           ============================================ */
         :root {
             --bg-color: #FFFFFF;
             --fg-color: #37352F;
             --fg-light: #9B9A97;
             --border-color: #E9E9E7;
+            --hover-bg: rgba(55, 53, 47, 0.08);
             --callout-bg: #F1F1EF;
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
         }
         
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #191919;
-                --fg-color: rgba(255, 255, 255, 0.9);
-                --fg-light: rgba(255, 255, 255, 0.443);
-                --border-color: rgba(255, 255, 255, 0.094);
-                --callout-bg: #2F2F2F;
-            }
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-color: #191919;
+            --fg-color: rgba(255, 255, 255, 0.9);
+            --fg-light: rgba(255, 255, 255, 0.443);
+            --border-color: rgba(255, 255, 255, 0.094);
+            --hover-bg: rgba(255, 255, 255, 0.055);
+            --callout-bg: #2F2F2F;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -83,35 +87,157 @@
             background: var(--bg-color);
             color: var(--fg-color);
             line-height: 1.6;
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 40px 20px;
         }
         
+        /* NavCover Styles */
+        
+        /* ============================================
+           NAVCOVER COMPONENT STYLES
+           ============================================ */
+        
+        /* Header / Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            font-size: 14px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        body.dark-mode header { background-color: rgba(25, 25, 25, 0.8); }
+        body:not(.dark-mode) header { background-color: rgba(255, 255, 255, 0.9); }
+        
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .crumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        .crumb:hover { background: var(--hover-bg); }
+        
+        .crumb-icon img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .divider {
+            color: var(--fg-light);
+            user-select: none;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+        }
+        
+        .header-btn {
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .header-btn:hover { background: var(--hover-bg); }
+        
+        /* Overflow Menu */
+        .overflow-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            min-width: 220px;
+            padding: 8px 0;
+            display: none;
+            z-index: 200;
+        }
+        .overflow-menu.active { display: block; }
+        
+        .menu-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--fg-light);
+            padding: 8px 12px 4px;
+            text-transform: uppercase;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            color: var(--fg-color);
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .menu-item:hover { background: var(--hover-bg); }
+        .menu-icon { font-size: 16px; }
+        
+        /* Cover Image */
         .cover-image {
             width: 100%;
-            height: 200px;
+            height: 30vh;
             object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 24px;
+        }
+        
+        /* Page Icon */
+        .page-icon {
+            font-size: 78px;
+            margin-top: -42px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 10;
+        }
+        .page-icon img {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    
+        
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 96px 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container { padding: 0 24px 60px; }
+        }
+        
+        /* Page Title */
+        h1.page-title {
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 1.2;
+            margin-bottom: 16px;
         }
         
         .meta {
             font-size: 14px;
             color: var(--fg-light);
             margin-bottom: 8px;
-        }
-        
-        .icon {
-            font-size: 48px;
-            margin-bottom: 8px;
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.2;
         }
         
         .excerpt {
@@ -122,13 +248,16 @@
             border-bottom: 1px solid var(--border-color);
         }
         
+        /* Content Styles */
         .content h2 {
             font-size: 1.5em;
+            font-weight: 600;
             margin: 32px 0 16px;
         }
         
         .content h3 {
             font-size: 1.25em;
+            font-weight: 600;
             margin: 24px 0 12px;
         }
         
@@ -197,18 +326,114 @@
         }
     </style>
 </head>
-<body>
-    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764964502546-Gemini_Generated_Image_4uio674uio674uio_formphotoeditor.com.jpg" alt="The "Master Prompt": How I Generate Personas, Tone, and Copy in One Session" class="cover-image">
+<body class="dark-mode">
     
-    <div class="icon">📝</div>
-    <p class="meta">05 December, 2025</p>
-    <h1>The "Master Prompt": How I Generate Personas, Tone, and Copy in One Session</h1>
-    <p class="excerpt">Most people use AI for one-off tasks. I built a "Master Prompt" workflow that chains context together—generating deep user personas, enforcing a strict brand voice, and outputting weeks of ad copy in a single, coherent stream.</p>
+    <!-- NAVCOVER COMPONENT -->
+    <header>
+        <div class="breadcrumbs">
+            <div class="crumb" onclick="window.location.href='https://99pablos.com'">
+                <span class="crumb-icon"><img src="https://99pablos.com/pabs_prof_circle@750.png" alt="Pablo"></span> Pablo Vizcaino
+            </div>
+            
+            <span class="divider">/</span>
+            <div class="crumb" onclick="window.location.href='https://99pablos.com/#blog'">
+                Blog
+            </div>
+            <span class="divider">/</span>
+            <div class="crumb" style="cursor: default;">
+                The "Master Prompt": How I Generate Personas, Tone, and Copy in One Session
+            </div>
+        </div>
+        <div class="header-controls">
+            <!-- Theme Toggle -->
+            <div class="header-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                <span id="theme-icon">☀️</span>
+            </div>
+            
+            <!-- Overflow Menu Trigger -->
+            <div class="header-btn" onclick="toggleOverflow(event)" title="More options">⋯</div>
+
+            <!-- DROP DOWN MENU -->
+            <div id="overflow-menu" class="overflow-menu">
+                <div class="menu-section-title">Contact</div>
+                <a href="mailto:heythatspablo@gmail.com" class="menu-item">
+                    <span class="menu-icon">✉️</span>
+                    <span class="menu-label">heythatspablo@gmail.com</span>
+                </a>
+                
+                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                
+                <div class="menu-section-title">Socials</div>
+                <a href="https://www.linkedin.com/in/pablo-vizcaino-caballeros/" target="_blank" class="menu-item">
+                    <span class="menu-icon">🔗</span>
+                    <span class="menu-label">LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764964502546-Gemini_Generated_Image_4uio674uio674uio_formphotoeditor.com.jpg" class="cover-image" alt="Cover">
+    <!-- END NAVCOVER COMPONENT -->
     
-    <article class="content">
+    <main class="main-container">
+        <div class="page-icon">📝</div>
+        <p class="meta">05 December, 2025</p>
+        <h1 class="page-title">The "Master Prompt": How I Generate Personas, Tone, and Copy in One Session</h1>
+        <p class="excerpt">Most people use AI for one-off tasks. I built a "Master Prompt" workflow that chains context together—generating deep user personas, enforcing a strict brand voice, and outputting weeks of ad copy in a single, coherent stream.</p>
+        
+        <article class="content">
 <p>In the world of growth marketing and product storytelling, <strong>context is currency.</strong></p><p>If you ask ChatGPT to "write 5 Facebook ads for an identity verification app," you get generic, robotic fluff. Why? Because the AI doesn't know who it's talking to, or how your brand speaks.</p><p>At <strong>Unfamiliar.id</strong>, we needed to launch campaigns fast, but we couldn't sacrifice our specific "Empowering &amp; Trustworthy" tone of voice.</p><p>I developed a technique I call the <strong>"Multi-Check-In Master Prompt."</strong></p><p>It’s not just a prompt; it’s a session architecture. It forces the AI to build a "mental model" of our strategy <em>before</em> it writes a single word of copy. Here is the framework.</p><h3>Phase 1: The Context Injection (The "Upload")</h3><br>I never ask for output first. I start by feeding the "Brain."</p><p>&gt; <strong>Prompt:</strong> "I am going to provide you with raw data about our product, Unfamiliar.id. Do not generate anything yet. Just acknowledge you have received it. Here is the Value Prop: [Paste Text]. Here is the Technical constraints: [Paste Text]."</p><h3>Phase 2: Generating the "Synthetic Personas"</h3><br>Once the AI understands the product, I ask it to hallucinate our users based on our real data.</p><p>&gt; <strong>Prompt:</strong> "Based on the product data, generate 3 detailed User Personas. <br>&gt; 1. <strong>The Stressed CTO:</strong> Cares about API uptime and security.<br>&gt; 2. <strong>The Growth PM:</strong> Cares about conversion rates and onboarding speed.<br>&gt; 3. <strong>The Legal Counsel:</strong> Cares about GDPR and compliance.<br>&gt; For each, list their deepest fears, their daily frustrations, and the specific jargon they use."</p><p>This creates a reference layer. Now, when I ask for copy, I don't say "write an ad." I say, <em>"Write to the Stressed CTO."</em></p><h3>Phase 3: The "Style Guard" (Tone Calibration)</h3><br>Next, I lock in the syntax using our <strong>Newsroom Playbook</strong>.</p><p>&gt; <strong>Prompt:</strong> "Adopt the following Tone of Voice:<br>&gt; * <strong>Empowering:</strong> Inspire action.<br>&gt; * <strong>Informative:</strong> One idea per sentence. No fluff.<br>&gt; * <strong>Trustworthy:</strong> No dramatic hype. Precision over persuasion.<br>&gt; Confirm you understand this voice by rewriting this generic sentence: 'Our app is really good at checking IDs fast.'"</p><h3>Phase 4: The Output (The Multi-Check-In)</h3><br>Now—and only now—do we generate the assets. Because the context is stacked, the output is aligned.</p><p>&gt; <strong>Prompt:</strong> "Act as a Senior Copywriter. Draft 5 LinkedIn text ads targeting <strong>The Stressed CTO</strong>. Use the <strong>Trustworthy</strong> tone. Focus on the pain point of 'Integration Nightmares'. Structure the copy using the hook/problem/solution framework."</p><h3>The Result</h3><br>Instead of disjointed, generic AI copy, we get highly specific, persona-driven creative that sounds like <em>us</em>.</p><p>By treating the AI session as a "Project File" rather than a search bar, I can generate a month’s worth of consistent, high-leverage content in 20 minutes.</p>
-    </article>
+        </article>
+        
+        <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    </main>
     
-    <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    <script>
+        
+        // --- THEME TOGGLE ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // --- OVERFLOW MENU LOGIC ---
+        function toggleOverflow(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('overflow-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('overflow-menu');
+            const trigger = document.querySelector('.header-btn[title="More options"]');
+            
+            if (menu && menu.classList.contains('active') && !menu.contains(e.target) && e.target !== trigger) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Initialize theme from localStorage or default to dark
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('theme-icon').textContent = '🌙';
+            } else {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-icon').textContent = '☀️';
+            }
+        })();
+    
+    </script>
 </body>
 </html>

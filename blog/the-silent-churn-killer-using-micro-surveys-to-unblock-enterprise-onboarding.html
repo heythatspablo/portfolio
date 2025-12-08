@@ -56,24 +56,28 @@
     </script>
     
     <style>
+        /* ============================================
+           NOTION DESIGN SYSTEM - CORE VARIABLES
+           ============================================ */
         :root {
             --bg-color: #FFFFFF;
             --fg-color: #37352F;
             --fg-light: #9B9A97;
             --border-color: #E9E9E7;
+            --hover-bg: rgba(55, 53, 47, 0.08);
             --callout-bg: #F1F1EF;
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
         }
         
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #191919;
-                --fg-color: rgba(255, 255, 255, 0.9);
-                --fg-light: rgba(255, 255, 255, 0.443);
-                --border-color: rgba(255, 255, 255, 0.094);
-                --callout-bg: #2F2F2F;
-            }
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-color: #191919;
+            --fg-color: rgba(255, 255, 255, 0.9);
+            --fg-light: rgba(255, 255, 255, 0.443);
+            --border-color: rgba(255, 255, 255, 0.094);
+            --hover-bg: rgba(255, 255, 255, 0.055);
+            --callout-bg: #2F2F2F;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -83,35 +87,157 @@
             background: var(--bg-color);
             color: var(--fg-color);
             line-height: 1.6;
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 40px 20px;
         }
         
+        /* NavCover Styles */
+        
+        /* ============================================
+           NAVCOVER COMPONENT STYLES
+           ============================================ */
+        
+        /* Header / Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            font-size: 14px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        body.dark-mode header { background-color: rgba(25, 25, 25, 0.8); }
+        body:not(.dark-mode) header { background-color: rgba(255, 255, 255, 0.9); }
+        
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .crumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        .crumb:hover { background: var(--hover-bg); }
+        
+        .crumb-icon img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .divider {
+            color: var(--fg-light);
+            user-select: none;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+        }
+        
+        .header-btn {
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .header-btn:hover { background: var(--hover-bg); }
+        
+        /* Overflow Menu */
+        .overflow-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            min-width: 220px;
+            padding: 8px 0;
+            display: none;
+            z-index: 200;
+        }
+        .overflow-menu.active { display: block; }
+        
+        .menu-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--fg-light);
+            padding: 8px 12px 4px;
+            text-transform: uppercase;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            color: var(--fg-color);
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .menu-item:hover { background: var(--hover-bg); }
+        .menu-icon { font-size: 16px; }
+        
+        /* Cover Image */
         .cover-image {
             width: 100%;
-            height: 200px;
+            height: 30vh;
             object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 24px;
+        }
+        
+        /* Page Icon */
+        .page-icon {
+            font-size: 78px;
+            margin-top: -42px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 10;
+        }
+        .page-icon img {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    
+        
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 96px 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container { padding: 0 24px 60px; }
+        }
+        
+        /* Page Title */
+        h1.page-title {
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 1.2;
+            margin-bottom: 16px;
         }
         
         .meta {
             font-size: 14px;
             color: var(--fg-light);
             margin-bottom: 8px;
-        }
-        
-        .icon {
-            font-size: 48px;
-            margin-bottom: 8px;
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.2;
         }
         
         .excerpt {
@@ -122,13 +248,16 @@
             border-bottom: 1px solid var(--border-color);
         }
         
+        /* Content Styles */
         .content h2 {
             font-size: 1.5em;
+            font-weight: 600;
             margin: 32px 0 16px;
         }
         
         .content h3 {
             font-size: 1.25em;
+            font-weight: 600;
             margin: 24px 0 12px;
         }
         
@@ -197,18 +326,114 @@
         }
     </style>
 </head>
-<body>
-    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764893471499-Gemini_Generated_Image_dvxb9jdvxb9jdvxb.png" alt="The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding" class="cover-image">
+<body class="dark-mode">
     
-    <div class="icon">📝</div>
-    <p class="meta">04 December, 2025</p>
-    <h1>The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding</h1>
-    <p class="excerpt">Support tickets are a lagging indicator of friction. Here is how I used embedded Typeforms to capture real-time CSAT data during the Unfamiliar.id onboarding flow, identifying a UX blind spot that was stalling enterprise clients.</p>
+    <!-- NAVCOVER COMPONENT -->
+    <header>
+        <div class="breadcrumbs">
+            <div class="crumb" onclick="window.location.href='https://99pablos.com'">
+                <span class="crumb-icon"><img src="https://99pablos.com/pabs_prof_circle@750.png" alt="Pablo"></span> Pablo Vizcaino
+            </div>
+            
+            <span class="divider">/</span>
+            <div class="crumb" onclick="window.location.href='https://99pablos.com/#blog'">
+                Blog
+            </div>
+            <span class="divider">/</span>
+            <div class="crumb" style="cursor: default;">
+                The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding
+            </div>
+        </div>
+        <div class="header-controls">
+            <!-- Theme Toggle -->
+            <div class="header-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                <span id="theme-icon">☀️</span>
+            </div>
+            
+            <!-- Overflow Menu Trigger -->
+            <div class="header-btn" onclick="toggleOverflow(event)" title="More options">⋯</div>
+
+            <!-- DROP DOWN MENU -->
+            <div id="overflow-menu" class="overflow-menu">
+                <div class="menu-section-title">Contact</div>
+                <a href="mailto:heythatspablo@gmail.com" class="menu-item">
+                    <span class="menu-icon">✉️</span>
+                    <span class="menu-label">heythatspablo@gmail.com</span>
+                </a>
+                
+                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                
+                <div class="menu-section-title">Socials</div>
+                <a href="https://www.linkedin.com/in/pablo-vizcaino-caballeros/" target="_blank" class="menu-item">
+                    <span class="menu-icon">🔗</span>
+                    <span class="menu-label">LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1764893471499-Gemini_Generated_Image_dvxb9jdvxb9jdvxb.png" class="cover-image" alt="Cover">
+    <!-- END NAVCOVER COMPONENT -->
     
-    <article class="content">
+    <main class="main-container">
+        <div class="page-icon">📝</div>
+        <p class="meta">04 December, 2025</p>
+        <h1 class="page-title">The "Silent Churn" Killer: Using Micro-Surveys to Unblock Enterprise Onboarding</h1>
+        <p class="excerpt">Support tickets are a lagging indicator of friction. Here is how I used embedded Typeforms to capture real-time CSAT data during the Unfamiliar.id onboarding flow, identifying a UX blind spot that was stalling enterprise clients.</p>
+        
+        <article class="content">
 <p>In B2B SaaS, the most dangerous customer isn't the one filing a support ticket. It's the one who gets stuck, says nothing, and quietly decides your product is "too complicated."</p><p>We call this <strong>Silent Churn</strong>.</p><p>At <strong>Unfamiliar.id</strong>, we were seeing a worrying trend during our Enterprise Onboarding phase. We had a powerful product, but our "Time to First Value" (TTFV)—the time it takes for a new developer to integrate our SDK—was lagging.</p><p>Worse, our support team was getting hit with a specific spike in tickets related to "API Configuration" about 48 hours after sign-up.</p><p>By the time the ticket arrived, the customer was already frustrated. The engineering team was fully booked building core features, so we couldn't just "build a feedback system" from scratch to diagnose the problem.</p><p>We needed a listening device, and we needed it immediately.</p><h3>The Low-Code Solution: Typeform as a Sensor</h3><p>Instead of waiting for a sprint cycle to build a native feedback component, I turned to <strong>Typeform</strong>.</p><p>My hypothesis was simple: We didn't have a bug; we had a clarity issue. But we needed data to prove it.</p><p>I spun up a lightweight, 2-question Typeform and used a simple Javascript embed to trigger it inside the dashboard at the exact moment a user completed (or abandoned) the API setup step.</p><p><strong>The Survey Design:</strong><br><ul><li><strong>The CSAT Score:</strong> "On a scale of 1-5, how easy was it to generate your first API key?"</li></ul><br><ul><li><strong>The Blocker (Conditional):</strong> If they scored 3 or lower, we asked: "What was the one thing that stopped you from finishing?"</li></ul></p><h3>The Deployment</h3><p>We deployed this "Micro-Survey" via Google Tag Manager (GTM). This meant we could go live without a deployment to the core codebase.</p><p>Within 24 hours, the data started flowing.</p><h3>The Discovery</h3><p>The qualitative data was shocking. We assumed users were struggling with complex technical documentation.</p><p>The reality? They couldn't find the "Environment Switcher."</p><p>Our Enterprise clients often needed to switch between "Sandbox" and "Production" modes to test their keys. In our UI, the switcher was a small toggle in the top right corner—standard for us, but invisible to them.</p><p>Users were generating Sandbox keys, trying to use them in Production environments, failing, and then churning or filing a ticket.</p><p><strong>The Feedback Loop:</strong><br><ul><li><strong>User A:</strong> "I generated a key but it says invalid."</li></ul><br><ul><li><strong>User B:</strong> "Where do I find the prod keys?"</li></ul><br><ul><li><strong>User C:</strong> "Stuck on sandbox mode."</li></ul></p><p>We didn't need a code rewrite. We needed a UI tweak.</p><h3>The Fix and The Outcome</h3><p>Armed with this data, I brought the findings to the Design team. Because the evidence was irrefutable (and tied directly to support volume), we prioritized a hotfix.</p><p>We moved the Environment Switcher to the center of the API Dashboard and added a clear banner indicating which mode was active.</p><p><strong>The Results:</strong><br><ul><li><strong>Support Ticket Volume:</strong> The specific "Invalid Key" ticket category dropped by <strong>60%</strong> within a week.</li></ul><br><ul><li><strong>CSAT Score:</strong> The specific rating for that onboarding step jumped from <strong>3.2 to 4.5</strong>.</li></ul><br><ul><li><strong>Engineering Time Saved:</strong> By diagnosing the problem with Typeform, we avoided weeks of engineers hunting for non-existent backend bugs.</li></ul></p><h3>The Takeaway</h3><p>As Product Managers, we often fall into the trap of thinking every solution needs to be "built."</p><p>Sometimes, the most high-leverage thing you can do is stop guessing and start asking. Tools like Typeform allow you to inject "listening devices" into your product experience instantly.</p><p>If your customers are getting stuck, don't wait for them to email support. Ask them right there, right then. The answer is usually simpler than you think.</p>
-    </article>
+        </article>
+        
+        <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    </main>
     
-    <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    <script>
+        
+        // --- THEME TOGGLE ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // --- OVERFLOW MENU LOGIC ---
+        function toggleOverflow(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('overflow-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('overflow-menu');
+            const trigger = document.querySelector('.header-btn[title="More options"]');
+            
+            if (menu && menu.classList.contains('active') && !menu.contains(e.target) && e.target !== trigger) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Initialize theme from localStorage or default to dark
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('theme-icon').textContent = '🌙';
+            } else {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-icon').textContent = '☀️';
+            }
+        })();
+    
+    </script>
 </body>
 </html>

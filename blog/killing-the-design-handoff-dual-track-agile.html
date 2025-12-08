@@ -56,24 +56,28 @@
     </script>
     
     <style>
+        /* ============================================
+           NOTION DESIGN SYSTEM - CORE VARIABLES
+           ============================================ */
         :root {
             --bg-color: #FFFFFF;
             --fg-color: #37352F;
             --fg-light: #9B9A97;
             --border-color: #E9E9E7;
+            --hover-bg: rgba(55, 53, 47, 0.08);
             --callout-bg: #F1F1EF;
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
         }
         
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #191919;
-                --fg-color: rgba(255, 255, 255, 0.9);
-                --fg-light: rgba(255, 255, 255, 0.443);
-                --border-color: rgba(255, 255, 255, 0.094);
-                --callout-bg: #2F2F2F;
-            }
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-color: #191919;
+            --fg-color: rgba(255, 255, 255, 0.9);
+            --fg-light: rgba(255, 255, 255, 0.443);
+            --border-color: rgba(255, 255, 255, 0.094);
+            --hover-bg: rgba(255, 255, 255, 0.055);
+            --callout-bg: #2F2F2F;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -83,35 +87,157 @@
             background: var(--bg-color);
             color: var(--fg-color);
             line-height: 1.6;
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 40px 20px;
         }
         
+        /* NavCover Styles */
+        
+        /* ============================================
+           NAVCOVER COMPONENT STYLES
+           ============================================ */
+        
+        /* Header / Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            font-size: 14px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        body.dark-mode header { background-color: rgba(25, 25, 25, 0.8); }
+        body:not(.dark-mode) header { background-color: rgba(255, 255, 255, 0.9); }
+        
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .crumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        .crumb:hover { background: var(--hover-bg); }
+        
+        .crumb-icon img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .divider {
+            color: var(--fg-light);
+            user-select: none;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+        }
+        
+        .header-btn {
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .header-btn:hover { background: var(--hover-bg); }
+        
+        /* Overflow Menu */
+        .overflow-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            min-width: 220px;
+            padding: 8px 0;
+            display: none;
+            z-index: 200;
+        }
+        .overflow-menu.active { display: block; }
+        
+        .menu-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--fg-light);
+            padding: 8px 12px 4px;
+            text-transform: uppercase;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            color: var(--fg-color);
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .menu-item:hover { background: var(--hover-bg); }
+        .menu-icon { font-size: 16px; }
+        
+        /* Cover Image */
         .cover-image {
             width: 100%;
-            height: 200px;
+            height: 30vh;
             object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 24px;
+        }
+        
+        /* Page Icon */
+        .page-icon {
+            font-size: 78px;
+            margin-top: -42px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 10;
+        }
+        .page-icon img {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    
+        
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 96px 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container { padding: 0 24px 60px; }
+        }
+        
+        /* Page Title */
+        h1.page-title {
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 1.2;
+            margin-bottom: 16px;
         }
         
         .meta {
             font-size: 14px;
             color: var(--fg-light);
             margin-bottom: 8px;
-        }
-        
-        .icon {
-            font-size: 48px;
-            margin-bottom: 8px;
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.2;
         }
         
         .excerpt {
@@ -122,13 +248,16 @@
             border-bottom: 1px solid var(--border-color);
         }
         
+        /* Content Styles */
         .content h2 {
             font-size: 1.5em;
+            font-weight: 600;
             margin: 32px 0 16px;
         }
         
         .content h3 {
             font-size: 1.25em;
+            font-weight: 600;
             margin: 24px 0 12px;
         }
         
@@ -197,18 +326,114 @@
         }
     </style>
 </head>
-<body>
-    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog_images/2025/Office%20Meeting%20Room%20Pop%20Art%20Clean.png" alt="Why I Killed the "Design Handoff" (And Architected a Bridge Instead)" class="cover-image">
+<body class="dark-mode">
     
-    <div class="icon">📝</div>
-    <p class="meta">04 December, 2025</p>
-    <h1>Why I Killed the "Design Handoff" (And Architected a Bridge Instead)</h1>
-    <p class="excerpt">In high-stakes product development, the traditional "handoff" is a bottleneck that breeds resentment and rework. Here is how I implemented dual-track agile and a Figma-to-Storybook bridge at Unfamiliar.id to cut cycle times by 33% and stop the war between Design and Engineering.</p>
+    <!-- NAVCOVER COMPONENT -->
+    <header>
+        <div class="breadcrumbs">
+            <div class="crumb" onclick="window.location.href='https://99pablos.com'">
+                <span class="crumb-icon"><img src="https://99pablos.com/pabs_prof_circle@750.png" alt="Pablo"></span> Pablo Vizcaino
+            </div>
+            
+            <span class="divider">/</span>
+            <div class="crumb" onclick="window.location.href='https://99pablos.com/#blog'">
+                Blog
+            </div>
+            <span class="divider">/</span>
+            <div class="crumb" style="cursor: default;">
+                Why I Killed the "Design Handoff" (And Architected a Bridge Instead)
+            </div>
+        </div>
+        <div class="header-controls">
+            <!-- Theme Toggle -->
+            <div class="header-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                <span id="theme-icon">☀️</span>
+            </div>
+            
+            <!-- Overflow Menu Trigger -->
+            <div class="header-btn" onclick="toggleOverflow(event)" title="More options">⋯</div>
+
+            <!-- DROP DOWN MENU -->
+            <div id="overflow-menu" class="overflow-menu">
+                <div class="menu-section-title">Contact</div>
+                <a href="mailto:heythatspablo@gmail.com" class="menu-item">
+                    <span class="menu-icon">✉️</span>
+                    <span class="menu-label">heythatspablo@gmail.com</span>
+                </a>
+                
+                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                
+                <div class="menu-section-title">Socials</div>
+                <a href="https://www.linkedin.com/in/pablo-vizcaino-caballeros/" target="_blank" class="menu-item">
+                    <span class="menu-icon">🔗</span>
+                    <span class="menu-label">LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog_images/2025/Office%20Meeting%20Room%20Pop%20Art%20Clean.png" class="cover-image" alt="Cover">
+    <!-- END NAVCOVER COMPONENT -->
     
-    <article class="content">
+    <main class="main-container">
+        <div class="page-icon">📝</div>
+        <p class="meta">04 December, 2025</p>
+        <h1 class="page-title">Why I Killed the "Design Handoff" (And Architected a Bridge Instead)</h1>
+        <p class="excerpt">In high-stakes product development, the traditional "handoff" is a bottleneck that breeds resentment and rework. Here is how I implemented dual-track agile and a Figma-to-Storybook bridge at Unfamiliar.id to cut cycle times by 33% and stop the war between Design and Engineering.</p>
+        
+        <article class="content">
 <p>In the traditional software waterfall model, there is a specific moment called "The Handoff."</p><p>It is the moment Design finishes a file, throws it over the fence to Engineering, and prays. In theory, this is where vision becomes reality. In practice, especially in high-compliance environments, this isn’t a handoff. <strong>It’s a grenade.</strong></p><p>When I joined <strong>Unfamiliar.id</strong> to lead product delivery for our identity verification platform, we were building AI-driven biometric capture flows. The stakes were incredibly high. We were dealing with GDPR constraints, complex anti-spoofing APIs, and users who had zero patience for lag.</p><p>We couldn't afford the friction of a traditional handoff. Every time an engineer had to guess the intention behind an animation, or a designer had to wait for a backend spec to start visualizing, we lost time.</p><p>We needed to stop treating Design and Engineering as separate entities and start treating them as a single organ with two functions. Here is the operational architecture I built to replace the "handoff" with a "bridge."</p><h3>The Shift: Dual-Track Agile</h3><p>The biggest mistake teams make is viewing the roadmap as a single, linear line. First, we define. Then, we design. Then, we build.</p><p>This creates "wait states." Engineers sit idle waiting for pixels; Designers sit idle waiting for builds to QA.</p><p>To fix this, I architected a <strong>Dual-Track Workflow</strong>. We split the roadmap into two parallel streams that ran simultaneously, not sequentially:</p><p>[Image of Dual Track Agile Diagram]<br><ul><li><strong>Track A: Discovery (The "What" and "Why")</strong></li></ul><br>    Designers and Product Managers work ahead of the current sprint. They validate user flows, test prototypes with legal/compliance teams, and finalize the "happy path."<br><ul><li><strong>Track B: Delivery (The "How")</strong></li></ul><br>    While Track A is finalizing the UI, Engineering is already building the infrastructure. They are setting up the API endpoints and data structures based on the <em>requirements</em>, not the <em>pixels</em>.</p><p>By the time the high-fidelity UI is ready, the backend is already waiting for it.</p><h3>The Tooling: Building the Bridge</h3><p>Process is nothing without the tooling to enforce it. A philosophy doesn't stop a frontend developer from hard-coding a hex value instead of using a token.</p><p>I implemented a strict "Bridge" strategy focusing on three operational pillars:</p><p>#### 1. Atomic Tickets (Linear &gt; Slack)<br>Vague requirements are the death of velocity. I banned "shoulder taps" and Slack requests for feature changes.</p><p>I instituted a system of <strong>Atomic Tickets</strong> in Linear. Every ticket required:<br><ul><li><strong>User Story:</strong> "As a user, I need to..."</li></ul><br><ul><li><strong>Technical Constraints:</strong> "API latency must be under 200ms."</li></ul><br><ul><li><strong>Acceptance Criteria:</strong> A checklist of exact behaviors.</li></ul></p><p>If it wasn't in Linear, it didn't exist.</p><p>#### 2. Systemizing the Figma-to-Storybook Pipeline<br>One of the most common sources of rework is the "interpretation gap"—when a developer eyes a margin and guesses it’s 16px, but the designer meant 24px.</p><p>We moved away from custom CSS for every feature. I pushed for a reusable component library where Figma components mapped 1:1 to <strong>Storybook</strong> components.<br><ul><li><strong>Design update:</strong> The designer updates the "Primary Button" in Figma.</li></ul><br><ul><li><strong>Dev update:</strong> The engineer sees the token change and updates the component in Storybook.</li></ul></p><p>This reduced the cognitive load on engineers. They stopped building <em>interfaces</em> and started assembling <em>systems</em>.</p><p>#### 3. The "Design QA" Gate<br>In many organizations, Quality Assurance (QA) checks for bugs. Does the app crash? No? Ship it.</p><p>I added a new layer: <strong>Design QA.</strong></p><p>Before any ticket could be marked "Done," it had to pass a Design QA gate. The designer responsible for the feature had to review the implementation in a Vercel preview deployment. If the spacing was off, or the animation curve was linear instead of eased, the ticket was rejected.</p><p>This sounds strict, but it actually built trust. Designers knew their work would be respected. Engineers knew exactly when they were "done."</p><h3>The Results</h3><p>Operational rigor isn't about making rules; it's about removing obstacles. By implementing this Dual-Track system and tightening our tooling standards, the metrics at Unfamiliar.id shifted dramatically over a single quarter:<br><ul><li><strong>33% Reduction in Cycle Time:</strong> Features moved from "In Progress" to "Shipped" a full third faster.</li></ul><br><ul><li><strong>40% Reduction in Rework:</strong> Because we defined the "What" (Design) and "How" (Eng) in parallel, we stopped having to tear down code that didn't fit the design.</li></ul><br><ul><li><strong>94% Pass Rate:</strong> Our biometric verification pass rate jumped from 82% to 94%, largely because we could iterate on the user experience faster based on live data.</li></ul></p><h3>The Takeaway</h3><p>If you are a Product Manager or Design Leader, stop looking for better ways to "hand off" work.</p><p>Handoffs imply that you are finished with the work and it is now someone else's problem. Instead, build a bridge. Create the infrastructure where Design and Engineering are constantly walking back and forth, refining the product together.</p><p>Don't wait for the specs to be perfect to start building. Build the bridge first, then cross it together.</p>
-    </article>
+        </article>
+        
+        <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    </main>
     
-    <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    <script>
+        
+        // --- THEME TOGGLE ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // --- OVERFLOW MENU LOGIC ---
+        function toggleOverflow(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('overflow-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('overflow-menu');
+            const trigger = document.querySelector('.header-btn[title="More options"]');
+            
+            if (menu && menu.classList.contains('active') && !menu.contains(e.target) && e.target !== trigger) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Initialize theme from localStorage or default to dark
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('theme-icon').textContent = '🌙';
+            } else {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-icon').textContent = '☀️';
+            }
+        })();
+    
+    </script>
 </body>
 </html>
