@@ -4,6 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pablo Vizcaino - Design Project Manager</title>
+    
+    <!-- Homepage Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://99pablos.com/#person",
+          "name": "Pablo F. Vizcaino",
+          "givenName": "Pablo",
+          "familyName": "Vizcaino",
+          "jobTitle": "Senior Design Project Manager & Product Implementation Specialist",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://99pablos.com/images/headshot.jpg",
+            "caption": "Pablo F. Vizcaino"
+          },
+          "description": "Senior Design Project Manager and Curator of My Newsroom. Bridging the gap between product delivery and strategic intelligence, covering decision science, AI operations, and growth frameworks.",
+          "url": "https://99pablos.com",
+          "sameAs": [
+            "https://www.linkedin.com/in/pablo-vizcaino", 
+            "https://peppermint.so"
+          ],
+          "knowsAbout": [
+            "Project Management",
+            "Product Operations",
+            "Dual-Track Agile",
+            "Design Systems",
+            "Decision Science",
+            "Growth Frameworks",
+            "AI Best Practices",
+            "Mental Models",
+            "Personal Performance",
+            "React",
+            "Figma"
+          ],
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "University of California, Riverside"
+          },
+          "worksFor": {
+            "@type": "Organization",
+            "name": "Peppermint"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://99pablos.com/#website",
+          "url": "https://99pablos.com",
+          "name": "Pablo F. Vizcaino - Portfolio & Newsroom",
+          "description": "Portfolio and Newsroom of Pablo F. Vizcaino. Featuring case studies in Design Project Management and daily intelligence on business, technology, and mental models.",
+          "publisher": {
+            "@id": "https://99pablos.com/#person"
+          },
+          "inLanguage": "en-US"
+        },
+        {
+          "@type": "ProfilePage",
+          "@id": "https://99pablos.com/#webpage",
+          "url": "https://99pablos.com",
+          "name": "About Pablo F. Vizcaino",
+          "isPartOf": {
+            "@id": "https://99pablos.com/#website"
+          },
+          "mainEntity": {
+            "@id": "https://99pablos.com/#person"
+          },
+          "description": "Biography, case studies, and Newsroom intelligence digest by Pablo F. Vizcaino."
+        }
+      ]
+    }
+    </script>
+
     <!-- Mermaid JS for Charts -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <!-- Supabase JS Client -->
