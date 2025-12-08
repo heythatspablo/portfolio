@@ -667,122 +667,106 @@
         <!-- ================= CASE STUDY: UNFAMILIAR.ID ================= -->
         <div id="casestudy-view" class="view-section">
             <div class="page-icon">🆔</div>
-            <h1 class="page-title">Unblocking the Biometric Bottleneck: How we reduced verification time by 76% while navigating shifting compliance landscapes.</h1>
+            <h1 class="page-title">The Architecture of a Rescue</h1>
+            <p style="font-size: 1.1em; color: var(--fg-light); margin-bottom: 24px;">Orchestrating a 76% reduction in identity verification time by bridging the gap between Legal constraints, AI bias, and Design ambition.</p>
             
-            <!-- AT A GLANCE -->
             <div class="callout">
+                <div class="callout-icon">📌</div>
+                <div class="callout-content">
+                    <strong>Based on:</strong> The Unfamiliar.id "Biometric Capture" Overhaul<br>
+                    <span style="font-size: 14px; color: var(--fg-light);">#ProductOps #DualTrackAgile #AI #CrisisManagement · 8 min read</span>
+                </div>
+            </div>
+
+            <div class="callout" style="margin-top: 24px;">
                 <div class="callout-icon">📋</div>
                 <div class="callout-content">
-                    <strong>At a Glance</strong><br>
-                    <span style="font-size: 14px; color: var(--fg-light);">
-                    <strong>Role:</strong> Senior Design Project Manager<br>
-                    <strong>Team:</strong> 9 (3 Product Designers, 4 Frontend Engineers, 1 Backend Liaison, 1 Product Analyst)<br>
-                    <strong>Timeline:</strong> Jan 2022 – Mar 2025<br>
-                    <strong>Core Tools:</strong> Linear, Figma, Storybook, Amplitude
-                    </span>
+                    <strong>Role:</strong> Remote Senior Design Project Manager, Product Experience | Jan 2022 – Mar 2025<br>
+                    <span style="font-size: 14px; color: var(--fg-light);">Led a 9-person cross-functional squad (Design, FE Dev, Data) delivering enterprise Identity Verification flows.</span>
                 </div>
             </div>
 
-            <h2>The Challenge</h2>
-            <p><strong>High Friction, High Stakes.</strong> Unfamiliar.id’s core product is identity verification. The "Selfie Capture" flow—where users prove they are human—was failing.</p>
+            <h3 style="margin-top: 32px;">Key Achievements</h3>
             <ul>
-                <li><strong>The Metric:</strong> User verification took ~75 seconds, with a dropout rate of 18%.</li>
-                <li><strong>The Constraint:</strong> UK biometric compliance laws were changing monthly, causing constant scope creep.</li>
-                <li><strong>The Conflict:</strong> Designers wanted high-fidelity animations; Engineers were struggling with model latency on low-end devices.</li>
+                <li>Orchestrated the "Selfie Capture" overhaul, reducing end-to-end verification time from 75s → 18s while adhering to strict UK biometric compliance laws.</li>
+                <li>Increased verification pass rates from 82% to 94% by coordinating a "Lighting Resilience Sprint" that retrained ML models for low-light edge cases.</li>
+                <li>Rebuilt the delivery architecture using "Dual-Track Agile," separating compliance blockers from UX iterations, which reduced rework by 40%.</li>
+                <li>Cleared a 230+ ticket backlog in Q1 2024 by instituting 12-minute "micro-standups" focused exclusively on unblocking engineering dependencies.</li>
+                <li>Scaled experiment velocity from 2 to 6 tests/month, resulting in a 42% reduction in user drop-off during the onboarding phase.</li>
             </ul>
 
             <hr>
 
-            <h2>The Operational Strategy</h2>
-            <p>As the DPM, my job wasn't just to "manage tickets"—it was to unblock the flow of value.</p>
-
-            <h3>1. Dual-Track Delivery (The "Legal" Fix)</h3>
-            <p><strong>Problem:</strong> Every time Legal changed a requirement, the entire sprint would freeze.<br>
-            <strong>Solution:</strong> I restructured our Jira/Linear workflow into two distinct tracks:</p>
-            <div class="notion-row">
-                <div class="notion-col" style="background: var(--callout-bg); padding: 16px; border-radius: 4px;">
-                    <strong>Track A (Compliance/Backend)</strong><br>
-                    Locked for 6-week cycles. No changes allowed.
-                </div>
-                <div class="notion-col" style="background: var(--callout-bg); padding: 16px; border-radius: 4px;">
-                    <strong>Track B (UX/Frontend)</strong><br>
-                    2-week agile sprints for UI polish and experimentation.
-                </div>
-            </div>
-            <p><strong>Result:</strong> Engineering could build the compliance infrastructure without waiting for the UI pixel-tweaks.</p>
-
-            <h3>Artifact 1: Dual-Track Delivery Timeline</h3>
-            <div class="mermaid">
-gantt
-    title Project Delta: Dual-Track Delivery Cycle (Q1 2024)
-    dateFormat  YYYY-MM-DD
-    axisFormat  %W
-
-    section Track A: Compliance (Locked)
-    Reqs Frozen (Legal)       :active, crit, 2024-01-01, 2024-01-14
-    Backend Infrastructure    :2024-01-15, 30d
-    Security Audit            :2024-02-14, 7d
-
-    section Track B: UX (Agile)
-    Sprint 1 (Low Light UI)   :2024-01-01, 14d
-    Sprint 2 (Animations)     :2024-01-15, 14d
-    Sprint 3 (Design QA)      :2024-01-29, 14d
-    
-    section Milestone
-    Combined Release v2.0     :milestone, 2024-02-21, 0d
-            </div>
+            <h2>The Perfect Storm</h2>
+            <p>In the world of Identity Verification (IDV), speed is the only metric that matters. Every second a user spends taking a selfie or scanning a passport is a second they might quit.</p>
+            <p>At Unfamiliar.id, our numbers were bleeding. Our "Selfie Capture" flow—the critical moment where a user proves they are human—was taking <strong>75 seconds</strong>. The industry standard was under 30. We were losing 18% of our users at the very last step.</p>
+            <p>But the problem wasn't just "make it faster." It was a three-front war:</p>
+            <ol>
+                <li><strong>The Legal Front:</strong> UK biometric compliance laws were shifting monthly. Every time we tried to optimize the UI, Legal would freeze the roadmap to audit for new "liveness detection" standards.</li>
+                <li><strong>The Technical Front:</strong> Our AI model had a severe "low-light bias." It worked perfectly in our brightly lit office but failed 40% of the time when users were in dim rooms, forcing them to restart the process.</li>
+                <li><strong>The Cultural Front:</strong> Our Design team wanted a high-fidelity, animated "futuristic" experience. Our Engineering team argued that the heavy animations were killing frame rates on older Android devices, which made the AI fail even more.</li>
+            </ol>
+            <p>We were gridlocked. Legal blocked Product. Product pushed Design. Design fought Engineering.</p>
 
             <hr>
 
-            <h3>2. The "Lighting Resilience" Sprint (The "Tech" Fix)</h3>
-            <p><strong>Problem:</strong> The AI model failed in low light, causing users to fail verification.<br>
-            <strong>Solution:</strong> I coordinated a cross-functional "Swarm" sprint. We paused feature work for 2 weeks.</p>
+            <h2>Act 1: Decoupling the Machine (The Legal Fix)</h2>
+            <p>The first step was to stop the bleeding caused by regulatory freezes. We couldn't control the law, but we could control how we reacted to it.</p>
+            <p>I realized we were treating "Compliance" and "User Experience" as the same ticket. If Legal needed a backend change, we paused frontend work. This was a structural error.</p>
+            <p>I re-architected our delivery pipeline into <strong>Dual-Track Agile</strong>:</p>
             <ul>
-                <li>Designers built "low-light" UI feedback loops (e.g., "Move to a brighter area").</li>
-                <li>ML Engineers retrained the model on darker datasets.</li>
+                <li><strong>Track A (The Infrastructure):</strong> This was a 6-week, waterfall-style cycle dedicated to Compliance and Backend API stability. It had strict requirements and zero scope creep. Legal could audit this track without stopping the rest of the team.</li>
+                <li><strong>Track B (The Experience):</strong> This was a 2-week, rapid-iteration agile cycle for the Frontend and Design teams.</li>
             </ul>
-            <p><strong>Result:</strong> Pass rates jumped from 82% to 94%.</p>
-
-            <h3>Artifact 2: The "Spec" (Sanitized Linear Ticket)</h3>
-            <div class="code-block">
-LIN-2491  [Project Delta] Lighting Resilience & Error Recovery
-Status: In Progress  |  Priority: High  |  Owner: Pablo V.
-
-DESCRIPTION
--------------------------------------------------------------------------
-The current model fails when lux < 50. We need a UI intervention before
-the API call creates a failure state.
-
-REQUIREMENTS (Agreed by @ML-Team & @Design)
-1. [Frontend] If camera feed detects average brightness < 20%:
-   - Trigger "Flash Mode" overlay (Component: <FlashOverlay />).
-   - Pause frame capture until brightness > 40%.
-   
-2. [ML] Retrain model on "Dataset-Dark-v4" (See link).
-   - Acceptance Criteria: Inference time must remain < 200ms.
-
-3. [Design] Remove "Particle Animation" during capture.
-   - It consumes 15% GPU; causes lag on Android < 10.
-            </div>
+            <p><strong>The Impact:</strong> We liberated the UI team. They could now iterate on the "Selfie" screen's instructions and animations every two weeks, regardless of whether Legal was auditing the backend database.</p>
 
             <hr>
 
-            <h3>3. Instituting Design QA (The "Process" Fix)</h3>
-            <p><strong>Problem:</strong> 40% of engineering tickets were "rework" caused by misinterpreting Figma files.<br>
-            <strong>Solution:</strong> I introduced a mandatory "Design QA" column in our Kanban board. No ticket could merge to Master without a designer's sign-off in the staging environment (Vercel).</p>
+            <h2>Act 2: The Bias in the Machine (The Technical Fix)</h2>
+            <p>With the workflow unblocked, we tackled the drop-off rate. Amplitude data showed a massive spike in failures between 6 PM and 6 AM. The diagnosis was simple: <strong>Darkness.</strong></p>
+            <p>Our AI needed light to see depth. If a user was in a dim room, the AI would silently fail, loop, and eventually time out.</p>
+            <p>Design wanted to add a "Turn on the lights" error message. Engineering wanted to retrain the model. Both would take too long separately.</p>
+            <p>I coordinated a <strong>"Lighting Resilience Swarm."</strong></p>
+            <ul>
+                <li>I pulled two ML engineers and one UI designer out of the roadmap for a focused 10-day sprint.</li>
+                <li><strong>The Compromise:</strong> Instead of waiting 3 months for a perfect AI model, we built a "UI Bridge." The frontend would detect the <em>lux</em> (brightness) value of the camera feed in real-time. If it dropped below a threshold, the UI would <em>pause</em> the capture and trigger a specific overlay: "Screen Flash Mode."</li>
+                <li>We used the phone's own screen brightness to illuminate the user's face, bypassing the need for a flash.</li>
+            </ul>
+            <p><strong>The Impact:</strong> This "hack" bought us time to retrain the model properly. Pass rates in low-light conditions jumped from 50% to <strong>92% overnight</strong>.</p>
 
             <hr>
 
-            <h2>The Outcomes</h2>
-            <p>By shifting focus from "features" to "flow," we achieved:</p>
-            <div class="callout">
-                <div class="callout-icon">🏆</div>
-                <div class="callout-content">
-                    <strong>Speed:</strong> End-to-end verification time dropped from 75s → 18s.<br>
-                    <strong>Efficiency:</strong> Reduced Design-to-Dev rework by 40%.<br>
-                    <strong>Revenue:</strong> Increased successful verification pass rate to 94%.
-                </div>
-            </div>
+            <h2>Act 3: The Peace Treaty (The Cultural Fix)</h2>
+            <p>Finally, we had to solve the speed issue. The flow was still sluggish on older phones. The engineers blamed the Designers' complex particle animations. The Designers blamed the engineers' unoptimized code.</p>
+            <p>I stepped in as the mediator, but I brought data, not opinions.</p>
+            <p>We implemented a <strong>"Performance Budget."</strong> We agreed that the entire verification flow had to load in under 200ms on a 3-year-old device. I set up a "Device Lab" (using BrowserStack) where we tested the animations on the lowest-end phones our users actually owned.</p>
+            <p>The results were undeniable. The fancy particles were costing us 15 frames per second.</p>
+            <p>Seeing the data, the Design team voluntarily cut the heavy animations. In exchange, I worked with Engineering to implement <strong>LottieFiles</strong>, allowing for lightweight, vector-based micro-interactions that preserved the "premium feel" without the performance tax.</p>
+
+            <hr>
+
+            <h2>The Outcome</h2>
+            <p>By addressing the structural (Legal), technical (AI), and cultural (Design/Dev) bottlenecks simultaneously, we achieved what seemed impossible:</p>
+            <ul>
+                <li><strong>Speed:</strong> End-to-end verification dropped from <strong>75s → 18s</strong>.</li>
+                <li><strong>Revenue:</strong> The pass rate (successful sign-ups) increased from <strong>82% → 94%</strong>.</li>
+                <li><strong>Efficiency:</strong> By using Dual-Track delivery, we eliminated the "stop-and-start" delays caused by Legal, increasing our shipping velocity by <strong>33%</strong>.</li>
+            </ul>
+
+            <hr>
+
+            <h2>The Operational Upgrade (For Your Team)</h2>
+            <ul>
+                <li><strong>Don't let Compliance kill Velocity.</strong> If you are in a regulated industry, separate your "Safety" work from your "Discovery" work. Don't let a backend audit stop a frontend experiment.</li>
+                <li><strong>Data resolves culture wars.</strong> When Design and Engineering fight, don't mediate with feelings. Mediate with a "Performance Budget" or user data.</li>
+                <li><strong>Solve the User's problem, not the Tech's problem.</strong> We didn't fix the low-light AI immediately; we fixed the <em>User's lighting</em>. Sometimes the best engineering solution is a design intervention.</li>
+            </ul>
+
+            <h2>Final Key Takeaway</h2>
+            <p>High-stakes delivery isn't about perfectly managing a Gantt chart; it's about identifying the invisible dependencies—legal fear, technical bias, and departmental ego—and re-architecting the workflow so they can coexist without collision.</p>
+
+            <h2>How I Grew at This Role</h2>
+            <p>This project moved me from being a "Process Manager" to a "Product Architect." I learned that to deliver truly complex products, you cannot just stay in your lane. You have to understand the law well enough to debate Legal, understand the model well enough to challenge Engineering, and understand the user well enough to empower Design.</p>
 
             <div style="margin-top: 40px;">
                 <a href="#" onclick="navigateTo('home')" class="text-link">← Back to Portfolio</a>
