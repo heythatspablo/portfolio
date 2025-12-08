@@ -1345,10 +1345,8 @@
         }
 
         function navigateToBlogPost(slug) {
-            // Store current slug for routing
-            window.currentBlogSlug = slug;
-            navigateTo('blogpost');
-            loadBlogPost(slug);
+            // Redirect to static blog page for SEO/shareability
+            window.location.href = `/blog/${slug}.html`;
         }
 
         // --- THEME TOGGLE ---
@@ -1384,13 +1382,48 @@
             }
         });
 
-        // --- SIMPLE ROUTING ---
-        function navigateTo(viewId) {
+        // --- HASH-BASED ROUTING ---
+        // Maps view IDs to URL hashes and breadcrumb text
+        const ROUTES = {
+            'home': { hash: '', breadcrumb: 'Portfolio' },
+            'about': { hash: 'about', breadcrumb: 'About' },
+            'contact': { hash: 'contact', breadcrumb: 'Contact' },
+            'blog': { hash: 'blog', breadcrumb: 'Blog' },
+            'casestudy': { hash: 'case-study/unfamiliar-id', breadcrumb: 'Case Study: Unfamiliar.id' },
+            'outliant': { hash: 'experience/outliant', breadcrumb: 'Experience: Outliant' },
+            'goliath': { hash: 'experience/goliath', breadcrumb: 'Experience: Goliath' },
+            'bloomreach': { hash: 'experience/bloomreach', breadcrumb: 'Experience: Bloomreach' }
+        };
+
+        // Reverse lookup: hash -> viewId
+        const HASH_TO_VIEW = {};
+        Object.entries(ROUTES).forEach(([viewId, config]) => {
+            HASH_TO_VIEW[config.hash] = viewId;
+        });
+
+        function navigateTo(viewId, updateHash = true) {
             // Hide all views
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             
             // Show target view
-            document.getElementById(viewId + '-view').classList.add('active');
+            const viewElement = document.getElementById(viewId + '-view');
+            if (viewElement) {
+                viewElement.classList.add('active');
+            } else {
+                // Fallback to home if view doesn't exist
+                document.getElementById('home-view').classList.add('active');
+                viewId = 'home';
+            }
+            
+            // Update URL hash (without triggering hashchange if we're already handling it)
+            if (updateHash && ROUTES[viewId]) {
+                const newHash = ROUTES[viewId].hash;
+                if (newHash) {
+                    history.pushState(null, '', '#' + newHash);
+                } else {
+                    history.pushState(null, '', window.location.pathname);
+                }
+            }
             
             // Update Breadcrumb
             const breadcrumb = document.getElementById('breadcrumb-current');
@@ -1401,19 +1434,8 @@
             breadcrumbMiddle.style.display = 'none';
             dividerMiddle.style.display = 'none';
             
-            if (viewId === 'home') breadcrumb.textContent = 'Portfolio';
-            if (viewId === 'about') breadcrumb.textContent = 'About';
-            if (viewId === 'contact') breadcrumb.textContent = 'Contact';
-            if (viewId === 'casestudy') breadcrumb.textContent = 'Case Study: Unfamiliar.id';
-            if (viewId === 'outliant') breadcrumb.textContent = 'Experience: Outliant';
-            if (viewId === 'goliath') breadcrumb.textContent = 'Experience: Goliath';
-            if (viewId === 'bloomreach') breadcrumb.textContent = 'Experience: Bloomreach';
-            if (viewId === 'blog') breadcrumb.textContent = 'Blog';
-            if (viewId === 'blogpost') {
-                // Show middle breadcrumb for blog posts: Pablo / Blog / {title}
-                breadcrumbMiddle.style.display = 'flex';
-                dividerMiddle.style.display = 'inline';
-                breadcrumb.textContent = 'Loading...'; // Will be updated by loadBlogPost
+            if (ROUTES[viewId]) {
+                breadcrumb.textContent = ROUTES[viewId].breadcrumb;
             }
 
             // --- COVER IMAGE LOGIC ---
@@ -1426,8 +1448,7 @@
                 coverImage.src = caseStudyCover;
             } else if (viewId === 'blog') {
                 coverImage.src = blogCover;
-            } else if (viewId !== 'blogpost') {
-                // blogpost sets its own cover via loadBlogPost()
+            } else {
                 coverImage.src = defaultCover;
             }
 
@@ -1445,8 +1466,36 @@
             }
         }
 
-        // Load recent posts on homepage on page load
-        document.addEventListener('DOMContentLoaded', loadRecentBlogPosts);
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', handleRoute);
+
+        // Handle initial page load and hash changes
+        function handleRoute() {
+            const hash = window.location.hash.slice(1); // Remove the '#'
+            
+            // Check direct hash match first
+            if (HASH_TO_VIEW[hash] !== undefined) {
+                navigateTo(HASH_TO_VIEW[hash], false);
+                return;
+            }
+            
+            // Check for partial matches (e.g., "experience/outliant" matches "outliant")
+            for (const [viewId, config] of Object.entries(ROUTES)) {
+                if (config.hash && hash === config.hash) {
+                    navigateTo(viewId, false);
+                    return;
+                }
+            }
+            
+            // Default to home
+            navigateTo('home', false);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadRecentBlogPosts();
+            handleRoute(); // Handle initial URL hash
+        });
 
         // Set dark mode as default
         document.body.classList.add('dark-mode');
