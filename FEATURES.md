@@ -702,6 +702,187 @@ git add -A && git commit -m "Update" && git push
 
 ---
 
+## Page Generator System
+
+A declarative page builder that generates Notion-styled HTML pages from JSON configuration.
+
+### Usage
+
+```bash
+# Generate page from config file
+node page-generator.js my-page.json
+
+# Output example config
+node page-generator.js --example > my-page.json
+
+# Build the built-in example (Work With Pablo)
+node page-generator.js --build-example
+
+# Show help
+node page-generator.js --help
+```
+
+### Config Structure
+
+```json
+{
+  "slug": "page-url-slug",
+  "title": "Page Title",
+  "description": "Meta description for SEO",
+  "cover": {
+    "gradient": "linear-gradient(135deg, #1a1a2e, #0f3460)"
+  },
+  "icon": {
+    "type": "none"
+  },
+  "toc": false,
+  "header": true,
+  "backLink": true,
+  "blocks": [ ... ]
+}
+```
+
+### Available Block Types
+
+| Block | Purpose | Key Properties |
+|-------|---------|----------------|
+| `h1` | Page title | `text`, `style` |
+| `h2` | Section header | `text`, `style` |
+| `h3` | Subheader | `text`, `style` |
+| `paragraph` | Body text | `text`, `style` |
+| `callout` | Highlighted box | `icon`, `content`, `background` |
+| `bulletList` | Unordered list | `items` (strings or `{lead, text}`) |
+| `numberedList` | Ordered list | `items` |
+| `quote` | Blockquote | `text`, `attribution` |
+| `divider` | Horizontal rule | — |
+| `columns` | Two-column layout | `columns[].blocks` |
+| `threeColumns` | Three-column grid | `columns[].blocks` |
+| `toggle` | Collapsible section | `title`, `content` |
+| `numberedToggle` | Numbered collapsible | `number`, `title`, `content` |
+| `button` | CTA button | `text`, `href`, `style` (primary/secondary) |
+| `link` | Text link | `text`, `href` |
+| `code` | Code block | `code` |
+| `image` | Image with caption | `src`, `alt`, `caption` |
+| `gallery` | Card grid | `cards[].{title, cover, href, ...}` |
+| `toc` | Table of contents | — |
+| `spacer` | Vertical space | `height` |
+| `centered` | Centered container | `blocks` |
+| `cover` | Cover image/gradient | `src` or `gradient` |
+| `icon` | Page icon | `emoji` or `type: "none"` |
+| `html` | Raw HTML | `content` |
+
+### Block Examples
+
+#### Callout with Icon
+```json
+{
+  "type": "callout",
+  "icon": "💡",
+  "content": "This is a callout with an icon."
+}
+```
+
+#### Two-Column Layout
+```json
+{
+  "type": "columns",
+  "columns": [
+    { "blocks": [{ "type": "paragraph", "text": "Left column" }] },
+    { "blocks": [{ "type": "paragraph", "text": "Right column" }] }
+  ]
+}
+```
+
+#### Numbered Toggle (Process Steps)
+```json
+{
+  "type": "numberedToggle",
+  "number": "1",
+  "title": "First Step",
+  "content": "Description of the first step."
+}
+```
+
+#### Bullet List with Bold Lead-ins
+```json
+{
+  "type": "bulletList",
+  "items": [
+    { "lead": "Bold Title", "text": "Description after the dash" },
+    { "lead": "Another Item", "text": "More details here" }
+  ]
+}
+```
+
+#### Button CTA
+```json
+{
+  "type": "button",
+  "text": "Book a Call →",
+  "href": "https://calendly.com/example",
+  "style": "primary"
+}
+```
+
+#### Gallery Grid
+```json
+{
+  "type": "gallery",
+  "cards": [
+    {
+      "title": "Card Title",
+      "icon": "🚀",
+      "cover": "image.jpg",
+      "subtitle": "Subtitle text",
+      "href": "/page.html"
+    }
+  ]
+}
+```
+
+### Inline Formatting
+
+Within text content, you can use:
+- `**bold**` → **bold**
+- `*italic*` → *italic*
+- `` `code` `` → `code`
+- `[link text](url)` → link
+
+### Recommended Page Structure
+
+Based on Notion best practices:
+
+```
+1. Cover (gradient or image)
+2. Icon (optional, often "none" for clean look)
+3. H1 Title
+4. H3 Subtitle (light gray)
+5. Callout (intro paragraph)
+6. Divider
+7. H2 Section + Two-Column Content
+8. Divider
+9. H2 Section + Numbered Toggles
+10. Divider
+11. H2 Section + Three-Column Grid
+12. Divider
+13. Quote (testimonial)
+14. Divider
+15. H2 CTA + Button in Callout
+16. Centered Closing Statement
+```
+
+### Output
+
+Generated pages include:
+- Full Notion design system CSS
+- Dark mode (default)
+- SEO meta tags (OG, Twitter)
+- Responsive layout
+- Sticky header with navigation
+- Back link to portfolio
+
+---
+
 ## Future Enhancements
 
 - [ ] RSS feed generation

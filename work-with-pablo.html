@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work With Pablo - Pablo Vizcaino</title>
+    
+    <!-- SEO -->
+    <meta name="description" content="Build smarter. Move faster. Make better decisions.">
+    <meta name="author" content="Pablo F. Vizcaino">
+    <link rel="canonical" href="https://99pablos.com/work-with-pablo.html">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Work With Pablo">
+    <meta property="og:description" content="Build smarter. Move faster. Make better decisions.">
+    <meta property="og:image" content="https://99pablos.com/li-pv2-small.png">
+    <meta property="og:url" content="https://99pablos.com/work-with-pablo.html">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Work With Pablo">
+    <meta name="twitter:description" content="Build smarter. Move faster. Make better decisions.">
+    
+    <style>
+        /* ============================================
+           NOTION DESIGN SYSTEM - CORE VARIABLES
+           ============================================ */
+        :root {
+            /* Light Mode */
+            --bg-color: #FFFFFF;
+            --fg-color: #37352F;
+            --fg-light: #9B9A97;
+            --border-color: #E9E9E7;
+            --hover-bg: rgba(55, 53, 47, 0.08);
+            --callout-bg: #F1F1EF;
+            --code-bg: #F7F6F3;
+            --card-shadow: rgba(15, 15, 15, 0.1);
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+        
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-color: #191919;
+            --fg-color: rgba(255, 255, 255, 0.9);
+            --fg-light: rgba(255, 255, 255, 0.443);
+            --border-color: rgba(255, 255, 255, 0.094);
+            --hover-bg: rgba(255, 255, 255, 0.055);
+            --callout-bg: #2F2F2F;
+            --code-bg: #262626;
+        }
+        
+        /* ============================================
+           BASE STYLES
+           ============================================ */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-color);
+            color: var(--fg-color);
+            line-height: 1.5;
+            font-size: 16px;
+        }
+        
+        .cover-image {
+            width: 100%;
+            height: 30vh;
+            object-fit: cover;
+        }
+        
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 96px 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container { padding: 0 24px 60px; }
+        }
+        
+        /* ============================================
+           PAGE ICON & TITLE
+           ============================================ */
+        .page-icon {
+            font-size: 78px;
+            margin-top: -42px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 10;
+        }
+        .page-icon img { width: 78px; }
+        
+        h1.page-title {
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+        
+        /* ============================================
+           TYPOGRAPHY
+           ============================================ */
+        h2 {
+            font-size: 1.875em;
+            font-weight: 600;
+            margin: 32px 0 16px;
+        }
+        
+        h3 {
+            font-size: 1.25em;
+            font-weight: 600;
+            margin: 24px 0 12px;
+            color: var(--fg-light);
+        }
+        
+        p {
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        
+        strong { font-weight: 600; }
+        em { font-style: italic; }
+        code {
+            font-family: var(--font-mono);
+            background: var(--callout-bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        /* ============================================
+           LISTS
+           ============================================ */
+        ul, ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+        li { margin-bottom: 8px; }
+        
+        /* ============================================
+           CALLOUT
+           ============================================ */
+        .callout {
+            display: flex;
+            background: var(--callout-bg);
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+        }
+        .callout-icon {
+            font-size: 1.2em;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .callout-content { flex: 1; }
+        .callout p:last-child { margin-bottom: 0; }
+        
+        /* ============================================
+           QUOTE
+           ============================================ */
+        blockquote {
+            border-left: 3px solid var(--fg-color);
+            padding-left: 16px;
+            margin: 24px 0;
+            font-style: italic;
+            color: var(--fg-light);
+        }
+        blockquote cite {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 14px;
+        }
+        
+        /* ============================================
+           DIVIDER
+           ============================================ */
+        hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 32px 0;
+        }
+        
+        /* ============================================
+           COLUMNS
+           ============================================ */
+        .notion-row {
+            display: flex;
+            gap: 24px;
+            margin: 24px 0;
+        }
+        .notion-col { flex: 1; }
+        
+        .notion-row-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 24px 0;
+        }
+        .notion-col-3 { }
+        
+        @media (max-width: 768px) {
+            .notion-row { flex-direction: column; }
+            .notion-row-3 { grid-template-columns: 1fr; }
+        }
+        
+        /* ============================================
+           TOGGLE
+           ============================================ */
+        details.notion-toggle {
+            margin: 8px 0;
+        }
+        .notion-toggle summary {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            font-weight: 500;
+            list-style: none;
+        }
+        .notion-toggle summary::-webkit-details-marker { display: none; }
+        .toggle-triangle {
+            margin-right: 8px;
+            transition: transform 0.2s;
+            font-size: 12px;
+            color: var(--fg-light);
+        }
+        .notion-toggle[open] .toggle-triangle {
+            transform: rotate(90deg);
+        }
+        .toggle-content {
+            padding-left: 24px;
+            padding-bottom: 8px;
+        }
+        
+        /* Numbered Toggle */
+        .numbered-toggle .toggle-number {
+            width: 24px;
+            height: 24px;
+            background: var(--fg-color);
+            color: var(--bg-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+        
+        /* ============================================
+           BUTTON
+           ============================================ */
+        .notion-button {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .notion-button.primary {
+            background: var(--fg-color);
+            color: var(--bg-color);
+        }
+        .notion-button.primary:hover {
+            opacity: 0.85;
+        }
+        .notion-button.secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--fg-color);
+        }
+        .notion-button.secondary:hover {
+            background: var(--hover-bg);
+        }
+        
+        /* ============================================
+           LINKS
+           ============================================ */
+        .text-link {
+            color: var(--fg-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--fg-light);
+            transition: border-color 0.2s;
+        }
+        .text-link:hover {
+            border-color: var(--fg-color);
+        }
+        
+        /* ============================================
+           CODE BLOCK
+           ============================================ */
+        .code-block {
+            background: var(--code-bg);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            padding: 16px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 16px 0;
+        }
+        
+        /* ============================================
+           IMAGE
+           ============================================ */
+        .notion-image {
+            margin: 24px 0;
+        }
+        .notion-image img {
+            max-width: 100%;
+            border-radius: 4px;
+        }
+        .notion-image figcaption {
+            font-size: 14px;
+            color: var(--fg-light);
+            text-align: center;
+            margin-top: 8px;
+        }
+        
+        /* ============================================
+           GALLERY GRID
+           ============================================ */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .gallery-card {
+            background: var(--bg-color);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px var(--card-shadow);
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+        .gallery-card:hover {
+            box-shadow: 0 4px 12px var(--card-shadow);
+        }
+        .gallery-cover {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+        .gallery-content { padding: 12px 16px; }
+        .gallery-title { font-weight: 500; }
+        .gallery-subtitle {
+            font-size: 12px;
+            color: var(--fg-light);
+            margin-top: 4px;
+        }
+        .gallery-description {
+            font-size: 13px;
+            color: var(--fg-light);
+            margin-top: 8px;
+        }
+        
+        /* ============================================
+           TABLE OF CONTENTS
+           ============================================ */
+        .notion-toc {
+            position: sticky;
+            top: 20px;
+            padding: 16px;
+            background: var(--callout-bg);
+            border-radius: 4px;
+            margin-bottom: 24px;
+        }
+        .toc-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--fg-light);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .notion-toc a {
+            display: block;
+            color: var(--fg-color);
+            text-decoration: none;
+            padding: 4px 0;
+            font-size: 14px;
+        }
+        .notion-toc a:hover {
+            background: var(--hover-bg);
+        }
+        
+        /* ============================================
+           CENTERED BLOCK
+           ============================================ */
+        .centered-block {
+            text-align: center;
+            max-width: 600px;
+            margin: 32px auto;
+        }
+        
+        /* ============================================
+           BACK LINK
+           ============================================ */
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--fg-light);
+            text-decoration: none;
+            border-bottom: 1px solid var(--fg-light);
+        }
+        .back-link:hover {
+            color: var(--fg-color);
+        }
+        
+        /* ============================================
+           HEADER
+           ============================================ */
+        .page-header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-nav a {
+            color: var(--fg-light);
+            text-decoration: none;
+            margin-left: 24px;
+        }
+        .header-nav a:hover {
+            color: var(--fg-color);
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    
+    <header class="page-header">
+        <a href="https://99pablos.com" class="text-link">← Back to Portfolio</a>
+        <nav class="header-nav">
+            <a href="https://99pablos.com/#blog">Blog</a>
+            <a href="https://99pablos.com/#about">About</a>
+        </nav>
+    </header>
+    
+    <div class="cover-image" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); height: 30vh;"></div>
+    
+    <main class="main-container">
+        
+        
+<h1 class="page-title">WORK WITH PABLO</h1>
+
+<h3 style="color: var(--fg-light); margin-top: -16px;">Build smarter. Move faster. Make better decisions.</h3>
+
+<div style="height: 16px;"></div>
+
+<div class="callout"><div class="callout-content">One conversation can replace months of spinning wheels. I help founders, operators, and creators cut through noise, build leverage, and move with clarity.</div></div>
+
+<hr>
+
+<h2>What I Help You Do</h2>
+
+<div class="notion-row">
+<div class="notion-col">
+<ul>
+<li><strong>Make Better Decisions</strong> — Frameworks for clarity under uncertainty</li>
+<li><strong>Build High-Leverage Systems</strong> — Automate the repeatable, focus on the irreplaceable</li>
+<li><strong>Modernize Your Stack</strong> — AI-native workflows that actually ship</li>
+<li><strong>Elevate Personal Performance</strong> — Mental models for sustainable output</li>
+</ul>
+</div>
+<div class="notion-col">
+<div class="callout"><div class="callout-icon">⚡</div><div class="callout-content"><strong>The goal isn't more work—it's sharper work.</strong> I help you find the 20% that drives 80% of results, then systematize it.</div></div>
+</div>
+</div>
+
+<hr>
+
+<h2>How We Work Together</h2>
+
+
+<details class="notion-toggle numbered-toggle">
+    <summary>
+        <div class="toggle-number">1</div>
+        <span>One Conversation</span>
+    </summary>
+    <div class="toggle-content">
+        <p>We start with a single focused session. You bring your challenge—strategy, systems, stack, or personal performance. I bring frameworks, pattern recognition, and direct feedback. Most people leave with immediate clarity.</p>
+    </div>
+</details>
+
+
+<details class="notion-toggle numbered-toggle">
+    <summary>
+        <div class="toggle-number">2</div>
+        <span>A Flexible Model That Fits You</span>
+    </summary>
+    <div class="toggle-content">
+        <p>Engagements scale with your needs. One-off advisory calls. Monthly retainers. Project-based sprints. Whatever creates the most leverage for your situation.</p>
+    </div>
+</details>
+
+
+<details class="notion-toggle numbered-toggle">
+    <summary>
+        <div class="toggle-number">3</div>
+        <span>Immediate, Practical Output</span>
+    </summary>
+    <div class="toggle-content">
+        <ul>
+<li>Decision frameworks you can use tomorrow</li>
+<li>AI prompts and workflows tailored to your context</li>
+<li>System designs ready for implementation</li>
+<li>Clear next actions, not vague advice</li>
+</ul>
+    </div>
+</details>
+
+<hr>
+
+<h2>Who This Is For</h2>
+
+<div class="notion-row-3">
+<div class="notion-col-3">
+<ul>
+<li>Founders building momentum</li>
+<li>Operators tightening systems</li>
+</ul>
+</div>
+<div class="notion-col-3">
+<ul>
+<li>Creators shaping products</li>
+<li>Teams experimenting with AI</li>
+</ul>
+</div>
+<div class="notion-col-3">
+<ul>
+<li>Professionals leveling up</li>
+<li>Anyone seeking clarity + speed</li>
+</ul>
+</div>
+</div>
+
+<hr>
+
+<h2>What You Get</h2>
+
+<div class="notion-row">
+<div class="notion-col">
+<div class="callout"><div class="callout-icon">📘</div><div class="callout-content"><strong>Proprietary playbooks</strong> — Battle-tested frameworks</div></div>
+<div class="callout"><div class="callout-icon">⚙️</div><div class="callout-content"><strong>AI prompt libraries</strong> — Ready-to-use workflows</div></div>
+<div class="callout"><div class="callout-icon">🧠</div><div class="callout-content"><strong>Mental models</strong> — Decision-making shortcuts</div></div>
+</div>
+<div class="notion-col">
+<div class="callout"><div class="callout-icon">🧩</div><div class="callout-content"><strong>Operational frameworks</strong> — Systems that scale</div></div>
+<div class="callout"><div class="callout-icon">🎯</div><div class="callout-content"><strong>Strategy sessions</strong> — Focused guidance</div></div>
+<div class="callout"><div class="callout-icon">📊</div><div class="callout-content"><strong>Benchmarks & analytics</strong> — Data-driven insights</div></div>
+</div>
+</div>
+
+<hr>
+
+<blockquote>One conversation with Pablo replaced months of spinning wheels.<cite>— Founder, Series A Startup</cite></blockquote>
+
+<hr>
+
+<h2>Simple Next Step</h2>
+
+<div class="callout"><a href="https://calendly.com/heythatspablo" class="notion-button primary" target="_self">Book a Quick Call →</a>
+<div style="height: 12px;"></div>
+<p style="margin-bottom: 0; font-size: 14px;">Or <a href="mailto:heythatspablo@gmail.com" class="text-link">send a message</a>—whatever is easiest.</p></div>
+
+<div style="height: 32px;"></div>
+
+<div class="centered-block">
+<div class="callout" style="background: var(--callout-bg);"><div class="callout-content"><strong>You bring the ambition.</strong> I help you sharpen it, systematize it, and make it real.</div></div>
+</div>
+
+        <a href="https://99pablos.com" class="back-link">← Back to Portfolio</a>
+    </main>
+    
+    <script>
+        // Dark mode default
+        document.body.classList.add('dark-mode');
+        
+    </script>
+</body>
+</html>
