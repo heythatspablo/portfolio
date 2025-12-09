@@ -1,0 +1,49 @@
+# Netlify Configuration
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  # No build command needed - we pre-build static files
+  publish = "."
+
+# Enable Pretty URLs (serve /blog/slug.html as /blog/slug)
+[build.processing]
+  skip_processing = false
+
+[build.processing.html]
+  pretty_urls = true
+
+# Headers for better caching and security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Redirects for clean URLs (fallback)
+[[redirects]]
+  from = "/blog/*"
+  to = "/blog/:splat.html"
+  status = 200
+  force = false
