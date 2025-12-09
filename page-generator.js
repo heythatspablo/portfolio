@@ -781,9 +781,9 @@ const exampleConfig = {
         gradient: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
     },
     
-    // Optional: page icon (set type: "none" to hide)
+    // Optional: page icon (emoji or type: "none" to hide)
     icon: {
-        type: "none"
+        emoji: "🫡"
     },
     
     // Enable table of contents
