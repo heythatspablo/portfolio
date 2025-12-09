@@ -33,7 +33,8 @@ function markdownToHtml(markdown) {
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        // Headers
+        // Headers (order matters - check longer patterns first)
+        .replace(/^#{4,}\s+(.*$)/gim, '<h4>$1</h4>')
         .replace(/^### (.*$)/gim, '<h3>$1</h3>')
         .replace(/^## (.*$)/gim, '<h2>$1</h2>')
         .replace(/^# (.*$)/gim, '<h1>$1</h1>')
@@ -49,8 +50,8 @@ function markdownToHtml(markdown) {
         .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
         // Unordered lists
         .replace(/^\s*[-*]\s+(.*$)/gim, '<li>$1</li>')
-        // Ordered lists
-        .replace(/^\s*\d+\.\s+(.*$)/gim, '<li>$1</li>')
+        // Ordered lists (with optional escaped dot like 1\.)
+        .replace(/^\s*\d+\\?\.\s+(.*$)/gim, '<li>$1</li>')
         // Blockquotes
         .replace(/^>\s+(.*$)/gim, '<blockquote>$1</blockquote>')
         // Horizontal rules
@@ -239,6 +240,12 @@ ${JSON.stringify(schema, null, 4)}
             font-size: 1.25em;
             font-weight: 600;
             margin: 24px 0 12px;
+        }
+        
+        .content h4 {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 20px 0 10px;
         }
         
         .content p {
