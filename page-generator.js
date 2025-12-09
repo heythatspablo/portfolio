@@ -410,13 +410,25 @@ function generatePage(config) {
             position: relative;
             z-index: 10;
         }
-        .page-icon img { width: 78px; }
+        .page-icon img { 
+            width: 78px; 
+            height: 78px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
         
         h1.page-title {
             font-weight: 700;
             font-size: 40px;
             line-height: 1.2;
             margin-bottom: 24px;
+        }
+        
+        /* When no icon, title overlaps cover */
+        .no-icon h1.page-title {
+            margin-top: -42px;
+            padding-top: 60px;
+            background: linear-gradient(to bottom, transparent 0%, var(--bg-color) 42px);
         }
         
         /* ============================================
@@ -739,7 +751,7 @@ function generatePage(config) {
 <body class="dark-mode">
     ${navCoverHtml}
     
-    <main class="main-container">
+    <main class="main-container${!iconHtml ? ' no-icon' : ''}">
         ${iconHtml}
         
 ${blocks}
