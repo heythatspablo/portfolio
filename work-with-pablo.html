@@ -420,8 +420,10 @@
         
         /* Header / Navigation */
         header {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
             display: flex;
             justify-content: space-between;
@@ -431,8 +433,13 @@
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
         }
-        body.dark-mode header { background-color: rgba(25, 25, 25, 0.8); }
-        body:not(.dark-mode) header { background-color: rgba(255, 255, 255, 0.9); }
+        body.dark-mode header { background-color: rgba(25, 25, 25, 0.95); }
+        body:not(.dark-mode) header { background-color: rgba(255, 255, 255, 0.95); }
+        
+        /* Spacer to prevent content from hiding under fixed header */
+        .header-spacer {
+            height: 44px;
+        }
         
         .breadcrumbs {
             display: flex;
@@ -580,6 +587,8 @@
             </div>
         </div>
     </header>
+    
+    <div class="header-spacer"></div>
 
     <div class="cover-image" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);"></div>
     <!-- END NAVCOVER COMPONENT -->
