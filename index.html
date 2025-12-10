@@ -630,6 +630,21 @@
                 <a href="#" onclick="navigateTo('blog')" class="text-link">View all posts →</a>
             </div>
 
+            <hr>
+
+            <!-- FRESH FROM THE NEWSLETTER -->
+            <h3>Fresh from the Newsletter</h3>
+            <div id="home-newsletter-posts">
+                <!-- Loaded dynamically -->
+                <div class="callout">
+                    <div class="callout-icon">⏳</div>
+                    <div class="callout-content">Loading newsletter...</div>
+                </div>
+            </div>
+            <div style="margin-top: 16px;">
+                <a href="#newsletter" onclick="navigateTo('newsletter'); return false;" class="text-link">View Newsletter →</a>
+            </div>
+
             <!-- HOW I WORK (3 Columns) -->
             <h3>How I Work</h3>
             <div class="notion-row">
@@ -1151,6 +1166,39 @@
             </div>
         </div>
 
+        <!-- ================= NEWSLETTER VIEW ================= -->
+        <div id="newsletter-view" class="view-section">
+            <div class="page-icon">📰</div>
+            <h1 class="page-title">Pablo's Newsletter</h1>
+            <p style="font-size: 1.2em; color: var(--fg-light); margin-bottom: 24px;">Curated intelligence on decision science, AI operations, and growth frameworks.</p>
+            
+            <!-- Subscribe Form -->
+            <div class="callout" style="background: rgba(35, 131, 226, 0.1); margin-bottom: 32px;">
+                <div class="callout-icon">📧</div>
+                <div class="callout-content">
+                    <div style="font-weight: 600; margin-bottom: 8px;">Subscribe to the Newsletter</div>
+                    <form id="newsletter-subscribe-form" style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <input type="email" id="subscribe-email" placeholder="your@email.com" required 
+                            style="flex: 1; min-width: 200px; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-color); color: var(--fg-color); font-size: 14px;">
+                        <button type="submit" style="padding: 10px 20px; background: var(--accent, #2383E2); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; white-space: nowrap;">Subscribe</button>
+                    </form>
+                    <div id="subscribe-message" style="margin-top: 8px; font-size: 13px;"></div>
+                </div>
+            </div>
+
+            <!-- Newsletter Posts List -->
+            <div id="newsletter-posts-list">
+                <div class="callout">
+                    <div class="callout-icon">⏳</div>
+                    <div class="callout-content">Loading newsletter...</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <a href="#" onclick="navigateTo('home')" class="text-link">← Back to Portfolio</a>
+            </div>
+        </div>
+
         <!-- ================= DYNAMIC BLOG POST VIEW ================= -->
         <div id="blogpost-view" class="view-section">
             <div class="page-icon" id="blogpost-icon">📝</div>
@@ -1349,6 +1397,181 @@
             window.location.href = `/blog/${slug}.html`;
         }
 
+        // --- NEWSLETTER FUNCTIONS ---
+        async function loadNewsletterPosts() {
+            const container = document.getElementById('newsletter-posts-list');
+            
+            const { data: posts, error } = await supabase
+                .from('newsletter_posts')
+                .select('*')
+                .eq('published', true)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                container.innerHTML = `
+                    <div class="callout" style="background: rgba(235, 87, 87, 0.1);">
+                        <div class="callout-icon">❌</div>
+                        <div class="callout-content">Error loading newsletter: ${error.message}</div>
+                    </div>`;
+                return;
+            }
+
+            if (!posts || posts.length === 0) {
+                container.innerHTML = `
+                    <div class="callout">
+                        <div class="callout-icon">📭</div>
+                        <div class="callout-content">No newsletter posts yet. Check back soon!</div>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = posts.map(post => `
+                <div id="post-${post.id}" class="callout" style="margin-bottom: 16px;">
+                    <div class="callout-icon">${post.icon || '📰'}</div>
+                    <div class="callout-content">
+
+                        <div style="font-weight: 600;font-size: 1.5em; margin-bottom: 16px;">${post.headline}</div>
+                        
+                        <div style="font-weight: 600; margin-bottom: 8px;">At-a-Glance Summary:</div>
+                        <div style="margin-bottom: 16px; line-height: 1.6;">${post.summary}</div>
+                        
+                        <div style="font-weight: 600; margin-bottom: 8px;">My 2-cents:</div>
+                        <div style="margin-bottom: 16px; line-height: 1.6; font-style: italic;">${post.commentary}</div>
+                        
+                        <div style="font-weight: 600; margin-bottom: 4px;">Original Source URL:</div>
+                        <div style="margin-bottom: 12px;"><a href="${post.source_url}" target="_blank" rel="noopener noreferrer" style="color: var(--accent, #2383E2); word-break: break-all;">${post.source_url}</a></div>
+                    
+                        <div style="margin-top: 12px; font-size: 12px; color: var(--fg-light);">Posted: ${formatDate(post.created_at)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadRecentNewsletterPosts() {
+            const container = document.getElementById('home-newsletter-posts');
+            if (!container) return;
+            
+            const { data: posts, error } = await supabase
+                .from('newsletter_posts')
+                .select('*')
+                .eq('published', true)
+                .order('created_at', { ascending: false })
+                .limit(2);
+
+            if (error || !posts || posts.length === 0) {
+                container.innerHTML = `
+                    <div class="callout">
+                        <div class="callout-icon">📭</div>
+                        <div class="callout-content">No newsletter posts yet. Check back soon!</div>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = posts.map(post => `
+                <div class="callout" style="margin-bottom: 12px; background: var(--callout-bg);">
+                    <div class="callout-icon">${post.icon || '📰'}</div>
+                    <div class="callout-content">
+                        <div style="font-weight: 600; font-size: 1.1em; margin-bottom: 8px;">${post.headline}</div>
+                        <div style="font-size: 14px; color: var(--fg-light); line-height: 1.5;">${truncateText(post.summary, 200)}</div>
+                        <div style="margin-top: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 12px; color: var(--fg-light);">${formatDate(post.created_at)}</span>
+                            <a href="#newsletter" onclick="navigateToNewsletterPost('${post.id}'); return false;" style="font-size: 12px; color: var(--accent, #2383E2);">View post →</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function truncateText(text, maxLength) {
+            if (!text) return '';
+            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+        }
+
+        function navigateToNewsletterPost(postId) {
+            // Navigate to newsletter view first
+            navigateTo('newsletter');
+            
+            // Wait for posts to load, then scroll to the specific post
+            setTimeout(() => {
+                const postElement = document.getElementById('post-' + postId);
+                if (postElement) {
+                    postElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Add a brief highlight effect
+                    postElement.style.transition = 'box-shadow 0.3s ease';
+                    postElement.style.boxShadow = '0 0 0 2px var(--accent, #2383E2)';
+                    setTimeout(() => {
+                        postElement.style.boxShadow = 'none';
+                    }, 2000);
+                }
+            }, 300);
+        }
+
+        // Newsletter subscription handler
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('newsletter-subscribe-form');
+            if (form) {
+                form.addEventListener('submit', handleNewsletterSubscribe);
+            }
+        });
+
+        async function handleNewsletterSubscribe(e) {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById('subscribe-email');
+            const messageDiv = document.getElementById('subscribe-message');
+            const email = emailInput.value.trim().toLowerCase();
+            
+            if (!email) {
+                messageDiv.innerHTML = '<span style="color: #e74c3c;">Please enter a valid email address.</span>';
+                return;
+            }
+
+            messageDiv.innerHTML = '<span style="color: var(--fg-light);">Subscribing...</span>';
+
+            // Check if already subscribed
+            const { data: existing } = await supabase
+                .from('newsletter_subscribers')
+                .select('id, subscribed')
+                .eq('email', email)
+                .single();
+
+            if (existing) {
+                if (existing.subscribed) {
+                    messageDiv.innerHTML = '<span style="color: var(--fg-light);">You\'re already subscribed!</span>';
+                } else {
+                    // Resubscribe
+                    const { error } = await supabase
+                        .from('newsletter_subscribers')
+                        .update({ subscribed: true, updated_at: new Date().toISOString() })
+                        .eq('id', existing.id);
+                    
+                    if (error) {
+                        messageDiv.innerHTML = `<span style="color: #e74c3c;">Error: ${error.message}</span>`;
+                    } else {
+                        messageDiv.innerHTML = '<span style="color: #27ae60;">Welcome back! You\'ve been resubscribed.</span>';
+                        emailInput.value = '';
+                    }
+                }
+                return;
+            }
+
+            // New subscriber
+            const { error } = await supabase
+                .from('newsletter_subscribers')
+                .insert([{ email, subscribed: true }]);
+
+            if (error) {
+                if (error.code === '23505') { // Unique violation
+                    messageDiv.innerHTML = '<span style="color: var(--fg-light);">You\'re already subscribed!</span>';
+                } else {
+                    messageDiv.innerHTML = `<span style="color: #e74c3c;">Error: ${error.message}</span>`;
+                }
+            } else {
+                messageDiv.innerHTML = '<span style="color: #27ae60;">Thanks for subscribing! You\'ll receive updates soon.</span>';
+                emailInput.value = '';
+            }
+        }
+
         // --- THEME TOGGLE ---
         function toggleTheme() {
             const body = document.body;
@@ -1389,6 +1612,7 @@
             'about': { hash: 'about', breadcrumb: 'About' },
             'contact': { hash: 'contact', breadcrumb: 'Contact' },
             'blog': { hash: 'blog', breadcrumb: 'Blog' },
+            'newsletter': { hash: 'newsletter', breadcrumb: 'Newsletter' },
             'casestudy': { hash: 'case-study/unfamiliar-id', breadcrumb: 'Case Study: Unfamiliar.id' },
             'outliant': { hash: 'experience/outliant', breadcrumb: 'Experience: Outliant' },
             'goliath': { hash: 'experience/goliath', breadcrumb: 'Experience: Goliath' },
@@ -1464,6 +1688,11 @@
             if (viewId === 'blog') {
                 loadBlogPosts();
             }
+
+            // Load newsletter posts when navigating to newsletter view
+            if (viewId === 'newsletter') {
+                loadNewsletterPosts();
+            }
         }
 
         // Handle browser back/forward buttons
@@ -1494,6 +1723,7 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
             loadRecentBlogPosts();
+            loadRecentNewsletterPosts();
             handleRoute(); // Handle initial URL hash
         });
 
