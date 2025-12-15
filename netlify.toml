@@ -43,7 +43,13 @@
 
 # Redirects for clean URLs (fallback)
 [[redirects]]
+  from = "/blog/*.html"
+  to = "/blog/:splat"
+  status = 200
+  force = false
+
+[[redirects]]
   from = "/blog/*"
-  to = "/blog/:splat.html"
+  to = "/blog/post.html?slug=:splat"
   status = 200
   force = false

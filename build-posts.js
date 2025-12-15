@@ -389,6 +389,14 @@ async function build() {
         
         fs.writeFileSync(filepath, html);
         console.log(`✅ Generated: /blog/${filename}`);
+
+        const prettyDir = path.join(BLOG_DIR, post.slug);
+        const prettyIndexPath = path.join(prettyDir, 'index.html');
+        if (!fs.existsSync(prettyDir)) {
+            fs.mkdirSync(prettyDir, { recursive: true });
+        }
+        fs.writeFileSync(prettyIndexPath, html);
+        console.log(`✅ Generated: /blog/${post.slug}/index.html`);
     }
     
     // Generate blog index

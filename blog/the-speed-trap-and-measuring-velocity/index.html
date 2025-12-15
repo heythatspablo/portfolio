@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Speed Trap: Why I Stopped Measuring "Shipping" and Started Measuring Velocity - Pablo Vizcaino</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Most startups confuse &quot;Speed&quot; (shipping code) with &quot;Velocity&quot; (shipping value). In this deep dive, I break down the physics of product management and show why 80% of features are &quot;digital waste.&quot; Learn how to use &quot;Vector Checks&quot; to align your team and stop running fast in the wrong direction.">
+    <meta name="author" content="Pablo F. Vizcaino">
+    <link rel="canonical" href="https://99pablos.com/blog/the-speed-trap-and-measuring-velocity.html">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="The Speed Trap: Why I Stopped Measuring "Shipping" and Started Measuring Velocity">
+    <meta property="og:description" content="Most startups confuse &quot;Speed&quot; (shipping code) with &quot;Velocity&quot; (shipping value). In this deep dive, I break down the physics of product management and show why 80% of features are &quot;digital waste.&quot; Learn how to use &quot;Vector Checks&quot; to align your team and stop running fast in the wrong direction.">
+    <meta property="og:image" content="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1765292263961-banner-blog__2_.png">
+    <meta property="og:url" content="https://99pablos.com/blog/the-speed-trap-and-measuring-velocity.html">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2025-12-09T14:57:49.787924+00:00">
+    <meta property="article:author" content="Pablo F. Vizcaino">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Speed Trap: Why I Stopped Measuring "Shipping" and Started Measuring Velocity">
+    <meta name="twitter:description" content="Most startups confuse &quot;Speed&quot; (shipping code) with &quot;Velocity&quot; (shipping value). In this deep dive, I break down the physics of product management and show why 80% of features are &quot;digital waste.&quot; Learn how to use &quot;Vector Checks&quot; to align your team and stop running fast in the wrong direction.">
+    <meta name="twitter:image" content="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1765292263961-banner-blog__2_.png">
+    
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": "https://99pablos.com/blog/the-speed-trap-and-measuring-velocity.html",
+    "mainEntityOfPage": "https://99pablos.com/blog/the-speed-trap-and-measuring-velocity.html",
+    "headline": "The Speed Trap: Why I Stopped Measuring \"Shipping\" and Started Measuring Velocity",
+    "description": "Most startups confuse \"Speed\" (shipping code) with \"Velocity\" (shipping value). In this deep dive, I break down the physics of product management and show why 80% of features are \"digital waste.\" Learn how to use \"Vector Checks\" to align your team and stop running fast in the wrong direction.",
+    "articleBody": "In the startup world, \"Move Fast and Break Things\" became the religion of the last decade. Speed was the ultimate virtue. If you weren't shipping daily, you were dying.\n\nBut in 2025, I see companies moving faster than ever, yet they are standing still. They are burning out engineering teams, shipping record numbers of features, and seeing zero movement in their North Star metrics.\n\nThey are confusing **Speed** with **Velocity**.\n\nAs an engineering leader, learning the distinction between these two physics concepts was the single most important mental model shift of my career. One leads to burnout; the other leads to leverage.\n\n#### The Physics of the Problem: Scalars vs. Vectors\n\nTo understand why teams fail despite working hard, we have to look at the math.\n\n*   **Speed** is a **Scalar Quantity**. It is defined simply as distance divided by time ($Speed = Distance / Time$). It has magnitude, but no direction. Running on a treadmill at 10mph requires high speed, but your displacement is zero.\n    \n*   **Velocity** is a **Vector Quantity**. It is defined as displacement divided by time in a specific direction. It requires both magnitude **AND** direction.\n    \n\nIf you have a team of 10 engineers working at maximum capacity (High Speed), but 5 are building for Enterprise clients and 5 are building for SMBs in a way that contradicts the Enterprise architecture, their vectors cancel each other out.\n\n**Net Velocity ≈ 0.**\n\nYou have paid for the speed (salaries, server costs, coffee), but you received zero velocity.\n\n#### The Data: The Trillion-Dollar Waste\n\nThis isn't just a metaphor; it is a measurable financial hemorrhage.\n\nAccording to a landmark report by **Pendo** (analyzing 1,000+ digital products), **80% of features** in the average software product are **rarely or never used**.\n\n*   **12%** are used daily.\n    \n*   **8%** are used weekly.\n    \n*   **80%** are \"digital waste.\"\n    \n\nThink about the implications of that data. If your team ships 10 features this quarter, statistically, 8 of them will generate zero value.\n\nIf you are managing based on \"Speed\" (e.g., \"How many tickets did we close?\"), you are incentivizing the creation of that waste. You are celebrating the production of code that no one wants. This is the **\"Feature Factory\"** trap.\n\n#### The Cost of Misalignment\n\nThe cost isn't just wasted salary; it is complexity.\n\nEvery line of code you ship introduces:\n\n1.  **Maintenance overhead.**\n    \n2.  **Potential bugs.**\n    \n3.  **Cognitive load for the user.**\n    \n\nWhen you prioritize speed over velocity, you accrue **Technical Debt** and **Product Debt** simultaneously. You build a fast car that is getting heavier with every mile, eventually making it impossible to steer.\n\n#### How I Implement Velocity Checks Operationally\n\nTo fix this, I stopped asking \"How fast are we moving?\" and started asking \"Where are we going?\" Here is the operational framework:\n\n1\\. The \"Vector Check\" in Sprint Planning\n\nI implemented a rule: No ticket enters a sprint unless it is explicitly tagged to a Key Result (KR).\n\nIf an engineer picks up a task, they must be able to answer: \"Which vector does this support?\"\n\nIf the answer is \"I don't know\" or \"It's just a cool idea,\" the ticket is killed. This ensures every ounce of force is applied in the same direction.\n\n2\\. Measuring \"Outcome over Output\"\n\nWe stopped measuring success by Output (number of features shipped).\n\nWe started measuring success by Outcome (change in user behavior).\n\n*   *Bad KPI:* \"Shipped the new dashboard.\" (Speed).\n    \n*   *Good KPI:* \"Reduced time-to-insight by 15%.\" (Velocity).\n    \n\nIf we ship the dashboard and time-to-insight doesn't change, we failed—even if we shipped it \"fast.\"\n\n3\\. The \"Kill Rate\" Metric\n\nI track a metric called \"Kill Rate\"—the percentage of features or code we remove from the product.\n\nHigh-velocity teams don't just add; they subtract to maintain aerodynamic efficiency. If we aren't deleting old code, we are accumulating drag.\n\n#### The Takeaway\n\nSpeed is satisfying. It feels like work. It makes the Slack channel noisy and the Jira burndown chart look pretty.\n\nBut Velocity is what moves the needle.\n\nIn a world of infinite distraction and limited resources, the most dangerous thing you can do is run fast in the wrong direction. Stop optimizing for the treadmill. Start optimizing for the map.",
+    "datePublished": "2025-12-09T14:57:49.787924+00:00",
+    "dateModified": "2025-12-09T14:58:46.862+00:00",
+    "author": {
+        "@type": "Person",
+        "name": "Pablo F. Vizcaino",
+        "url": "https://99pablos.com"
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "Pablo F. Vizcaino",
+        "url": "https://99pablos.com"
+    },
+    "image": [
+        "https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1765292263961-banner-blog__2_.png"
+    ],
+    "inLanguage": "en",
+    "wordCount": 699
+}
+    </script>
+    
+    <style>
+        /* ============================================
+           NOTION DESIGN SYSTEM - CORE VARIABLES
+           ============================================ */
+        :root {
+            --bg-color: #FFFFFF;
+            --fg-color: #37352F;
+            --fg-light: #9B9A97;
+            --border-color: #E9E9E7;
+            --hover-bg: rgba(55, 53, 47, 0.08);
+            --callout-bg: #F1F1EF;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+        
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-color: #191919;
+            --fg-color: rgba(255, 255, 255, 0.9);
+            --fg-light: rgba(255, 255, 255, 0.443);
+            --border-color: rgba(255, 255, 255, 0.094);
+            --hover-bg: rgba(255, 255, 255, 0.055);
+            --callout-bg: #2F2F2F;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-color);
+            color: var(--fg-color);
+            line-height: 1.6;
+        }
+        
+        /* NavCover Styles */
+        
+        /* ============================================
+           NAVCOVER COMPONENT STYLES
+           ============================================ */
+        
+        /* Header / Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            font-size: 14px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        body.dark-mode header { background-color: rgba(25, 25, 25, 0.95); }
+        body:not(.dark-mode) header { background-color: rgba(255, 255, 255, 0.95); }
+        
+        /* Spacer to prevent content from hiding under fixed header */
+        .header-spacer {
+            height: 44px;
+        }
+        
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .crumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        .crumb:hover { background: var(--hover-bg); }
+        
+        .crumb-icon img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .divider {
+            color: var(--fg-light);
+            user-select: none;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+        }
+        
+        .header-btn {
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .header-btn:hover { background: var(--hover-bg); }
+        
+        /* Overflow Menu */
+        .overflow-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            min-width: 220px;
+            padding: 8px 0;
+            display: none;
+            z-index: 200;
+        }
+        .overflow-menu.active { display: block; }
+        
+        .menu-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--fg-light);
+            padding: 8px 12px 4px;
+            text-transform: uppercase;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            color: var(--fg-color);
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .menu-item:hover { background: var(--hover-bg); }
+        .menu-icon { font-size: 16px; }
+        
+        /* Cover Image */
+        .cover-image {
+            width: 100%;
+            height: 30vh;
+            object-fit: cover;
+        }
+        
+        /* Page Icon */
+        .page-icon {
+            font-size: 78px;
+            margin-top: -42px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 10;
+        }
+        .page-icon img {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    
+        
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 96px 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container { padding: 0 24px 60px; }
+        }
+        
+        /* Page Title */
+        h1.page-title {
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        
+        .meta {
+            font-size: 14px;
+            color: var(--fg-light);
+            margin-bottom: 8px;
+        }
+        
+        .excerpt {
+            font-size: 1.1em;
+            color: var(--fg-light);
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        /* Content Styles */
+        .content h2 {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin: 32px 0 16px;
+        }
+        
+        .content h3 {
+            font-size: 1.25em;
+            font-weight: 600;
+            margin: 24px 0 12px;
+        }
+        
+        .content h4 {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 20px 0 10px;
+        }
+        
+        .content p {
+            margin-bottom: 16px;
+        }
+        
+        .content ul, .content ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+        
+        .content li {
+            margin-bottom: 8px;
+        }
+        
+        .content blockquote {
+            border-left: 3px solid var(--fg-color);
+            padding-left: 16px;
+            margin: 16px 0;
+            color: var(--fg-light);
+        }
+        
+        .content code {
+            font-family: var(--font-mono);
+            background: var(--callout-bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        .content pre {
+            background: var(--callout-bg);
+            padding: 16px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        
+        .content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .content a {
+            color: var(--fg-color);
+            text-decoration: underline;
+        }
+        
+        .content hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 32px 0;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--fg-light);
+            text-decoration: none;
+            border-bottom: 1px solid var(--fg-light);
+        }
+        
+        .back-link:hover {
+            color: var(--fg-color);
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    
+    <!-- NAVCOVER COMPONENT -->
+    <header>
+        <div class="breadcrumbs">
+            <div class="crumb" onclick="window.location.href='https://99pablos.com'">
+                <span class="crumb-icon"><img src="https://99pablos.com/pabs_prof_circle@750.png" alt="Pablo"></span> Pablo Vizcaino
+            </div>
+            
+            <span class="divider">/</span>
+            <div class="crumb" onclick="window.location.href='https://99pablos.com/#blog'">
+                Blog
+            </div>
+            <span class="divider">/</span>
+            <div class="crumb" style="cursor: default;">
+                The Speed Trap: Why I Stopped Measuring "Shipping" and Started Measuring Velocity
+            </div>
+        </div>
+        <div class="header-controls">
+            <!-- Theme Toggle -->
+            <div class="header-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                <span id="theme-icon">☀️</span>
+            </div>
+            
+            <!-- Overflow Menu Trigger -->
+            <div class="header-btn" onclick="toggleOverflow(event)" title="More options">⋯</div>
+
+            <!-- DROP DOWN MENU -->
+            <div id="overflow-menu" class="overflow-menu">
+                <div class="menu-section-title">Contact</div>
+                <a href="mailto:heythatspablo@gmail.com" class="menu-item">
+                    <span class="menu-icon">✉️</span>
+                    <span class="menu-label">heythatspablo@gmail.com</span>
+                </a>
+                
+                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                
+                <div class="menu-section-title">Socials</div>
+                <a href="https://www.linkedin.com/in/pablo-vizcaino-caballeros/" target="_blank" class="menu-item">
+                    <span class="menu-icon">🔗</span>
+                    <span class="menu-label">LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <div class="header-spacer"></div>
+
+    <img src="https://cvaujkhxgzrqwqjofgls.supabase.co/storage/v1/object/public/blog-images/1765292263961-banner-blog__2_.png" class="cover-image" alt="Cover">
+    <!-- END NAVCOVER COMPONENT -->
+    
+    <main class="main-container">
+        <div class="page-icon">🚀</div>
+        <p class="meta">09 December, 2025</p>
+        <h1 class="page-title">The Speed Trap: Why I Stopped Measuring "Shipping" and Started Measuring Velocity</h1>
+        <p class="excerpt">Most startups confuse "Speed" (shipping code) with "Velocity" (shipping value). In this deep dive, I break down the physics of product management and show why 80% of features are "digital waste." Learn how to use "Vector Checks" to align your team and stop running fast in the wrong direction.</p>
+        
+        <article class="content">
+<p>In the startup world, "Move Fast and Break Things" became the religion of the last decade. Speed was the ultimate virtue. If you weren't shipping daily, you were dying.</p><p>But in 2025, I see companies moving faster than ever, yet they are standing still. They are burning out engineering teams, shipping record numbers of features, and seeing zero movement in their North Star metrics.</p><p>They are confusing <strong>Speed</strong> with <strong>Velocity</strong>.</p><p>As an engineering leader, learning the distinction between these two physics concepts was the single most important mental model shift of my career. One leads to burnout; the other leads to leverage.</p><h4>The Physics of the Problem: Scalars vs. Vectors</h4><p>To understand why teams fail despite working hard, we have to look at the math.<br><ul><li><strong>Speed</strong> is a <strong>Scalar Quantity</strong>. It is defined simply as distance divided by time ($Speed = Distance / Time$). It has magnitude, but no direction. Running on a treadmill at 10mph requires high speed, but your displacement is zero.</li></ul><br><ul><li><strong>Velocity</strong> is a <strong>Vector Quantity</strong>. It is defined as displacement divided by time in a specific direction. It requires both magnitude <strong>AND</strong> direction.</li></ul><br>    </p><p>If you have a team of 10 engineers working at maximum capacity (High Speed), but 5 are building for Enterprise clients and 5 are building for SMBs in a way that contradicts the Enterprise architecture, their vectors cancel each other out.</p><p><strong>Net Velocity ≈ 0.</strong></p><p>You have paid for the speed (salaries, server costs, coffee), but you received zero velocity.</p><h4>The Data: The Trillion-Dollar Waste</h4><p>This isn't just a metaphor; it is a measurable financial hemorrhage.</p><p>According to a landmark report by <strong>Pendo</strong> (analyzing 1,000+ digital products), <strong>80% of features</strong> in the average software product are <strong>rarely or never used</strong>.<br><ul><li><strong>12%</strong> are used daily.</li></ul><br><ul><li><strong>8%</strong> are used weekly.</li></ul><br><ul><li><strong>80%</strong> are "digital waste."</li></ul><br>    </p><p>Think about the implications of that data. If your team ships 10 features this quarter, statistically, 8 of them will generate zero value.</p><p>If you are managing based on "Speed" (e.g., "How many tickets did we close?"), you are incentivizing the creation of that waste. You are celebrating the production of code that no one wants. This is the <strong>"Feature Factory"</strong> trap.</p><h4>The Cost of Misalignment</h4><p>The cost isn't just wasted salary; it is complexity.</p><p>Every line of code you ship introduces:<br><ul><li><strong>Maintenance overhead.</strong></li></ul><br><ul><li><strong>Potential bugs.</strong></li></ul><br><ul><li><strong>Cognitive load for the user.</strong></li></ul><br>    </p><p>When you prioritize speed over velocity, you accrue <strong>Technical Debt</strong> and <strong>Product Debt</strong> simultaneously. You build a fast car that is getting heavier with every mile, eventually making it impossible to steer.</p><h4>How I Implement Velocity Checks Operationally</h4><p>To fix this, I stopped asking "How fast are we moving?" and started asking "Where are we going?" Here is the operational framework:<br><ul><li>The "Vector Check" in Sprint Planning</li></ul></p><p>I implemented a rule: No ticket enters a sprint unless it is explicitly tagged to a Key Result (KR).</p><p>If an engineer picks up a task, they must be able to answer: "Which vector does this support?"</p><p>If the answer is "I don't know" or "It's just a cool idea," the ticket is killed. This ensures every ounce of force is applied in the same direction.<br><ul><li>Measuring "Outcome over Output"</li></ul></p><p>We stopped measuring success by Output (number of features shipped).</p><p>We started measuring success by Outcome (change in user behavior).</p><p><em>   </em>Bad KPI:* "Shipped the new dashboard." (Speed).<br>    <br><em>   </em>Good KPI:* "Reduced time-to-insight by 15%." (Velocity).<br>    </p><p>If we ship the dashboard and time-to-insight doesn't change, we failed—even if we shipped it "fast."<br><ul><li>The "Kill Rate" Metric</li></ul></p><p>I track a metric called "Kill Rate"—the percentage of features or code we remove from the product.</p><p>High-velocity teams don't just add; they subtract to maintain aerodynamic efficiency. If we aren't deleting old code, we are accumulating drag.</p><h4>The Takeaway</h4><p>Speed is satisfying. It feels like work. It makes the Slack channel noisy and the Jira burndown chart look pretty.</p><p>But Velocity is what moves the needle.</p><p>In a world of infinite distraction and limited resources, the most dangerous thing you can do is run fast in the wrong direction. Stop optimizing for the treadmill. Start optimizing for the map.</p>
+        </article>
+        
+        <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
+    </main>
+    
+    <script>
+        
+        // --- THEME TOGGLE ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // --- OVERFLOW MENU LOGIC ---
+        function toggleOverflow(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('overflow-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('overflow-menu');
+            const trigger = document.querySelector('.header-btn[title="More options"]');
+            
+            if (menu && menu.classList.contains('active') && !menu.contains(e.target) && e.target !== trigger) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Initialize theme from localStorage or default to dark
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('theme-icon').textContent = '🌙';
+            } else {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-icon').textContent = '☀️';
+            }
+        })();
+    
+    </script>
+</body>
+</html>

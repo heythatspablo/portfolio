@@ -543,10 +543,16 @@
                     </span>
                     <div class="post-actions">
                         <button class="btn btn-secondary" onclick="editPost('${post.id}')">Edit</button>
-                        <button class="btn btn-primary" onclick="window.open('index.html#blog/${post.slug}', '_blank')">View</button>
+                        <button class="btn btn-primary" onclick="window.open(getViewUrl('${post.slug}'), '_blank')">View</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function getViewUrl(slug) {
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            if (isLocal) return `/blog/post.html?slug=${encodeURIComponent(slug)}`;
+            return `/blog/${encodeURIComponent(slug)}`;
         }
 
         function formatDate(isoString) {
