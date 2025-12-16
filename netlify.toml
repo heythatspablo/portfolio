@@ -49,6 +49,12 @@
   force = false
 
 [[redirects]]
+  from = "/reformatter"
+  to = "/markdownreformatter.html"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/blog/*"
   to = "/blog/post.html?slug=:splat"
   status = 200

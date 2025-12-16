@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Way Formatter</title>
+    <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+    <script src="https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-app: #1c1c1e;
+            --bg-panel: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.4);
+            --accent: #0a84ff;
+            --divider: #3a3a3c;
+            --btn-secondary: #2c2c2e;
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font);
+            margin: 0;
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        .header-bar {
+            display: flex;
+            height: 50px;
+            background: var(--bg-app);
+            border-bottom: 1px solid var(--divider);
+            flex-shrink: 0;
+            z-index: 50;
+        }
+
+        .header-title {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: opacity 0.3s ease, color 0.3s ease;
+        }
+
+        .header-active { opacity: 1; color: white; }
+        .header-inactive { opacity: 0.4; }
+
+        /* --- WORKSPACE --- */
+        .workspace {
+            display: flex;
+            flex: 1;
+            position: relative;
+            height: calc(100vh - 50px);
+        }
+
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-panel);
+            position: relative;
+            min-width: 0; /* Prevents flex overflow */
+        }
+
+        /* --- EDITORS --- */
+        .scroll-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden; /* Textarea handles scroll */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* The container for rich text */
+        .rich-editor-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            /* Extra padding at bottom so footer doesn't cover text */
+            padding-bottom: 100px; 
+            outline: none;
+        }
+
+        /* The rich text editor itself */
+        .rich-editor {
+            outline: none;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            min-height: 100%; 
+        }
+
+        /* The markdown editor (Textarea) */
+        textarea.md-editor {
+            flex: 1;
+            width: 100%;
+            height: 100%; /* User Requirement */
+            background: transparent;
+            border: none;
+            color: #d1d5db;
+            padding: 30px;
+            padding-bottom: 100px; /* Space for footer */
+            resize: none;
+            outline: none;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Placeholder Styles */
+        [contenteditable]:empty:before, textarea:empty::placeholder {
+            content: attr(data-placeholder);
+            color: var(--text-secondary);
+        }
+
+        /* --- FOOTER (ACTIONS) --- */
+        .sticky-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, var(--bg-panel) 85%, transparent);
+            display: flex;
+            gap: 12px;
+            z-index: 40;
+            /* Initially hidden, toggled via JS */
+            display: none; 
+        }
+        
+        /* Show footer only when panel is inactive (Output mode) */
+        .panel.is-output .sticky-footer {
+            display: flex;
+        }
+
+        /* Hide placeholders in output mode to look cleaner */
+        .panel.is-output [data-placeholder]:empty:before,
+        .panel.is-output textarea:empty::placeholder {
+            color: transparent;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-copy {
+            flex: 1;
+            height: 44px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-copy:hover { background-color: #0071e3; }
+        .btn-copy:active { transform: scale(0.99); }
+
+        .btn-clear {
+            flex: 0 0 auto; /* Auto width */
+            padding: 0 20px;
+            height: 44px;
+            background: var(--btn-secondary);
+            color: var(--text-secondary);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s, background 0.2s;
+        }
+        .btn-clear:hover { background: #3a3a3c; color: white; }
+
+        /* --- DIVIDER & SWITCH --- */
+        .divider-line {
+            width: 1px;
+            background-color: var(--divider);
+            position: relative;
+            z-index: 60;
+        }
+
+        .switch-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #2c2c2e;
+            border: 1px solid #48484a;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: transform 0.2s, background 0.2s;
+            z-index: 70;
+        }
+        .switch-btn:hover { background-color: #3a3a3c; transform: translate(-50%, -50%) scale(1.1); }
+        .switch-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+    </style>
+</head>
+<body>
+
+<div class="header-bar">
+    <div id="head-left" class="header-title header-active">Formatted Text</div>
+    <div class="divider-line" style="background:transparent; width:1px;"></div>
+    <div id="head-right" class="header-title header-inactive">Markdown</div>
+</div>
+
+<div class="workspace">
+    
+    <div id="panel-left" class="panel is-input">
+        <div class="scroll-wrapper">
+            <div class="rich-editor-container" onclick="focusRichEditor()">
+                <div id="editor-rich" class="rich-editor" contenteditable="true" data-placeholder="Paste formatted text here..."></div>
+            </div>
+        </div>
+        <div class="sticky-footer">
+            <button class="btn-clear" onclick="clearAll()">Clear</button>
+            <button class="btn-copy" onclick="copyContent()">Copy Result</button>
+        </div>
+    </div>
+
+    <div class="divider-line">
+        <button class="switch-btn" onclick="toggleMode()" title="Switch Direction">
+            <svg viewBox="0 0 24 24"><path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/></svg>
+        </button>
+    </div>
+
+    <div id="panel-right" class="panel is-output">
+        <div class="scroll-wrapper">
+            <textarea id="output-md" class="md-editor" readonly data-placeholder="Markdown result will appear here..."></textarea>
+        </div>
+        <div class="sticky-footer">
+            <button class="btn-clear" onclick="clearAll()">Clear</button>
+            <button class="btn-copy" onclick="copyContent()">Copy Result</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- SETUP ---
+    const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced', emDelimiter: '*' });
+    turndownService.use(turndownPluginGfm.gfm);
+
+    // DOM Elements
+    const headLeft = document.getElementById('head-left');
+    const headRight = document.getElementById('head-right');
+    const panelLeft = document.getElementById('panel-left');
+    const panelRight = document.getElementById('panel-right');
+    const editorRich = document.getElementById('editor-rich');
+    const editorMd = document.getElementById('output-md');
+
+    // State: 'RT_TO_MD' (Left->Right) or 'MD_TO_RT' (Right->Left)
+    let direction = 'RT_TO_MD'; 
+
+    // --- LOGIC ---
+
+    function toggleMode() {
+        direction = direction === 'RT_TO_MD' ? 'MD_TO_RT' : 'RT_TO_MD';
+        updateUI();
+        convert(); // Re-run conversion immediately
+    }
+
+    function updateUI() {
+        if (direction === 'RT_TO_MD') {
+            // Direction: Rich Text (Left) -> Markdown (Right)
+            
+            // 1. Headers
+            headLeft.className = "header-title header-active";
+            headRight.className = "header-title header-inactive";
+            
+            // 2. Panel Classes (Controls Footer Visibility)
+            panelLeft.className = "panel is-input";
+            panelRight.className = "panel is-output";
+
+            // 3. Editor States
+            editorRich.contentEditable = "true";
+            editorMd.readOnly = true;
+
+            // 4. Focus
+            editorRich.focus();
+
+        } else {
+            // Direction: Markdown (Right) -> Rich Text (Left)
+
+            // 1. Headers
+            headLeft.className = "header-title header-inactive";
+            headRight.className = "header-title header-active";
+
+            // 2. Panel Classes
+            panelLeft.className = "panel is-output";
+            panelRight.className = "panel is-input";
+
+            // 3. Editor States
+            editorRich.contentEditable = "false";
+            editorMd.readOnly = false;
+
+            // 4. Focus
+            editorMd.focus();
+        }
+    }
+
+    function convert() {
+        if (direction === 'RT_TO_MD') {
+            const html = editorRich.innerHTML;
+            if (!html.trim()) { 
+                editorMd.value = ''; 
+                return; 
+            }
+            editorMd.value = turndownService.turndown(html);
+        } else {
+            const md = editorMd.value;
+            if (!md.trim()) { 
+                editorRich.innerHTML = ''; 
+                return; 
+            }
+            editorRich.innerHTML = marked.parse(md);
+        }
+    }
+
+    function clearAll() {
+        editorRich.innerHTML = '';
+        editorMd.value = '';
+        // Re-focus the active input
+        if(direction === 'RT_TO_MD') editorRich.focus();
+        else editorMd.focus();
+    }
+
+    async function copyContent() {
+        // We always copy from the OUTPUT (Inactive) panel
+        const buttons = document.querySelectorAll('.btn-copy');
+        
+        try {
+            if (direction === 'RT_TO_MD') {
+                // Copying Markdown (Text) from Right
+                await navigator.clipboard.writeText(editorMd.value);
+            } else {
+                // Copying Rich Text (HTML) from Left
+                const blobHtml = new Blob([editorRich.innerHTML], { type: 'text/html' });
+                const blobText = new Blob([editorRich.innerText], { type: 'text/plain' });
+                await navigator.clipboard.write([
+                    new ClipboardItem({ "text/html": blobHtml, "text/plain": blobText })
+                ]);
+            }
+
+            // Feedback on all copy buttons
+            buttons.forEach(btn => btn.innerText = "Copied!");
+            setTimeout(() => {
+                buttons.forEach(btn => btn.innerText = "Copy Result");
+            }, 1500);
+
+        } catch (err) {
+            console.error('Copy failed', err);
+            alert("Failed to copy. Please check permissions.");
+        }
+    }
+
+    // --- EVENTS ---
+    
+    // Rich Text Input
+    editorRich.addEventListener('input', convert);
+    editorRich.addEventListener('paste', () => setTimeout(convert, 10)); // Allow paste to render then convert
+
+    // Markdown Input
+    editorMd.addEventListener('input', convert);
+
+    // Helper to focus rich text when clicking container
+    function focusRichEditor() {
+        if(direction === 'RT_TO_MD') editorRich.focus();
+    }
+
+    // Initialize
+    updateUI();
+
+</script>
+
+</body>
+</html>
