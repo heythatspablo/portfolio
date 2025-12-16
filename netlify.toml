@@ -56,6 +56,6 @@
 
 [[redirects]]
   from = "/blog/*"
-  to = "/blog/post.html?slug=:splat"
+  to = "/blog/post.html"
   status = 200
   force = false

@@ -300,9 +300,22 @@
             link.setAttribute('href', url);
         }
 
-        async function loadPost() {
+        function getSlugFromUrl() {
+            // First try query param (for local dev)
             const params = new URLSearchParams(window.location.search);
-            const slug = params.get('slug');
+            const querySlug = params.get('slug');
+            if (querySlug) return querySlug;
+
+            // Then try path-based slug (for production)
+            // URL pattern: /blog/{slug} or /blog/{slug}/
+            const pathMatch = window.location.pathname.match(/\/blog\/([^\/]+)\/?$/);
+            if (pathMatch) return pathMatch[1];
+
+            return null;
+        }
+
+        async function loadPost() {
+            const slug = getSlugFromUrl();
 
             if (!slug) {
                 document.getElementById('content').innerHTML = '<div class="error">Missing slug.</div>';
