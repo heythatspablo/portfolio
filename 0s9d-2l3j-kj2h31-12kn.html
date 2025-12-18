@@ -457,6 +457,7 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2YXVqa2h4Z3pycXdxam9mZ2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3OTM3NDYsImV4cCI6MjA4MDM2OTc0Nn0.qbmIu3luDquk734FXko7I2m1qaY6MPA0r6quFJlEmSw';
         const ADMIN_PASSWORD = 'mainchance1970';
         const STORAGE_BUCKET = 'blog-images';
+        const NETLIFY_BUILD_HOOK = 'https://api.netlify.com/build_hooks/69448f9f279d9e25dbb186a4';
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -651,7 +652,18 @@
             if (result.error) {
                 showToast('Error saving: ' + result.error.message, true);
             } else {
-                showToast('Post saved successfully!');
+                // Trigger Netlify rebuild if post is published
+                if (postData.published) {
+                    showToast('Post saved! Deploying to site...');
+                    try {
+                        await fetch(NETLIFY_BUILD_HOOK, { method: 'POST' });
+                        showToast('Post published & deploy triggered!');
+                    } catch (err) {
+                        showToast('Post saved but deploy failed. Try again.', true);
+                    }
+                } else {
+                    showToast('Draft saved!');
+                }
                 hideEditor();
                 loadPosts();
             }

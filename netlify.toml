@@ -2,7 +2,8 @@
 # https://docs.netlify.com/configure-builds/file-based-configuration/
 
 [build]
-  # No build command needed - we pre-build static files
+  # Build static blog posts from Supabase before deploy
+  command = "node build-posts.js"
   publish = "."
 
 # Enable Pretty URLs (serve /blog/slug.html as /blog/slug)
