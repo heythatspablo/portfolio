@@ -458,7 +458,7 @@
         const ADMIN_PASSWORD = 'mainchance1970';
         const STORAGE_BUCKET = 'blog-images';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let allPosts = [];
         let currentFilter = 'all';
@@ -493,7 +493,7 @@
 
         // --- POSTS ---
         async function loadPosts() {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('posts')
                 .select('*')
                 .order('created_at', { ascending: false });
@@ -643,9 +643,9 @@
 
             let result;
             if (id) {
-                result = await supabase.from('posts').update(postData).eq('id', id);
+                result = await supabaseClient.from('posts').update(postData).eq('id', id);
             } else {
-                result = await supabase.from('posts').insert([postData]);
+                result = await supabaseClient.from('posts').insert([postData]);
             }
 
             if (result.error) {
@@ -664,7 +664,7 @@
 
             if (!confirm('Are you sure you want to delete this post?')) return;
 
-            const { error } = await supabase.from('posts').delete().eq('id', id);
+            const { error } = await supabaseClient.from('posts').delete().eq('id', id);
 
             if (error) {
                 showToast('Error deleting: ' + error.message, true);
@@ -679,7 +679,7 @@
         async function uploadImage(file) {
             const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
             
-            const { data, error } = await supabase.storage
+            const { data, error } = await supabaseClient.storage
                 .from(STORAGE_BUCKET)
                 .upload(fileName, file, { cacheControl: '3600', upsert: false });
 
@@ -687,7 +687,7 @@
                 throw new Error(error.message);
             }
 
-            const { data: urlData } = supabase.storage
+            const { data: urlData } = supabaseClient.storage
                 .from(STORAGE_BUCKET)
                 .getPublicUrl(fileName);
 

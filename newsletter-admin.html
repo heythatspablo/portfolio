@@ -489,7 +489,7 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2YXVqa2h4Z3pycXdxam9mZ2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3OTM3NDYsImV4cCI6MjA4MDM2OTc0Nn0.qbmIu3luDquk734FXko7I2m1qaY6MPA0r6quFJlEmSw';
         const ADMIN_PASSWORD = 'mainchance1970';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let allPosts = [];
         let allSubscribers = [];
@@ -541,7 +541,7 @@
 
         // --- POSTS ---
         async function loadPosts() {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('newsletter_posts')
                 .select('*')
                 .order('created_at', { ascending: false });
@@ -669,9 +669,9 @@
 
             let result;
             if (id) {
-                result = await supabase.from('newsletter_posts').update(postData).eq('id', id);
+                result = await supabaseClient.from('newsletter_posts').update(postData).eq('id', id);
             } else {
-                result = await supabase.from('newsletter_posts').insert([postData]);
+                result = await supabaseClient.from('newsletter_posts').insert([postData]);
             }
 
             if (result.error) {
@@ -690,7 +690,7 @@
 
             if (!confirm('Are you sure you want to delete this post?')) return;
 
-            const { error } = await supabase.from('newsletter_posts').delete().eq('id', id);
+            const { error } = await supabaseClient.from('newsletter_posts').delete().eq('id', id);
 
             if (error) {
                 showToast('Error deleting: ' + error.message, true);
@@ -703,7 +703,7 @@
 
         // --- SUBSCRIBERS ---
         async function loadSubscribers() {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('newsletter_subscribers')
                 .select('*')
                 .order('created_at', { ascending: false });
@@ -765,7 +765,7 @@
         }
 
         async function toggleSubscription(id, currentStatus) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('newsletter_subscribers')
                 .update({ subscribed: !currentStatus, updated_at: new Date().toISOString() })
                 .eq('id', id);
