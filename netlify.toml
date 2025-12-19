@@ -55,8 +55,5 @@
   status = 200
   force = true
 
-[[redirects]]
-  from = "/blog/*"
-  to = "/blog/post.html"
-  status = 200
-  force = false
+# Removed catch-all redirect to post.html - static files are now generated at build time
+# with both /blog/slug.html and /blog/slug/index.html formats for clean URLs
