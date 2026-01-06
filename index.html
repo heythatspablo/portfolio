@@ -1353,15 +1353,29 @@
             
             // Render markdown content
             const rawContent = post.content || '';
-            console.log('📄 Raw content from DB (first 200 chars):', rawContent.substring(0, 200));
+            console.log('📄 Raw content from DB (first 500 chars):', rawContent.substring(0, 500));
             
-            // Parse markdown but preserve raw HTML blocks
-            const renderedContent = marked.parse(rawContent, { 
-                async: false,
-                breaks: true,
-                gfm: true
+            // WORKAROUND: Marked escapes inline HTML. We need to protect HTML blocks before parsing
+            // Find HTML blocks (lines starting with < and ending with >) and temporarily replace them
+            const htmlBlockPattern = /^(<[^>]+>.*?<\/[^>]+>)$/gm;
+            const htmlBlocks = [];
+            let processedContent = rawContent.replace(htmlBlockPattern, (match) => {
+                const placeholder = `___HTML_BLOCK_${htmlBlocks.length}___`;
+                htmlBlocks.push(match);
+                console.log('🔒 Protected HTML block:', match.substring(0, 100));
+                return placeholder;
             });
-            console.log('✨ Rendered HTML (first 200 chars):', renderedContent.substring(0, 200));
+            
+            // Parse markdown
+            let renderedContent = marked.parse(processedContent);
+            
+            // Restore HTML blocks
+            htmlBlocks.forEach((block, index) => {
+                renderedContent = renderedContent.replace(`___HTML_BLOCK_${index}___`, block);
+                console.log('🔓 Restored HTML block:', block.substring(0, 100));
+            });
+            
+            console.log('✨ Final rendered HTML (first 500 chars):', renderedContent.substring(0, 500));
             document.getElementById('blogpost-content').innerHTML = renderedContent;
             
             // Update cover image
