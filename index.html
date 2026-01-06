@@ -1222,10 +1222,13 @@
     </main>
 
     <script>
+        console.log('🚀 Portfolio loaded - Build timestamp: 2026-01-06 13:50 PST');
+        
         // Initialize Mermaid
         mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
 
         // Configure marked to allow raw HTML (for iframes, etc.)
+        console.log('📝 Configuring marked.js version:', marked?.VERSION || 'unknown');
         marked.use({
             breaks: true,
             gfm: true,
@@ -1233,9 +1236,11 @@
             headerIds: false,
             hooks: {
                 preprocess(markdown) {
+                    console.log('⚙️ Preprocessing markdown, length:', markdown?.length);
                     return markdown;
                 },
                 postprocess(html) {
+                    console.log('⚙️ Postprocessing HTML, length:', html?.length);
                     return html;
                 }
             }
@@ -1245,6 +1250,7 @@
         const renderer = new marked.Renderer();
         const originalHtml = renderer.html;
         renderer.html = function(html) {
+            console.log('🔧 Custom HTML renderer called with:', html?.substring(0, 100));
             return html;
         };
         marked.use({ renderer });
@@ -1360,7 +1366,9 @@
             
             // Render markdown content
             const rawContent = post.content || '';
+            console.log('📄 Raw content from DB (first 200 chars):', rawContent.substring(0, 200));
             const renderedContent = marked.parse(rawContent);
+            console.log('✨ Rendered HTML (first 200 chars):', renderedContent.substring(0, 200));
             document.getElementById('blogpost-content').innerHTML = renderedContent;
             
             // Update cover image
