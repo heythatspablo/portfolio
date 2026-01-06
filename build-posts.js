@@ -9,6 +9,7 @@
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const { marked } = require('marked');
 
 // Import NavCover component
 const { 
@@ -24,60 +25,12 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const BLOG_DIR = path.join(__dirname, 'blog');
 
-// Simple markdown to HTML converter (basic implementation)
+// Markdown to HTML converter using marked library
 function markdownToHtml(markdown) {
     if (!markdown) return '';
     
-    let html = markdown
-        // Escape HTML first
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        // Headers (order matters - check longer patterns first)
-        .replace(/^#{4,}\s+(.*$)/gim, '<h4>$1</h4>')
-        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-        // Bold
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        // Italic
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        // Code blocks
-        .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
-        // Inline code
-        .replace(/`(.*?)`/g, '<code>$1</code>')
-        // Links
-        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
-        // Unordered lists
-        .replace(/^\s*[-*]\s+(.*$)/gim, '<li>$1</li>')
-        // Ordered lists (with optional escaped dot like 1\.)
-        .replace(/^\s*\d+\\?\.\s+(.*$)/gim, '<li>$1</li>')
-        // Blockquotes
-        .replace(/^>\s+(.*$)/gim, '<blockquote>$1</blockquote>')
-        // Horizontal rules
-        .replace(/^---$/gim, '<hr>')
-        // Paragraphs (double newlines)
-        .replace(/\n\n/g, '</p><p>')
-        // Single newlines to <br> within paragraphs
-        .replace(/\n/g, '<br>');
-    
-    // Wrap in paragraph tags
-    html = '<p>' + html + '</p>';
-    
-    // Clean up empty paragraphs
-    html = html.replace(/<p><\/p>/g, '');
-    html = html.replace(/<p>\s*<h/g, '<h');
-    html = html.replace(/<\/h(\d)>\s*<\/p>/g, '</h$1>');
-    html = html.replace(/<p>\s*<hr>\s*<\/p>/g, '<hr>');
-    html = html.replace(/<p>\s*<pre>/g, '<pre>');
-    html = html.replace(/<\/pre>\s*<\/p>/g, '</pre>');
-    html = html.replace(/<p>\s*<blockquote>/g, '<blockquote>');
-    html = html.replace(/<\/blockquote>\s*<\/p>/g, '</blockquote>');
-    
-    // Wrap consecutive <li> in <ul>
-    html = html.replace(/(<li>.*?<\/li>)+/gs, '<ul>$&</ul>');
-    
-    return html;
+    // Use marked.parse with default settings (allows HTML passthrough)
+    return marked.parse(markdown);
 }
 
 function formatDate(isoString) {
@@ -363,6 +316,10 @@ function fetchPosts() {
 
 async function build() {
     console.log('🔨 Building static blog posts...\n');
+    
+    // Verify marked version
+    const markedVersion = require('marked/package.json').version;
+    console.log(`✅ Using marked v${markedVersion} (supports HTML passthrough)\n`);
     
     // Create blog directory if it doesn't exist
     if (!fs.existsSync(BLOG_DIR)) {

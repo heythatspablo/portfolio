@@ -397,7 +397,50 @@
         <p class="excerpt">Support tickets are a lagging indicator of friction. Here is how I used embedded Typeforms to capture real-time CSAT data during the Unfamiliar.id onboarding flow, identifying a UX blind spot that was stalling enterprise clients.</p>
         
         <article class="content">
-<p>In B2B SaaS, the most dangerous customer isn't the one filing a support ticket. It's the one who gets stuck, says nothing, and quietly decides your product is "too complicated."</p><p>We call this <strong>Silent Churn</strong>.</p><p>At <strong>Unfamiliar.id</strong>, we were seeing a worrying trend during our Enterprise Onboarding phase. We had a powerful product, but our "Time to First Value" (TTFV)—the time it takes for a new developer to integrate our SDK—was lagging.</p><p>Worse, our support team was getting hit with a specific spike in tickets related to "API Configuration" about 48 hours after sign-up.</p><p>By the time the ticket arrived, the customer was already frustrated. The engineering team was fully booked building core features, so we couldn't just "build a feedback system" from scratch to diagnose the problem.</p><p>We needed a listening device, and we needed it immediately.</p><h3>The Low-Code Solution: Typeform as a Sensor</h3><p>Instead of waiting for a sprint cycle to build a native feedback component, I turned to <strong>Typeform</strong>.</p><p>My hypothesis was simple: We didn't have a bug; we had a clarity issue. But we needed data to prove it.</p><p>I spun up a lightweight, 2-question Typeform and used a simple Javascript embed to trigger it inside the dashboard at the exact moment a user completed (or abandoned) the API setup step.</p><p><strong>The Survey Design:</strong><br><ul><li><strong>The CSAT Score:</strong> "On a scale of 1-5, how easy was it to generate your first API key?"</li></ul><br><ul><li><strong>The Blocker (Conditional):</strong> If they scored 3 or lower, we asked: "What was the one thing that stopped you from finishing?"</li></ul></p><h3>The Deployment</h3><p>We deployed this "Micro-Survey" via Google Tag Manager (GTM). This meant we could go live without a deployment to the core codebase.</p><p>Within 24 hours, the data started flowing.</p><h3>The Discovery</h3><p>The qualitative data was shocking. We assumed users were struggling with complex technical documentation.</p><p>The reality? They couldn't find the "Environment Switcher."</p><p>Our Enterprise clients often needed to switch between "Sandbox" and "Production" modes to test their keys. In our UI, the switcher was a small toggle in the top right corner—standard for us, but invisible to them.</p><p>Users were generating Sandbox keys, trying to use them in Production environments, failing, and then churning or filing a ticket.</p><p><strong>The Feedback Loop:</strong><br><ul><li><strong>User A:</strong> "I generated a key but it says invalid."</li></ul><br><ul><li><strong>User B:</strong> "Where do I find the prod keys?"</li></ul><br><ul><li><strong>User C:</strong> "Stuck on sandbox mode."</li></ul></p><p>We didn't need a code rewrite. We needed a UI tweak.</p><h3>The Fix and The Outcome</h3><p>Armed with this data, I brought the findings to the Design team. Because the evidence was irrefutable (and tied directly to support volume), we prioritized a hotfix.</p><p>We moved the Environment Switcher to the center of the API Dashboard and added a clear banner indicating which mode was active.</p><p><strong>The Results:</strong><br><ul><li><strong>Support Ticket Volume:</strong> The specific "Invalid Key" ticket category dropped by <strong>60%</strong> within a week.</li></ul><br><ul><li><strong>CSAT Score:</strong> The specific rating for that onboarding step jumped from <strong>3.2 to 4.5</strong>.</li></ul><br><ul><li><strong>Engineering Time Saved:</strong> By diagnosing the problem with Typeform, we avoided weeks of engineers hunting for non-existent backend bugs.</li></ul></p><h3>The Takeaway</h3><p>As Product Managers, we often fall into the trap of thinking every solution needs to be "built."</p><p>Sometimes, the most high-leverage thing you can do is stop guessing and start asking. Tools like Typeform allow you to inject "listening devices" into your product experience instantly.</p><p>If your customers are getting stuck, don't wait for them to email support. Ask them right there, right then. The answer is usually simpler than you think.</p>
+<p>In B2B SaaS, the most dangerous customer isn&#39;t the one filing a support ticket. It&#39;s the one who gets stuck, says nothing, and quietly decides your product is &quot;too complicated.&quot;</p>
+<p>We call this <strong>Silent Churn</strong>.</p>
+<p>At <strong>Unfamiliar.id</strong>, we were seeing a worrying trend during our Enterprise Onboarding phase. We had a powerful product, but our &quot;Time to First Value&quot; (TTFV)—the time it takes for a new developer to integrate our SDK—was lagging.</p>
+<p>Worse, our support team was getting hit with a specific spike in tickets related to &quot;API Configuration&quot; about 48 hours after sign-up.</p>
+<p>By the time the ticket arrived, the customer was already frustrated. The engineering team was fully booked building core features, so we couldn&#39;t just &quot;build a feedback system&quot; from scratch to diagnose the problem.</p>
+<p>We needed a listening device, and we needed it immediately.</p>
+<h3>The Low-Code Solution: Typeform as a Sensor</h3>
+<p>Instead of waiting for a sprint cycle to build a native feedback component, I turned to <strong>Typeform</strong>.</p>
+<p>My hypothesis was simple: We didn&#39;t have a bug; we had a clarity issue. But we needed data to prove it.</p>
+<p>I spun up a lightweight, 2-question Typeform and used a simple Javascript embed to trigger it inside the dashboard at the exact moment a user completed (or abandoned) the API setup step.</p>
+<p><strong>The Survey Design:</strong></p>
+<ol>
+<li><strong>The CSAT Score:</strong> &quot;On a scale of 1-5, how easy was it to generate your first API key?&quot;</li>
+<li><strong>The Blocker (Conditional):</strong> If they scored 3 or lower, we asked: &quot;What was the one thing that stopped you from finishing?&quot;</li>
+</ol>
+<h3>The Deployment</h3>
+<p>We deployed this &quot;Micro-Survey&quot; via Google Tag Manager (GTM). This meant we could go live without a deployment to the core codebase.</p>
+<p>Within 24 hours, the data started flowing.</p>
+<h3>The Discovery</h3>
+<p>The qualitative data was shocking. We assumed users were struggling with complex technical documentation.</p>
+<p>The reality? They couldn&#39;t find the &quot;Environment Switcher.&quot;</p>
+<p>Our Enterprise clients often needed to switch between &quot;Sandbox&quot; and &quot;Production&quot; modes to test their keys. In our UI, the switcher was a small toggle in the top right corner—standard for us, but invisible to them.</p>
+<p>Users were generating Sandbox keys, trying to use them in Production environments, failing, and then churning or filing a ticket.</p>
+<p><strong>The Feedback Loop:</strong></p>
+<ul>
+<li><strong>User A:</strong> &quot;I generated a key but it says invalid.&quot;</li>
+<li><strong>User B:</strong> &quot;Where do I find the prod keys?&quot;</li>
+<li><strong>User C:</strong> &quot;Stuck on sandbox mode.&quot;</li>
+</ul>
+<p>We didn&#39;t need a code rewrite. We needed a UI tweak.</p>
+<h3>The Fix and The Outcome</h3>
+<p>Armed with this data, I brought the findings to the Design team. Because the evidence was irrefutable (and tied directly to support volume), we prioritized a hotfix.</p>
+<p>We moved the Environment Switcher to the center of the API Dashboard and added a clear banner indicating which mode was active.</p>
+<p><strong>The Results:</strong></p>
+<ul>
+<li><strong>Support Ticket Volume:</strong> The specific &quot;Invalid Key&quot; ticket category dropped by <strong>60%</strong> within a week.</li>
+<li><strong>CSAT Score:</strong> The specific rating for that onboarding step jumped from <strong>3.2 to 4.5</strong>.</li>
+<li><strong>Engineering Time Saved:</strong> By diagnosing the problem with Typeform, we avoided weeks of engineers hunting for non-existent backend bugs.</li>
+</ul>
+<h3>The Takeaway</h3>
+<p>As Product Managers, we often fall into the trap of thinking every solution needs to be &quot;built.&quot;</p>
+<p>Sometimes, the most high-leverage thing you can do is stop guessing and start asking. Tools like Typeform allow you to inject &quot;listening devices&quot; into your product experience instantly.</p>
+<p>If your customers are getting stuck, don&#39;t wait for them to email support. Ask them right there, right then. The answer is usually simpler than you think.</p>
+
         </article>
         
         <a href="https://99pablos.com/#blog" class="back-link">← Back to Blog</a>
