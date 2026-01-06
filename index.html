@@ -1226,11 +1226,28 @@
         mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
 
         // Configure marked to allow raw HTML (for iframes, etc.)
-        marked.setOptions({
+        marked.use({
             breaks: true,
             gfm: true,
-            sanitize: false
+            mangle: false,
+            headerIds: false,
+            hooks: {
+                preprocess(markdown) {
+                    return markdown;
+                },
+                postprocess(html) {
+                    return html;
+                }
+            }
         });
+        
+        // Override the default renderer to not escape HTML
+        const renderer = new marked.Renderer();
+        const originalHtml = renderer.html;
+        renderer.html = function(html) {
+            return html;
+        };
+        marked.use({ renderer });
 
         // --- SUPABASE CLIENT ---
         const SUPABASE_URL = 'https://cvaujkhxgzrqwqjofgls.supabase.co';
