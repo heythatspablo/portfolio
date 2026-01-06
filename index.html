@@ -1229,31 +1229,18 @@
 
         // Configure marked to allow raw HTML (for iframes, etc.)
         console.log('📝 Configuring marked.js version:', marked?.VERSION || 'unknown');
-        marked.use({
+        
+        // Set options to preserve HTML
+        marked.setOptions({
             breaks: true,
             gfm: true,
-            mangle: false,
-            headerIds: false,
-            hooks: {
-                preprocess(markdown) {
-                    console.log('⚙️ Preprocessing markdown, length:', markdown?.length);
-                    return markdown;
-                },
-                postprocess(html) {
-                    console.log('⚙️ Postprocessing HTML, length:', html?.length);
-                    return html;
-                }
-            }
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: false
         });
         
-        // Override the default renderer to not escape HTML
-        const renderer = new marked.Renderer();
-        const originalHtml = renderer.html;
-        renderer.html = function(html) {
-            console.log('🔧 Custom HTML renderer called with:', html?.substring(0, 100));
-            return html;
-        };
-        marked.use({ renderer });
+        console.log('✅ Marked configured to allow raw HTML');
 
         // --- SUPABASE CLIENT ---
         const SUPABASE_URL = 'https://cvaujkhxgzrqwqjofgls.supabase.co';
@@ -1367,7 +1354,13 @@
             // Render markdown content
             const rawContent = post.content || '';
             console.log('📄 Raw content from DB (first 200 chars):', rawContent.substring(0, 200));
-            const renderedContent = marked.parse(rawContent);
+            
+            // Parse markdown but preserve raw HTML blocks
+            const renderedContent = marked.parse(rawContent, { 
+                async: false,
+                breaks: true,
+                gfm: true
+            });
             console.log('✨ Rendered HTML (first 200 chars):', renderedContent.substring(0, 200));
             document.getElementById('blogpost-content').innerHTML = renderedContent;
             
