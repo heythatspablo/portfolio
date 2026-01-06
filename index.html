@@ -98,7 +98,7 @@
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Marked.js for Markdown rendering -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js?v=20260106-1417"></script>
     <style>
         /* --- VARIABLES & THEME CONFIG --- */
         :root {
@@ -1222,7 +1222,8 @@
     </main>
 
     <script>
-        console.log('🚀 Portfolio loaded - Build timestamp: 2026-01-06 13:50 PST');
+        console.log('🚀 BUILD TIMESTAMP: 2026-01-06 14:17 PST - Cache-busted');
+        console.log('📦 Marked.js version:', typeof marked !== 'undefined' ? marked.VERSION : 'not loaded');
         
         // Initialize Mermaid
         mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
@@ -1246,6 +1247,43 @@
         const SUPABASE_URL = 'https://cvaujkhxgzrqwqjofgls.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2YXVqa2h4Z3pycXdxam9mZ2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3OTM3NDYsImV4cCI6MjA4MDM2OTc0Nn0.qbmIu3luDquk734FXko7I2m1qaY6MPA0r6quFJlEmSw';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // --- HTML BLOCK PRE-PROCESSOR ---
+        function ensureHtmlBlockFormatting(markdown) {
+            if (!markdown) return markdown;
+            
+            console.log('🔧 Pre-processing markdown for HTML blocks');
+            
+            // Ensure block-level HTML tags have blank lines before and after
+            // Target: <div, <iframe, <section, <article, <aside, <header, <footer, <nav
+            let processed = markdown;
+            
+            // Add blank line before block HTML tags if not present
+            processed = processed.replace(/(\n?)(<(?:div|iframe|section|article|aside|header|footer|nav|main|figure)\b[^>]*>)/gi, function(match, before, tag) {
+                // If there's already a double newline, keep it
+                if (before === '\n\n' || match.startsWith('\n\n')) {
+                    return match;
+                }
+                console.log('✏️ Adding blank line before:', tag.substring(0, 50));
+                return '\n\n' + tag;
+            });
+            
+            // Add blank line after closing block HTML tags if not present
+            processed = processed.replace(/(<\/(?:div|iframe|section|article|aside|header|footer|nav|main|figure)>)(\n?)/gi, function(match, tag, after) {
+                // If there's already a double newline, keep it
+                if (after === '\n\n' || match.endsWith('\n\n')) {
+                    return match;
+                }
+                console.log('✏️ Adding blank line after:', tag);
+                return tag + '\n\n';
+            });
+            
+            // Trim leading/trailing whitespace to avoid extra blank lines at start/end
+            processed = processed.trim();
+            
+            console.log('✅ Pre-processing complete');
+            return processed;
+        }
 
         // --- DATE FORMATTING ---
         function formatDate(isoString) {
@@ -1353,12 +1391,14 @@
             
             // Render markdown content
             const rawContent = post.content || '';
-            console.log('📄 Raw content from DB:', rawContent);
-            console.log('📄 Content length:', rawContent.length);
-            console.log('📄 First 3 lines:', rawContent.split('\n').slice(0, 3));
+            console.log('📄 Raw content from DB (length: ' + rawContent.length + '):', rawContent.substring(0, 300));
             
-            const renderedContent = marked.parse(rawContent);
-            console.log('✨ Rendered HTML:', renderedContent);
+            // Pre-process to ensure HTML blocks have proper formatting
+            const processedContent = ensureHtmlBlockFormatting(rawContent);
+            console.log('🔄 After pre-processing:', processedContent.substring(0, 300));
+            
+            const renderedContent = marked.parse(processedContent);
+            console.log('✨ Rendered HTML (length: ' + renderedContent.length + '):', renderedContent.substring(0, 300));
             
             document.getElementById('blogpost-content').innerHTML = renderedContent;
             
